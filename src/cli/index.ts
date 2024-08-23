@@ -1,17 +1,12 @@
-#!/usr/bin/env node
-
 import * as p from '@clack/prompts'
 import chalk from 'chalk'
 
-import { validateSource } from '@/utils/validateSource'
-
-const pd = p.group(
+export const projectDetails = p.group(
     {
         name: () =>
             p.text({
                 message: 'Name of your project',
                 defaultValue: '.',
-                validate: validateSource,
             }),
         pacMan: () => {
             return p.select({
@@ -31,7 +26,7 @@ const pd = p.group(
                         hint: 'Not supported yet',
                     },
                 ],
-                initialValue: 'bun',
+                initialValue: 'npm',
             })
         },
         // NOTE: Remove then when pnpm and yarn are supported

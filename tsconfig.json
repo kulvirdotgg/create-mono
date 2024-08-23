@@ -26,7 +26,7 @@
 
         "baseUrl": "./",
         "paths": {
-            "@/*": ["./cli/*"]
+            "@/*": ["./src/*"]
         }
     },
     "include": ["cli", "tsup.config.ts"]

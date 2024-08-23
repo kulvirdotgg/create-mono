@@ -1,0 +1,25 @@
+{
+    "name": "template",
+    "private": true,
+    "scripts": {
+        "build": "turbo run build",
+        "clean": "turbo run clean",
+        "dev": "turbo run dev",
+        "lint": "turbo run lint",
+        "format": "prettier '**/*.{cjs,mjs,ts,tsx,md,json}' --write",
+        "format:check": "prettier '**/*.{cjs,mjs,ts,tsx,md,json}' --check",
+        "typecheck": "turbo run typecheck"
+    },
+    "devDependencies": {
+        "prettier": "^3.2.5",
+        "turbo": "^2.0.13"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "packageManager": "bun@1.1.22",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ]
+}
