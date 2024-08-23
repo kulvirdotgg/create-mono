@@ -10,6 +10,8 @@ async function main() {
 
     const [path, name] = pathDetails(details.name)
     createBase(name, path, 'bun')
+
+    process.exit(0)
 }
 
 main()
