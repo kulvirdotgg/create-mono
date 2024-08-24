@@ -1,61 +1,92 @@
-import path from 'node:path'
-import fs from 'fs-extra'
-
-import * as p from '@clack/prompts'
-import ora from 'ora'
 import chalk from 'chalk'
+import fs from 'fs-extra'
+import ora from 'ora'
+import path from 'node:path'
+import * as p from '@clack/prompts'
 
 import { ROOT } from '../CONSTS'
 
 /*
-name: name of the project
-dir: path to the directory where to initialize
-pkgManager: package manager [npm, bun, pnpm]
+projectName: name of the project (user input)
 */
-async function createBase(projectName, dir, pkgManager) {
-    const files = path.join(ROOT, 'template/base')
+async function createBase(projectName: string) {
+    const projectDir = path.resolve(process.cwd(), projectName)
 
-    const waiter = ora(`Starting monorepo in: ${dir}...\n`).start()
+    const spin = ora('Starting monorepo in: ' + projectDir + '...\n').start()
 
-    if (fs.existsSync(dir)) {
-        if (fs.readdirSync(dir).length === 0) {
+    if (fs.existsSync(projectDir)) {
+        if (fs.readdirSync(projectDir).length === 0) {
             if (projectName !== '.')
-                waiter.info(
-                    `${chalk.cyan.bold(projectName)} directory is already present but empty (like life), continuing...\n`,
+                spin.info(
+                    chalk.cyan.bold(projectName) +
+                        ' present but empty (like life), continuing...\n',
                 )
         } else {
-            waiter.stopAndPersist()
+            spin.stopAndPersist()
 
             const overwrite = await p.select({
-                message: `${chalk.redBright.bold('Warning:')} ${chalk.cyan.bold(
-                    projectName,
-                )} exists and isn't empty. Still proceed?`,
+                message:
+                    chalk.redBright.bold('warning: ') +
+                    chalk.cyan.bold(projectName) +
+                    ' exists, Still proceed?',
                 options: [
                     {
                         label: 'Stop installation (recommended)',
                         value: 'abort',
                     },
                     {
-                        label: 'naah continue...',
-                        value: 'continue',
+                        label: 'Clear the directory and continue...',
+                        value: 'clear',
+                    },
+                    {
+                        label: 'Overwrite conflicting files...',
+                        value: 'overwrite',
                     },
                 ],
                 initialValue: 'abort',
             })
             if (overwrite === 'abort') {
-                waiter.fail('Aborting...')
+                spin.fail('Aborting...')
                 process.exit(1)
             }
-            if (overwrite === 'clear') {
-                waiter.info('continuing...')
+
+            const action =
+                overwrite === 'clear'
+                    ? 'clear the directory'
+                    : 'overwrite conflicting files'
+
+            const confirmOverwrite = await p.confirm({
+                message: 'Are you sure you want to ' + action,
+                initialValue: false,
+            })
+
+            if (!confirmOverwrite) {
+                spin.fail('Aborting...')
+                process.exit(1)
             }
+
+            if (overwrite === 'clear') {
+                spin.info(
+                    chalk.cyan.bold(projectName) +
+                        'clearning and continuing...',
+                )
+                fs.emptyDirSync(projectDir)
+            }
+
+            spin.stopAndPersist()
         }
     }
-    waiter.start()
+    spin.start()
 
-    fs.copySync(files, projectName)
-    fs.renameSync(path.join(dir, 'gitignore'), path.join(dir, '.gitignore'))
-    waiter.succeed('Base created successfully...')
+    const base = path.join(ROOT, 'template/base')
+
+    fs.copySync(base, projectDir)
+    fs.renameSync(
+        path.join(projectDir, 'gitignore'),
+        path.join(projectDir, '.gitignore'),
+    )
+    const baseName = projectName === '.' ? 'App' : chalk.cyan.bold(projectName)
+    spin.succeed(baseName + ' created successfully...\n')
 }
 
 export { createBase }

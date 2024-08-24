@@ -1,12 +1,15 @@
 import * as p from '@clack/prompts'
 import chalk from 'chalk'
 
+import { validateName } from '../utils/validate-name'
+
 export const projectDetails = p.group(
     {
         name: () =>
             p.text({
                 message: 'Name of your project',
                 defaultValue: '.',
+                validate: validateName,
             }),
         pacMan: () => {
             return p.select({
