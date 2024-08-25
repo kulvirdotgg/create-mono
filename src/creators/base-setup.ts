@@ -6,9 +6,6 @@ import * as p from '@clack/prompts'
 
 import { ROOT } from '../CONSTS'
 
-/*
-projectName: name of the project (user input)
-*/
 async function createBase(projectName: string) {
     const projectDir = path.resolve(process.cwd(), projectName)
 
