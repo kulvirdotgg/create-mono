@@ -6,9 +6,7 @@ import * as p from '@clack/prompts'
 
 import { ROOT } from '../CONSTS'
 
-async function createBase(projectName: string) {
-    const projectDir = path.resolve(process.cwd(), projectName)
-
+async function createBase(projectName: string, projectDir: string) {
     const spin = ora('Starting monorepo in: ' + projectDir + '...\n').start()
 
     if (fs.existsSync(projectDir)) {
