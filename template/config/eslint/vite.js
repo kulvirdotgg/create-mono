@@ -3,25 +3,23 @@ import { resolve } from 'node:path'
 const project = resolve(process.cwd(), 'tsconfig.json')
 
 /*
- * This is a custom ESLint configuration for use server side
- * typescript packages.
+ * This is a custom ESLint configuration for use react applications
  *
  * This config extends the Vercel Engineering Style Guide.
  * For more information, see https://github.com/vercel/style-guide
- *
  */
 
-module.exports = {
+export default {
     extends: [
-        '@vercel/style-guide/eslint/node',
+        '@vercel/style-guide/eslint/browser',
         '@vercel/style-guide/eslint/typescript',
-    ].map(require.resolve),
+        '@vercel/style-guide/eslint/react',
+    ].map(resolve),
     parserOptions: {
         project,
     },
-    env: {
-        node: true,
-        es6: true,
+    globals: {
+        JSX: true,
     },
     plugins: ['only-warn'],
     settings: {
@@ -31,15 +29,7 @@ module.exports = {
             },
         },
     },
-    overrides: [
-        {
-            files: ['**/__tests__/**/*'],
-            env: {
-                jest: true,
-            },
-        },
-    ],
-    ignorePatterns: ['.*.js', 'node_modules/', 'dist/'],
+    ignorePatterns: ['node_modules/', 'dist/', '.eslintrc.js', '**/*.css'],
     // add rules configurations here
     rules: {
         // 'import/no-default-export': 'off',
