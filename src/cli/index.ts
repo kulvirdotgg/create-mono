@@ -19,55 +19,29 @@ async function cli() {
                         {
                             value: 'npm',
                             label: 'npm',
-                            hint: 'Not supported yet',
                         },
                         { value: 'bun', label: 'Bun' },
                         // TODO: support pnpm and yarn too
                         {
                             value: 'pnpm',
-                            label: chalk.redBright('pnpm'),
-                            hint: 'Not supported yet',
+                            label: 'pnpm',
                         },
                         {
                             value: 'yarn',
-                            label: chalk.redBright('Yarn'),
-                            hint: 'Not supported yet',
+                            label: 'yarn',
                         },
                     ],
                     initialValue: 'npm',
                 })
-            },
-            // NOTE: Remove then when pnpm and yarn are supported
-            _: ({ results }) => {
-                if (
-                    results.pacMan === 'pnpm' ||
-                    results.pacMan === 'yarn' ||
-                    results.pacMan === 'npm'
-                ) {
-                    p.cancel(
-                        chalk.redBright(
-                            'Told yaa this package manager is not supported yet, I am working on it. Let me have sigh of relief',
-                        ),
-                    )
-                    process.exit(0)
-                }
             },
             apps: () => {
                 return p.multiselect({
                     message:
                         'What applications you want to have in your monorepo?',
                     options: [
-                        { value: 'vite', label: 'Vite single page app' },
-                        { value: 'express', label: 'Express API' },
-                        // TODO: add next and astro templates.
                         {
-                            value: 'elysia',
-                            label: chalk.redBright('Elysia API'),
-                            hint: 'not available yet',
-                        },
-                        {
-                            value: 'hono',
-                            label: chalk.redBright('Hono API'),
+                            value: 'astro',
+                            label: chalk.redBright('Astro app'),
                             hint: 'not available yet',
                         },
                         {
@@ -75,16 +49,24 @@ async function cli() {
                             label: chalk.redBright('Next App') + '(app router)',
                             hint: 'not available yet',
                         },
+                        { value: 'vite', label: 'Vite SPA' },
+                        // TODO: add next and astro templates.
                         {
-                            value: 'astro',
-                            label: chalk.redBright('Astro app'),
+                            value: 'hono',
+                            label: chalk.redBright('Hono API'),
                             hint: 'not available yet',
                         },
+                        {
+                            value: 'elysia',
+                            label: chalk.redBright('Elysia API'),
+                            hint: 'not available yet',
+                        },
+                        { value: 'express', label: 'Express API' },
                     ],
                 })
             },
             //NOTE: Remove when next and astro template is added
-            __: ({ results }) => {
+            _: ({ results }) => {
                 if (
                     results.apps?.includes('hono') ||
                     results.apps?.includes('elysia') ||
@@ -114,7 +96,7 @@ async function cli() {
                     initialValue: 'typescript',
                 })
             },
-            ___: ({ results }) => {
+            __: ({ results }) => {
                 if (results.language === 'javascript') {
                     return p.note(
                         chalk.redBright(
@@ -122,14 +104,6 @@ async function cli() {
                         ),
                     )
                 }
-            },
-            uiPackage: () => {
-                return p.confirm({
-                    message:
-                        'Do you want a shared ' +
-                        chalk.cyan.bold('ui') +
-                        ' package? (Tailwind w shad-cn)',
-                })
             },
         },
         {
@@ -142,8 +116,7 @@ async function cli() {
     return {
         repoName: userInputs.repoName,
         packageManager: userInputs.pacMan,
-        applications: [...userInputs.apps],
-        uiPackage: userInputs.uiPackage,
+        applications: [...userInputs.apps] as string[],
     }
 }
 

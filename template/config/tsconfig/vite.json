@@ -1,24 +1,17 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
-    "display": "Next.js",
     "extends": "./base.json",
+    "Display": "Vite",
     "compilerOptions": {
-        "target": "ES2020",
-        "useDefineForClassFields": true,
-        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "allowJs": false,
+        "esModuleInterop": false,
+        "jsx": "react",
+        "lib": ["dom", "dom.iterable", "esnext"],
         "module": "ESNext",
-        "skipLibCheck": true,
-
-        "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
-        "isolatedModules": true,
-        "moduleDetection": "force",
         "noEmit": true,
-        "jsx": "react-jsx",
-
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+        "resolveJsonModule": true,
+        "skipLibCheck": false,
+        "target": "ESNext",
+        "types": ["vite/client"]
     }
 }
