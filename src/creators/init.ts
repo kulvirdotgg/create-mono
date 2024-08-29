@@ -1,8 +1,10 @@
 import fs from 'fs'
-import fse from 'fs-extra'
 import path from 'path'
+import fse from 'fs-extra'
 
 import { createBase } from './base-setup'
+import { expressJSON } from './express-json'
+import { viteJSON } from './vite-json'
 import { ROOT } from '../CONSTS'
 
 async function init({
@@ -10,59 +12,33 @@ async function init({
     applications,
     packageManager,
 }: TInitProject) {
-    console.log(projectName)
     const projectDir = path.resolve(process.cwd(), projectName)
 
     await createBase(projectName, projectDir)
 
-    if (applications.includes('vite')) {
-        fse.copySync(
-            path.join(ROOT, 'template/applications/vite'),
-            path.join(projectDir, 'apps/vite'),
+    // pnpm got weird workspaces things
+    if (packageManager === 'pnpm') {
+        const pkgJSON = fse.readJSONSync(
+            path.resolve(projectDir, 'package.json'),
         )
+        delete pkgJSON['workspaces']
+
+        fse.writeJsonSync(path.join(projectDir, 'package.json'), pkgJSON, {
+            spaces: 4,
+        })
 
         fs.copyFileSync(
-            path.join(ROOT, 'template/config/eslint/vite.js'),
-            path.join(projectDir, 'packages/eslint-config/vite.js'),
-        )
-        fs.copyFileSync(
-            path.join(ROOT, 'template/config/tsconfig/vite.json'),
-            path.join(projectDir, 'packages/typescript-config/vite.json'),
+            path.join(ROOT, 'template/config/pnpm-workspace.yaml'),
+            path.join(projectDir, 'pnpm-workspace.yaml'),
         )
     }
 
+    if (applications.includes('vite')) {
+        viteJSON(projectDir, packageManager)
+    }
+
     if (applications.includes('express')) {
-        fse.copySync(
-            path.join(ROOT, 'template/applications/express'),
-            path.join(projectDir, 'apps/express'),
-        )
-
-        const expPkgJSON = fse.readJSONSync(
-            path.join(projectDir, 'apps/express/package.json'),
-        )
-        if (packageManager == 'npm') {
-            expPkgJSON.devDependencies['@types/node'] = '^20.11.24'
-
-            expPkgJSON.scripts.start = 'node dist/index.js'
-            expPkgJSON.scripts.dev =
-                'tsup --watch --onSuccess "node dist/index.js"'
-        } else {
-            expPkgJSON.scripts.start = `${packageManager} dist/index.js`
-            expPkgJSON.scripts.dev = `tsup --watch --onSuccess \"${packageManager} dist/index.js\"`
-        }
-
-        fse.writeJsonSync(
-            path.join(projectDir, 'apps/express/package.json'),
-            expPkgJSON,
-            {
-                spaces: 4,
-            },
-        )
-
-        fs.copyFileSync(
-            path.join(ROOT, 'template/config/eslint/server.js'),
-            path.join(projectDir, 'packages/eslint-config/server.js'),
-        )
+        expressJSON(projectDir, packageManager)
     }
 }
 

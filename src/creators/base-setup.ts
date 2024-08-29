@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import fs from 'fs-extra'
+import fse from 'fs-extra'
 import ora from 'ora'
 import path from 'node:path'
 import * as p from '@clack/prompts'
@@ -9,8 +9,8 @@ import { ROOT } from '../CONSTS'
 async function createBase(projectName: string, projectDir: string) {
     const spin = ora('Starting monorepo in: ' + projectDir + '...\n').start()
 
-    if (fs.existsSync(projectDir)) {
-        if (fs.readdirSync(projectDir).length === 0) {
+    if (fse.existsSync(projectDir)) {
+        if (fse.readdirSync(projectDir).length === 0) {
             if (projectName !== '.')
                 spin.info(
                     chalk.cyan.bold(projectName) +
@@ -65,7 +65,7 @@ async function createBase(projectName: string, projectDir: string) {
                     chalk.cyan.bold(projectName) +
                         'clearning and continuing...',
                 )
-                fs.emptyDirSync(projectDir)
+                fse.emptyDirSync(projectDir)
             }
 
             spin.stopAndPersist()
@@ -74,9 +74,8 @@ async function createBase(projectName: string, projectDir: string) {
     spin.start()
 
     const base = path.join(ROOT, 'template/base')
-
-    fs.copySync(base, projectDir)
-    fs.renameSync(
+    fse.copySync(base, projectDir)
+    fse.renameSync(
         path.join(projectDir, 'gitignore'),
         path.join(projectDir, '.gitignore'),
     )
