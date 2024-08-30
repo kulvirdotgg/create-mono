@@ -9,6 +9,9 @@ import { pathDetails } from './utils/path-details'
 import { init } from './creators/init'
 
 async function main() {
+    //TODO: render some kind of title before begining the process. (shameless plug)
+    // ASCII art something like theo's t3 could be used.
+
     const { applications, packageManager, repoName } = await cli()
 
     const [scopedName, projectName] = pathDetails(repoName)
@@ -18,12 +21,19 @@ async function main() {
     basePkgJSON.name = scopedName
 
     // TODO: try catch block here, if user doens't have that package manager installed exit.
-    const { stdout } = await execa(packageManager, ['-v'])
+    try {
+        const { stdout } = await execa(packageManager, ['-v'], {
+            cwd: projectName,
+        })
 
-    basePkgJSON.packageManager = packageManager + '@' + stdout.trim()
-    fse.writeJsonSync(path.join(projectName, 'package.json'), basePkgJSON, {
-        spaces: 4,
-    })
+        basePkgJSON.packageManager = packageManager + '@' + stdout.trim()
+        fse.writeJsonSync(path.join(projectName, 'package.json'), basePkgJSON, {
+            spaces: 4,
+        })
+    } catch (err) {
+        console.log('failed')
+        process.exit(1)
+    }
 
     process.exit(0)
 }
