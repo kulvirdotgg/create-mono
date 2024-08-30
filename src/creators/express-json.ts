@@ -19,18 +19,13 @@ function expressJSON(projectDir: string, packageManager: string) {
         pkgJSON.scripts.start = 'node dist/index.js'
         pkgJSON.scripts.dev = 'tsup --watch --onSuccess "node dist/index.js"'
 
-        // pnpm workspaces fucks everytime
+        // pnpm workspaces fucks me everytime
         if (packageManager === 'pnpm') {
             pkgJSON.devDependencies['@repo/eslint-config'] = 'workspace:*'
             pkgJSON.devDependencies['@repo/typescript-config'] = 'workspace:*'
         }
-
-        // add "@types/node"
-        pkgJSON.devDependencies['@types/node'] = '^22.5.1'
-    } else {
-        // add "@types/bun"
-        pkgJSON.devDependencies['@types/bun'] = '^1.1.26'
     }
+
     fse.writeJsonSync(
         path.join(projectDir, 'apps/express/package.json'),
         pkgJSON,

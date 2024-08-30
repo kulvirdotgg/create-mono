@@ -18,25 +18,12 @@ async function main() {
     basePkgJSON.name = scopedName
 
     // TODO: try catch block here, if user doens't have that package manager installed exit.
+    const { stdout } = await execa(packageManager, ['-v'])
 
-    // cannot run pnpm command wherever any other package manager is mentioned
-    if (packageManager === 'pnpm') {
-        // TODO: make sure to use the project dir to check pnpm version
-        const { stdout } = await execa(packageManager, ['-v'])
-
-        basePkgJSON.packageManager = packageManager + '@' + stdout.trim()
-        fse.writeJsonSync(path.join(projectName, 'package.json'), basePkgJSON, {
-            spaces: 4,
-        })
-    } else {
-        const { stdout } = await execa(packageManager, ['-v'], {
-            cwd: projectName,
-        })
-        basePkgJSON.packageManager = packageManager + '@' + stdout.trim()
-        fse.writeJsonSync(path.join(projectName, 'package.json'), basePkgJSON, {
-            spaces: 4,
-        })
-    }
+    basePkgJSON.packageManager = packageManager + '@' + stdout.trim()
+    fse.writeJsonSync(path.join(projectName, 'package.json'), basePkgJSON, {
+        spaces: 4,
+    })
 
     process.exit(0)
 }
