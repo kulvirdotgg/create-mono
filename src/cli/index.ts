@@ -16,28 +16,20 @@ async function cli() {
                 return p.select({
                     message: 'Choose your package manager',
                     options: [
-                        {
-                            value: 'npm',
-                            label: 'npm',
-                        },
                         { value: 'bun', label: 'Bun' },
-                        // TODO: support pnpm and yarn too
-                        {
-                            value: 'pnpm',
-                            label: 'pnpm',
-                        },
-                        {
-                            value: 'yarn',
-                            label: 'yarn',
-                        },
+                        { value: 'npm', label: 'npm' },
+                        { value: 'pnpm', label: 'pnpm' },
+                        { value: 'yarn', label: 'yarn' },
                     ],
-                    initialValue: 'npm',
+                    initialValue: 'bun',
                 })
             },
+            // TODO: add next and astro templates.
             apps: () => {
                 return p.multiselect({
                     message:
-                        'What applications you want to have in your monorepo?',
+                        'What applications you want to have in your monorepo?' +
+                        chalk.cyan('(space to select)'),
                     options: [
                         {
                             value: 'astro',
@@ -50,26 +42,19 @@ async function cli() {
                             hint: 'not available yet',
                         },
                         { value: 'vite', label: 'Vite SPA' },
-                        // TODO: add next and astro templates.
                         {
                             value: 'hono',
                             label: chalk.redBright('Hono API'),
-                            hint: 'not available yet',
-                        },
-                        {
-                            value: 'elysia',
-                            label: chalk.redBright('Elysia API'),
                             hint: 'not available yet',
                         },
                         { value: 'express', label: 'Express API' },
                     ],
                 })
             },
-            //NOTE: Remove when next and astro template is added
+            //TODO: Remove when next and astro template is added
             _: ({ results }) => {
                 if (
                     results.apps?.includes('hono') ||
-                    results.apps?.includes('elysia') ||
                     results.apps?.includes('next') ||
                     results.apps?.includes('astro')
                 ) {

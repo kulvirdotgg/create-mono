@@ -28,7 +28,7 @@ async function init({
         })
 
         fs.copyFileSync(
-            path.join(ROOT, 'template/config/pnpm-workspace.yaml'),
+            path.join(ROOT, 'template/deps/configs/pnpm-workspace.yaml'),
             path.join(projectDir, 'pnpm-workspace.yaml'),
         )
     }

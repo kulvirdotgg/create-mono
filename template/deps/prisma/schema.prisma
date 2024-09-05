@@ -1,0 +1,20 @@
+// Example schema from prisma docs.
+// Read more here from below links about connection pooling.
+// https://www.prisma.io/docs/orm/overview/databases/supabase
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+}
+
+model Post {
+    id        Int      @id @default(autoincrement())
+    title     String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

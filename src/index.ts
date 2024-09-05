@@ -7,6 +7,8 @@ import { execa } from 'execa'
 import { cli } from './cli/index'
 import { pathDetails } from './utils/path-details'
 import { init } from './creators/init'
+import { deps } from './cli/deps'
+import { addAppDeps } from './adder'
 
 async function main() {
     //TODO: render some kind of title before begining the process. (shameless plug)
@@ -35,6 +37,8 @@ async function main() {
         process.exit(1)
     }
 
+    const { vite, express } = await deps(applications)
+    await addAppDeps(projectName, express, vite)
     process.exit(0)
 }
 
