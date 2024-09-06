@@ -1,5 +1,4 @@
 import path from 'node:path'
-import fs from 'fs'
 import fse from 'fs-extra'
 
 import { addDependencies } from '../utils/add-dependencies'
@@ -30,17 +29,17 @@ function prismaInstaller(appDir: string, dbProvider: string) {
     fse.copySync(path.join(depsDir, 'prisma'), path.join(appDir, 'prisma'))
 
     // create the prisma directory first inside src
-    const prismaDir = path.join(appDir, 'src/prisma')
-    fse.ensureDir(prismaDir)
+    const prisma = path.join(appDir, 'src/prisma')
+    fse.ensureDir(prisma)
 
-    // db-conn
-    fs.copyFileSync(
+    // template/deps/db/prisma/db-neon.ts
+    fse.copySync(
         path.join(
             depsDir,
             'db/prisma',
             dbProvider === 'neon' ? 'db-neon.ts' : 'db-supabase.ts',
         ),
-        path.join(prismaDir, 'db.ts'),
+        path.join(prisma, 'db.ts'),
     )
 }
 

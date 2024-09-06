@@ -2,6 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 
 import App from './app/index'
+import './globals.css'
 
 const el = document.getElementById('root')
 if (el) {

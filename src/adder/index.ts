@@ -2,12 +2,17 @@ import path from 'node:path'
 
 import { addExpressDependencies } from './express'
 import type { TExpress, TVite } from '../cli/deps'
+import { addViteDependencies } from './vite'
 
 async function addAppDeps(projectDir: string, express: TExpress, vite: TVite) {
-    const appDir = path.join(projectDir, 'apps/express')
-
     if (express !== null) {
-        addExpressDependencies(appDir, express)
+        const expressDir = path.join(projectDir, 'apps/express')
+        addExpressDependencies(expressDir, express)
+    }
+
+    if (vite !== null) {
+        const viteDir = path.join(projectDir, 'apps/vite')
+        addViteDependencies(viteDir, vite)
     }
 }
 

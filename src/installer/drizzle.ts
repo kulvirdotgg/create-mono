@@ -1,5 +1,4 @@
 import path from 'node:path'
-import fs from 'fs'
 import fse from 'fs-extra'
 
 import { addDependencies } from '../utils/add-dependencies'
@@ -29,29 +28,29 @@ function drizzleInstaller(appDir: string, dbProvider: string) {
     const depsDir = path.join(ROOT, 'template/deps')
 
     // create the drizzle directory first inside src
-    const drizzleDir = path.join(appDir, 'src/drizzle')
-    fse.ensureDir(drizzleDir)
+    const drizzle = path.join(appDir, 'src/drizzle')
+    fse.ensureDir(drizzle)
 
     // drizzle config
-    fs.copyFileSync(
+    fse.copyFileSync(
         path.join(depsDir, 'configs/drizzle.config.ts'),
         path.join(appDir, 'drizzle.config.ts'),
     )
 
     // schema
-    fs.copyFileSync(
+    fse.copyFileSync(
         path.join(depsDir, 'db/drizzle/schema.ts'),
-        path.join(drizzleDir, 'schema.ts'),
+        path.join(drizzle, 'schema.ts'),
     )
 
     // db-conn
-    fs.copyFileSync(
+    fse.copySync(
         path.join(
             depsDir,
             'db/drizzle',
             dbProvider === 'neon' ? 'db-neon.ts' : 'db-supabase.ts',
         ),
-        path.join(drizzleDir, 'db.ts'),
+        path.join(drizzle, 'db.ts'),
     )
 }
 

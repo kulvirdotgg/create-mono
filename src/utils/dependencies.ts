@@ -16,9 +16,11 @@ const dependencyMap = {
     prisma: '^5.19.1',
 
     // TailwindCSS
-    postcss: '^8.4.44',
-    prettier: '^3.3.3',
     tailwindcss: '^3.4.10',
+    postcss: '^8.4.44',
+    autoprefixer: '^10.4.20',
+
+    prettier: '^3.3.3',
     // 'prettier-plugin-tailwindcss': '^0.6.6',
 } as const
 
