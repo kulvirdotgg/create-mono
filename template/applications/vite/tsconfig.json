@@ -4,6 +4,10 @@
     "compilerOptions": {
         "rootDir": ".",
         "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"]
+        }
     },
     "include": ["src", "vite.config.ts"]
 }

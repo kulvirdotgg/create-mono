@@ -4,10 +4,10 @@ const router = Router()
 
 router
     .get('/hello', (_, res) => {
-        res.status(200).json({ 69: 420 })
+        res.status(200).json({ hello: 'world' })
     })
     .get('/status', (_, res) => {
-        res.status(200).json({ msg: 'Skill Isssues :p' })
+        res.status(200).json({ msg: 'uWu oniii chan :p' })
     })
 
 export { router }

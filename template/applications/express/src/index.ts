@@ -3,7 +3,7 @@ import express, { type Express } from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 
-import { router } from './routes'
+import { router } from '@/routes'
 
 const port = process.env.PORT || 42069
 
@@ -17,5 +17,5 @@ app.disable('x-powered-by')
 app.use('/api', router)
 
 app.listen(port, () => {
-    console.log(`express api running happy and healthy on ${port}`)
+    console.log(`express api running happily on ${port}`)
 })

@@ -90,6 +90,12 @@ async function cli() {
                     )
                 }
             },
+            importAlias: () => {
+                return p.text({
+                    message: 'Import alias',
+                    defaultValue: '@/',
+                })
+            },
         },
         {
             onCancel() {
@@ -102,6 +108,7 @@ async function cli() {
         repoName: userInputs.repoName,
         packageManager: userInputs.pacMan,
         applications: [...userInputs.apps] as string[],
+        importAlias: userInputs.importAlias,
     }
 }
 

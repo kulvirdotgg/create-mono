@@ -9,12 +9,13 @@ import { pathDetails } from './utils/path-details'
 import { init } from './creators/init'
 import { deps } from './cli/deps'
 import { addAppDeps } from './adder'
+import { updateImportAlias, updateViteAlias } from './utils/update-import-alisa'
 
 async function main() {
     //TODO: render some kind of title before begining the process. (shameless plug)
     // ASCII art something like theo's t3 could be used.
 
-    const { applications, packageManager, repoName } = await cli()
+    const { applications, packageManager, repoName, importAlias } = await cli()
 
     const [scopedName, projectName] = pathDetails(repoName)
     await init({ projectName, applications, packageManager })
@@ -39,6 +40,14 @@ async function main() {
 
     const { vite, express } = await deps(applications)
     await addAppDeps(projectName, express, vite)
+
+    // update the import alias
+    updateImportAlias(projectName, importAlias)
+    if (vite) {
+        const vitePath = path.join(projectName, 'apps/vite/vite.config.ts')
+        updateViteAlias(vitePath, importAlias)
+    }
+
     process.exit(0)
 }
 
