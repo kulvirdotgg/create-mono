@@ -2,6 +2,7 @@
     "name": "express-api",
     "version": "0.0.0",
     "private": true,
+    "type": "module",
     "scripts": {
         "start": "bun dist/index.js",
         "dev": "tsup --watch --onSuccess \"bun dist/index.js\"",
