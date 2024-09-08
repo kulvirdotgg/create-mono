@@ -60,8 +60,8 @@ async function cli() {
                 ) {
                     p.cancel(
                         chalk.redBright(
-                            'This framework is not yet supported, If needed create on your own.',
-                        ),
+                            'This framework is not yet supported, If needed create on your own.'
+                        )
                     )
                     process.exit(0)
                 }
@@ -85,8 +85,8 @@ async function cli() {
                 if (results.language === 'javascript') {
                     return p.note(
                         chalk.redBright(
-                            'Skill issues, you will use only Typescript',
-                        ),
+                            'Skill issues, you will use only Typescript'
+                        )
                     )
                 }
             },
@@ -101,7 +101,7 @@ async function cli() {
             onCancel() {
                 process.exit(0)
             },
-        },
+        }
     )
 
     return {

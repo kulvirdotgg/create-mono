@@ -13,7 +13,7 @@ function addViteDependencies(appDir: string, vite: TVite) {
     if (tw) {
         fs.copyFileSync(
             path.join(pagesDir, 'vite-tw.tsx'),
-            path.join(appDir, 'src/app/index.tsx'),
+            path.join(appDir, 'src/app/index.tsx')
         )
         twInstaller(appDir)
     }

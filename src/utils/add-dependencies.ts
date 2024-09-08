@@ -7,7 +7,7 @@ import { dependencyMap, type TDependencies } from './dependencies'
 function addDependencies(
     dependencies: TDependencies[],
     devDep: boolean,
-    projectDir: string,
+    projectDir: string
 ) {
     const packageJSON = fse.readJSONSync(path.join(projectDir, 'package.json'))
 
@@ -26,7 +26,7 @@ function addDependencies(
         sortedPackageJSON,
         {
             spaces: 4,
-        },
+        }
     )
 }
 

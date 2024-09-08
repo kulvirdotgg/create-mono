@@ -19,7 +19,7 @@ async function init({
     // pnpm got weird workspaces things
     if (packageManager === 'pnpm') {
         const pkgJSON = fse.readJSONSync(
-            path.resolve(projectDir, 'package.json'),
+            path.resolve(projectDir, 'package.json')
         )
         delete pkgJSON['workspaces']
 
@@ -29,7 +29,7 @@ async function init({
 
         fs.copyFileSync(
             path.join(ROOT, 'template/deps/configs/pnpm-workspace.yaml'),
-            path.join(projectDir, 'pnpm-workspace.yaml'),
+            path.join(projectDir, 'pnpm-workspace.yaml')
         )
     }
 

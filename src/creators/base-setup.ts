@@ -14,7 +14,7 @@ async function createBase(projectName: string, projectDir: string) {
             if (projectName !== '.')
                 spin.info(
                     chalk.cyan.bold(projectName) +
-                        ' present but empty (like life), continuing...\n',
+                        ' present but empty (like life), continuing...\n'
                 )
         } else {
             spin.stopAndPersist()
@@ -62,8 +62,7 @@ async function createBase(projectName: string, projectDir: string) {
 
             if (overwrite === 'clear') {
                 spin.info(
-                    chalk.cyan.bold(projectName) +
-                        'clearning and continuing...',
+                    chalk.cyan.bold(projectName) + 'clearning and continuing...'
                 )
                 fse.emptyDirSync(projectDir)
             }
@@ -77,7 +76,7 @@ async function createBase(projectName: string, projectDir: string) {
     fse.copySync(base, projectDir)
     fse.renameSync(
         path.join(projectDir, 'gitignore'),
-        path.join(projectDir, '.gitignore'),
+        path.join(projectDir, '.gitignore')
     )
     const baseName = projectName === '.' ? 'App' : chalk.cyan.bold(projectName)
     spin.succeed(baseName + ' created successfully...\n')

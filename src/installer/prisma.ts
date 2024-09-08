@@ -50,9 +50,9 @@ function prismaInstaller(appDir: string, dbProvider: string) {
         path.join(
             depsDir,
             'db/prisma',
-            dbProvider === 'neon' ? 'db-neon.ts' : 'db-supabase.ts',
+            dbProvider === 'neon' ? 'db-neon.ts' : 'db-supabase.ts'
         ),
-        path.join(prisma, 'db.ts'),
+        path.join(prisma, 'db.ts')
     )
 }
 

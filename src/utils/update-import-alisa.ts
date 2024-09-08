@@ -8,7 +8,7 @@ import path from 'path'
 function replaceTextInFiles(
     directory: string,
     search: string,
-    replacement: string,
+    replacement: string
 ) {
     const files = fs.readdirSync(directory)
 
@@ -21,7 +21,7 @@ function replaceTextInFiles(
             const data = fs.readFileSync(filePath, 'utf8')
             const updatedData = data.replace(
                 new RegExp(search, 'g'),
-                replacement,
+                replacement
             )
             fs.writeFileSync(filePath, updatedData, 'utf8')
         }

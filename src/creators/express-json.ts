@@ -7,11 +7,11 @@ import { ROOT } from '../CONSTS'
 function expressJSON(projectDir: string, packageManager: string) {
     fse.copySync(
         path.join(ROOT, 'template/applications/express'),
-        path.join(projectDir, 'apps/express'),
+        path.join(projectDir, 'apps/express')
     )
 
     const pkgJSON = fse.readJSONSync(
-        path.join(projectDir, 'apps/express/package.json'),
+        path.join(projectDir, 'apps/express/package.json')
     )
 
     // `node run dist/index.js` for other than bun.
@@ -31,12 +31,12 @@ function expressJSON(projectDir: string, packageManager: string) {
         pkgJSON,
         {
             spaces: 4,
-        },
+        }
     )
 
     fs.copyFileSync(
         path.join(ROOT, 'template/deps/eslint/server.cjs'),
-        path.join(projectDir, 'packages/eslint-config/server.cjs'),
+        path.join(projectDir, 'packages/eslint-config/server.cjs')
     )
 }
 

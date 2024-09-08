@@ -47,22 +47,22 @@ function drizzleInstaller(appDir: string, dbProvider: string) {
     // drizzle config
     fse.copyFileSync(
         path.join(depsDir, 'configs/drizzle.config.ts'),
-        path.join(appDir, 'drizzle.config.ts'),
+        path.join(appDir, 'drizzle.config.ts')
     )
 
     // schema
     fse.copyFileSync(
         path.join(depsDir, 'db/drizzle/schema.ts'),
-        path.join(drizzle, 'schema.ts'),
+        path.join(drizzle, 'schema.ts')
     )
 
     fse.copySync(
         path.join(
             depsDir,
             'db/drizzle',
-            dbProvider === 'neon' ? 'db-neon.ts' : 'db-supabase.ts',
+            dbProvider === 'neon' ? 'db-neon.ts' : 'db-supabase.ts'
         ),
-        path.join(drizzle, 'db.ts'),
+        path.join(drizzle, 'db.ts')
     )
 }
 

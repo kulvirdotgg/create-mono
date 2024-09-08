@@ -1,6 +1,6 @@
 function App() {
     return (
-        <div className="bg-gray-900 text-gray-100 min-h-screen flex justify-center items-center">
+        <div className="flex min-h-screen items-center justify-center bg-gray-900 text-gray-100">
             <h1 className="text-5xl font-bold">Skill Issue</h1>
         </div>
     )

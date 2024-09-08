@@ -27,20 +27,20 @@ function twInstaller(appDir: string) {
     // prettier config for tailwind classes
     fs.copyFileSync(
         path.join(configsDir, 'prettier.config.js'),
-        path.join(appDir, 'prettier.config.js'),
+        path.join(appDir, 'prettier.config.js')
     )
 
     fs.copyFileSync(
         path.join(configsDir, 'globals.css'),
-        path.join(appDir, 'src/globals.css'),
+        path.join(appDir, 'src/globals.css')
     )
     fs.copyFileSync(
         path.join(configsDir, 'tailwind.config.ts'),
-        path.join(appDir, 'tailwind.config.ts'),
+        path.join(appDir, 'tailwind.config.ts')
     )
     fs.copyFileSync(
         path.join(configsDir, 'postcss.config.cjs'),
-        path.join(appDir, 'postcss.config.cjs'),
+        path.join(appDir, 'postcss.config.cjs')
     )
 }
 
