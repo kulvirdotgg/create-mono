@@ -1,6 +1,6 @@
 /** @type {import("eslint").Linter.Config} */
-export default {
-    extends: ['@repo/eslint-config/vite.js'],
+module.exports = {
+    extends: ['@repo/eslint-config/vite.cjs'],
     parser: '@typescript-eslint/parser',
     parserOptions: {
         project: true,

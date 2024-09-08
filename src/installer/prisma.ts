@@ -1,5 +1,6 @@
 import path from 'node:path'
 import fse from 'fs-extra'
+import { sortPackageJson } from 'sort-package-json'
 
 import { addDependencies } from '../utils/add-dependencies'
 import type { TDependencies } from '../utils/dependencies'
@@ -15,6 +16,18 @@ function prismaInstaller(appDir: string, dbProvider: string) {
         pkg.push('@prisma/adapter-neon')
     }
     addDependencies(pkg, false, appDir)
+
+    // add ORM scripts
+    const packageJSON = fse.readJSONSync(path.join(appDir, 'package.json'))
+    packageJSON.scripts['db:generate'] = 'prisma migrate dev'
+    packageJSON.scripts['db:migrate'] = 'prisma migrate deploy'
+    packageJSON.scripts['db:push'] = 'prisma db push'
+    packageJSON.scripts['db:studio'] = 'prisma studio'
+
+    const sortedPackageJSON = sortPackageJson(packageJSON)
+    fse.writeJSONSync(path.join(appDir, 'package.json'), sortedPackageJSON, {
+        spaces: 4,
+    })
 
     /*
     prisma

@@ -4,24 +4,21 @@
     Thanks again Theo, if you see stuff copied T3 code then it is actually. (Opensource BTW)
 */
 const dependencyMap = {
-    // Drizzle
     'drizzle-orm': '^0.33.0',
     '@neondatabase/serverless': '^0.9.4',
     postgres: '^3.4.4',
     'drizzle-kit': '^0.24.2',
 
-    // Prisma
     '@prisma/client': '^5.19.1',
     '@prisma/adapter-neon': '^5.19.1',
     prisma: '^5.19.1',
 
-    // TailwindCSS
     tailwindcss: '^3.4.10',
     postcss: '^8.4.44',
     autoprefixer: '^10.4.20',
 
     prettier: '^3.3.3',
-    // 'prettier-plugin-tailwindcss': '^0.6.6',
+    'prettier-plugin-tailwindcss': '^0.6.6',
 } as const
 
 type TDependencies = keyof typeof dependencyMap

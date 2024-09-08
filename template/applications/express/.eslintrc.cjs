@@ -1,6 +1,6 @@
 /** @type {import("eslint").Linter.Config} */
-export default {
-    extends: ['@repo/eslint-config/server.js'],
+module.exports = {
+    extends: ['@repo/eslint-config/server.cjs'],
     parser: '@typescript-eslint/parser',
     parserOptions: {
         project: true,

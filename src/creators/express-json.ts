@@ -35,8 +35,8 @@ function expressJSON(projectDir: string, packageManager: string) {
     )
 
     fs.copyFileSync(
-        path.join(ROOT, 'template/deps/eslint/server.js'),
-        path.join(projectDir, 'packages/eslint-config/server.js'),
+        path.join(ROOT, 'template/deps/eslint/server.cjs'),
+        path.join(projectDir, 'packages/eslint-config/server.cjs'),
     )
 }
 

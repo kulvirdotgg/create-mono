@@ -1,5 +1,6 @@
 import path from 'node:path'
 import fse from 'fs-extra'
+import { sortPackageJson } from 'sort-package-json'
 
 import { addDependencies } from '../utils/add-dependencies'
 import { TDependencies } from '../utils/dependencies'
@@ -16,6 +17,18 @@ function drizzleInstaller(appDir: string, dbProvider: string) {
         pkg.push('postgres')
     }
     addDependencies(pkg, false, appDir)
+
+    // add ORM scripts
+    const packageJSON = fse.readJSONSync(path.join(appDir, 'package.json'))
+    packageJSON.scripts['db:generate'] = 'drizzle-kit generate'
+    packageJSON.scripts['db:migrate'] = 'drizzle-kit migrate '
+    packageJSON.scripts['db:push'] = 'drizzle-kit push'
+    packageJSON.scripts['db:studio'] = 'drizzle-kit studio'
+
+    const sortedPackageJSON = sortPackageJson(packageJSON)
+    fse.writeJSONSync(path.join(appDir, 'package.json'), sortedPackageJSON, {
+        spaces: 4,
+    })
 
     /*
     src
@@ -43,7 +56,6 @@ function drizzleInstaller(appDir: string, dbProvider: string) {
         path.join(drizzle, 'schema.ts'),
     )
 
-    // db-conn
     fse.copySync(
         path.join(
             depsDir,

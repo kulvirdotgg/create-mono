@@ -29,8 +29,8 @@ function viteJSON(projectDir: string, packageManager: string) {
     }
 
     fs.copyFileSync(
-        path.join(ROOT, 'template/deps/eslint/vite.js'),
-        path.join(projectDir, 'packages/eslint-config/vite.js'),
+        path.join(ROOT, 'template/deps/eslint/vite.cjs'),
+        path.join(projectDir, 'packages/eslint-config/vite.cjs'),
     )
     fs.copyFileSync(
         path.join(ROOT, 'template/deps/tsconfig/vite.json'),

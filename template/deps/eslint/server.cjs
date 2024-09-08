@@ -1,4 +1,4 @@
-import { resolve } from "node:path"
+const { resolve } = require("node:path")
 
 const project = resolve(process.cwd(), "tsconfig.json");
 
@@ -11,11 +11,11 @@ const project = resolve(process.cwd(), "tsconfig.json");
  *
  */
 
-export default {
+module.exports = {
     extends: [
         "@vercel/style-guide/eslint/node",
         "@vercel/style-guide/eslint/typescript",
-    ].map(resolve),
+    ].map(require.resolve),
     parserOptions: {
         project,
     },
