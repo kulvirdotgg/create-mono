@@ -1,0 +1,8 @@
+# `.env` file is gitignored
+# use this file to create new `.env` when you clone it
+# KEEP IT UP TO DATE and don't commit any secrets int his file
+# This just serves as template for `.env`
+
+PORT = "0000"
+
+DATABASE_URL = "postgres://postgres:5353"

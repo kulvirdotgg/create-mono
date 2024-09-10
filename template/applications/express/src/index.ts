@@ -2,10 +2,13 @@ import { json, urlencoded } from 'body-parser'
 import express, { type Express } from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
+import { configDotenv } from 'dotenv'
 
 import { router } from '@/routes'
 
-const port = process.env.PORT || 42069
+configDotenv({ path: '.env' })
+
+const port = process.env.PORT
 
 const app: Express = express()
 app.disable('x-powered-by')

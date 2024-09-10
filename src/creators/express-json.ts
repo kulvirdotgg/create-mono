@@ -17,7 +17,7 @@ function expressJSON(projectDir: string, packageManager: string) {
     // `node run dist/index.js` for other than bun.
     if (packageManager !== 'bun') {
         pkgJSON.scripts.start = 'node dist/index.js'
-        pkgJSON.scripts.dev = 'tsup --watch --onSuccess "node dist/index.js"'
+        pkgJSON.scripts.dev = 'tsup --watch --onSuccess "node dist/index.cjs"'
 
         // pnpm workspaces fucks me everytime
         if (packageManager === 'pnpm') {

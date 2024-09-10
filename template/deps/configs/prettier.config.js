@@ -1,4 +1,4 @@
-import base from "../../prettier.config.js"
+import base from "../../prettier.config.mjs"
 
 /**
 @see https://prettier.io/docs/en/configuration#sharing-configurations 
@@ -9,4 +9,3 @@ const config = {
 };
 
 export default config;
-

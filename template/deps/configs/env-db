@@ -1,0 +1,4 @@
+PORT = 42069
+
+# Database connection string
+DATABASE_URL = postgres://postgres:5353

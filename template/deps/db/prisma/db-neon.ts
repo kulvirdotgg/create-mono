@@ -2,7 +2,7 @@ import { neon } from '@neondatabase/serverless'
 import { PrismaNeonHTTP } from '@prisma/adapter-neon'
 import { PrismaClient } from '@prisma/client'
 
-import { env } from '../env'
+import { env } from '@/env'
 
 /*
     To use Connection Pooling read more on below link
