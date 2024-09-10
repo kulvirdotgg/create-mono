@@ -44,16 +44,19 @@ function prismaInstaller(appDir: string, dbProvider: string) {
     // create the prisma directory first inside src
     const prisma = path.join(appDir, 'src/prisma')
     fse.ensureDir(prisma)
-
-    // template/deps/db/prisma/db-neon.ts
-    fse.copySync(
-        path.join(
-            depsDir,
-            'db/prisma',
-            dbProvider === 'neon' ? 'db-neon.ts' : 'db-supabase.ts'
-        ),
-        path.join(prisma, 'db.ts')
-    )
+        .then(() => {
+            fse.copySync(
+                path.join(
+                    depsDir,
+                    'db/prisma',
+                    dbProvider === 'neon' ? 'db-neon.ts' : 'db-supabase.ts'
+                ),
+                path.join(prisma, 'db.ts')
+            )
+        })
+        .catch((err) => {
+            console.log(err)
+        })
 }
 
 export { prismaInstaller }
