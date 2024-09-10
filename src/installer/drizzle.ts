@@ -31,39 +31,43 @@ function drizzleInstaller(appDir: string, dbProvider: string) {
     })
 
     /*
-    src
-    |  drizzle
-    |  |  db.ts
-    |  |  schema.ts
-    drizzle.connfig.ts
-    */
+src
+|  drizzle
+|  |  db.ts
+|  |  schema.ts
+drizzle.connfig.ts
+*/
 
     const depsDir = path.join(ROOT, 'template/deps')
 
     // create the drizzle directory first inside src
     const drizzle = path.join(appDir, 'src/drizzle')
     fse.ensureDir(drizzle)
+        .then(() => {
+            // drizzle config
+            fse.copyFileSync(
+                path.join(depsDir, 'configs/drizzle.config.ts'),
+                path.join(appDir, 'drizzle.config.ts')
+            )
 
-    // drizzle config
-    fse.copyFileSync(
-        path.join(depsDir, 'configs/drizzle.config.ts'),
-        path.join(appDir, 'drizzle.config.ts')
-    )
+            // schema
+            fse.copyFileSync(
+                path.join(depsDir, 'db/drizzle/schema.ts'),
+                path.join(drizzle, 'schema.ts')
+            )
 
-    // schema
-    fse.copyFileSync(
-        path.join(depsDir, 'db/drizzle/schema.ts'),
-        path.join(drizzle, 'schema.ts')
-    )
-
-    fse.copySync(
-        path.join(
-            depsDir,
-            'db/drizzle',
-            dbProvider === 'neon' ? 'db-neon.ts' : 'db-supabase.ts'
-        ),
-        path.join(drizzle, 'db.ts')
-    )
+            fse.copySync(
+                path.join(
+                    depsDir,
+                    'db/drizzle',
+                    dbProvider === 'neon' ? 'db-neon.ts' : 'db-supabase.ts'
+                ),
+                path.join(drizzle, 'db.ts')
+            )
+        })
+        .catch((err) => {
+            console.error(err)
+        })
 }
 
 export { drizzleInstaller }
