@@ -2,11 +2,11 @@ import { json, urlencoded } from 'body-parser'
 import express, { type Express } from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
-import { configDotenv } from 'dotenv'
+import { config } from 'dotenv'
 
 import { router } from '@/routes'
 
-configDotenv({ path: '.env' })
+config({ path: '.env' })
 
 const port = process.env.PORT
 

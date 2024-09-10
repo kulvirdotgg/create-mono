@@ -1,15 +1,19 @@
 import { drizzle } from 'drizzle-orm/neon-http'
 import { neon } from '@neondatabase/serverless'
+import { config } from 'dotenv'
 
-import { env } from '@/env'
-import * as schema from '@/drizle/schema'
+import * as schema from '@/drizzle/schema'
+
+config({ path: '.env' })
 
 /*
-    Supabase supports connection pooling too. Read more about using below link
-    https://supabase.com/docs/guides/database/connecting-to-postgres#connecting-with-prisma
+    Neon supports connection pooling too. Read more about using below link
+    https://neon.tech/docs/connect/connection-pooling
 */
 
-const conn = neon(env.DATABASE_URL)
+const dbUrl = process.env.DATABASE_URL!
+
+const conn = neon(dbUrl)
 const db = drizzle(conn, { schema })
 
 export { db }

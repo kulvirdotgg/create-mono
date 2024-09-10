@@ -5,8 +5,8 @@ import { env } from '@/env'
 import * as schema from '@/drizzle/schema'
 
 /*
-    Neon supports connection pooling too. Read more about using below link
-    https://neon.tech/docs/connect/connection-pooling
+    Supabase supports connection pooling too. Read more about using below link
+    https://supabase.com/docs/guides/database/connecting-to-postgres#connecting-with-prisma
 */
 
 const conn = postgres(env.DATABASE_URL)

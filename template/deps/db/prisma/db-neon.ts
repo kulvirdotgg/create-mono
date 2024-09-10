@@ -1,16 +1,19 @@
 import { neon } from '@neondatabase/serverless'
 import { PrismaNeonHTTP } from '@prisma/adapter-neon'
 import { PrismaClient } from '@prisma/client'
+import { config } from 'dotenv'
 
-import { env } from '@/env'
+config({ path: '.env' })
 
 /*
     To use Connection Pooling read more on below link
     https://www.prisma.io/docs/orm/overview/databases/neon
 */
 
+const dbUrl = process.env.DATABASE_URL!
+
 const client = () => {
-    const postgres = neon(env.DATABASE_URL)
+    const postgres = neon(dbUrl)
     const adapter = new PrismaNeonHTTP(postgres)
     return new PrismaClient({ adapter })
 }

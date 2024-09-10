@@ -1,13 +1,16 @@
 import { defineConfig } from 'drizzle-kit'
+import { config } from 'dotenv'
 
-import { env } from '@/env'
+config({ path: '.env' })
+
+const dbUrl = process.env.DATABASE_URL!
 
 export default defineConfig({
     schema: './src/drizzle/schema.ts',
     out: './migrations',
     dialect: 'postgresql',
     dbCredentials: {
-        url: env.DATABASE_URL!,
+        url: dbUrl
     },
     tablesFilter: ['mono_express_*'],
 })
