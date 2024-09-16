@@ -8,7 +8,7 @@ import { router } from '@/routes'
 
 config({ path: '.env' })
 
-const port = process.env.PORT
+const port = process.env.PORT!
 
 const app: Express = express()
 app.disable('x-powered-by')

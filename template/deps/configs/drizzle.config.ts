@@ -10,7 +10,7 @@ export default defineConfig({
     out: './migrations',
     dialect: 'postgresql',
     dbCredentials: {
-        url: dbUrl
+        url: dbUrl,
     },
     tablesFilter: ['mono_express_*'],
 })

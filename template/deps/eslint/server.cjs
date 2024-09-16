@@ -3,19 +3,13 @@ const { resolve } = require('node:path')
 const project = resolve(process.cwd(), 'tsconfig.json')
 
 /*
- * This is a custom ESLint configuration for use server side
- * typescript packages.
- *
- * This config extends the Vercel Engineering Style Guide.
- * For more information, see https://github.com/vercel/style-guide
- *
- */
+https://github.com/vercel/style-guide
+*/
 
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
-    extends: [
-        '@vercel/style-guide/eslint/node',
-        '@vercel/style-guide/eslint/typescript',
-    ].map(require.resolve),
+    extends: ["eslint:recommended", "prettier", "turbo"],
+    plugins: ['only-warn'],
     parserOptions: {
         project,
     },
@@ -23,7 +17,6 @@ module.exports = {
         node: true,
         es6: true,
     },
-    plugins: ['only-warn'],
     settings: {
         'import/resolver': {
             typescript: {
@@ -33,7 +26,6 @@ module.exports = {
     },
     overrides: [],
     ignorePatterns: ['.*.js', 'node_modules/', 'dist/'],
-    // add rules configurations here
     rules: {
         'import/no-default-export': 'off',
     },

@@ -3,27 +3,23 @@ const { resolve } = require('node:path')
 const project = resolve(process.cwd(), 'tsconfig.json')
 
 /*
- * This is a custom ESLint configuration for use a library
- * that utilizes React.
- *
- * This config extends the Vercel Engineering Style Guide.
- * For more information, see https://github.com/vercel/style-guide
- *
- */
+For more information, see https://github.com/vercel/style-guide
+*/
 
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
-    extends: [
-        '@vercel/style-guide/eslint/browser',
-        '@vercel/style-guide/eslint/typescript',
-        '@vercel/style-guide/eslint/react',
-    ].map(require.resolve),
+    extends: ["eslint:recommended", "prettier", "turbo"],
+    plugins: ['only-warn'],
+    globals: {
+        JSX: true,
+        React: true,
+    },
+    env: {
+        browser: true,
+    },
     parserOptions: {
         project,
     },
-    globals: {
-        JSX: true,
-    },
-    plugins: ['only-warn'],
     settings: {
         'import/resolver': {
             typescript: {
@@ -31,8 +27,10 @@ module.exports = {
             },
         },
     },
-    ignorePatterns: ['node_modules/', 'dist/', '.eslintrc.js', '**/*.css'],
-    // add rules configurations here
+    ignorePatterns: ['node_modules/', 'dist/', '.eslintrc.cjs', '**/*.css'],
+    overrides: [
+        { files: ["*.js?(x)", "*.ts?(x)"] },
+    ],
     rules: {
         'import/no-default-export': 'off',
     },

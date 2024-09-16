@@ -3,6 +3,7 @@ import fse from 'fs-extra'
 import path from 'node:path'
 
 import { ROOT } from '../CONSTS'
+import { sortPackageJson } from 'sort-package-json'
 
 function expressJSON(projectDir: string, packageManager: string) {
     fse.copySync(
@@ -19,16 +20,21 @@ function expressJSON(projectDir: string, packageManager: string) {
         pkgJSON.scripts.start = 'node dist/index.js'
         pkgJSON.scripts.dev = 'tsup --watch --onSuccess "node dist/index.cjs"'
 
+        pkgJSON.devDependencies['@types/node'] = '^20.16.5'
+
         // pnpm workspaces fucks me everytime
         if (packageManager === 'pnpm') {
             pkgJSON.devDependencies['@repo/eslint-config'] = 'workspace:*'
             pkgJSON.devDependencies['@repo/typescript-config'] = 'workspace:*'
         }
+    } else {
+        pkgJSON.devDependencies['@types/bun'] = '^1.1.9'
     }
 
+    const sortedPackageJSON = sortPackageJson(pkgJSON)
     fse.writeJsonSync(
         path.join(projectDir, 'apps/express/package.json'),
-        pkgJSON,
+        sortedPackageJSON,
         {
             spaces: 4,
         }

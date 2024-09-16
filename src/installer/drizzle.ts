@@ -66,7 +66,7 @@ drizzle.connfig.ts
             )
         })
         .catch((err) => {
-            console.error(err)
+            console.log('error in drizzle path copying', err)
         })
 }
 

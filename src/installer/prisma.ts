@@ -14,6 +14,7 @@ function prismaInstaller(appDir: string, dbProvider: string) {
     const pkg: TDependencies[] = ['@prisma/client']
     if (dbProvider === 'neon') {
         pkg.push('@prisma/adapter-neon')
+        pkg.push('@neondatabase/serverless')
     }
     addDependencies(pkg, false, appDir)
 
@@ -55,7 +56,7 @@ function prismaInstaller(appDir: string, dbProvider: string) {
             )
         })
         .catch((err) => {
-            console.log(err)
+            console.log('error in installing prisma', err)
         })
 }
 
