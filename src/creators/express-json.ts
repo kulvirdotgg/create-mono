@@ -4,6 +4,7 @@ import path from 'node:path'
 
 import { ROOT } from '../CONSTS'
 import { sortPackageJson } from 'sort-package-json'
+import { dependencyMap } from '../utils/dependencies'
 
 function expressJSON(projectDir: string, packageManager: string) {
     fse.copySync(
@@ -20,7 +21,7 @@ function expressJSON(projectDir: string, packageManager: string) {
         pkgJSON.scripts.start = 'node dist/index.js'
         pkgJSON.scripts.dev = 'tsup --watch --onSuccess "node dist/index.cjs"'
 
-        pkgJSON.devDependencies['@types/node'] = '^20.16.5'
+        pkgJSON.devDependencies['@types/node'] = dependencyMap['types/node']
 
         // pnpm workspaces fucks me everytime
         if (packageManager === 'pnpm') {
@@ -28,7 +29,7 @@ function expressJSON(projectDir: string, packageManager: string) {
             pkgJSON.devDependencies['@repo/typescript-config'] = 'workspace:*'
         }
     } else {
-        pkgJSON.devDependencies['@types/bun'] = '^1.1.9'
+        pkgJSON.devDependencies['@types/bun'] = dependencyMap['types/bun']
     }
 
     const sortedPackageJSON = sortPackageJson(pkgJSON)

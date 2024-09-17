@@ -3,4 +3,4 @@
 # KEEP IT UP TO DATE and don't commit any secrets int his file
 # This just serves as template for `.env`
 
-PORT = "0000"
+PORT = "42069"

@@ -19,6 +19,8 @@ const dependencyMap = {
 
     prettier: '^3.3.3',
     'prettier-plugin-tailwindcss': '^0.6.6',
+    'types/node': '^20.16.3',
+    'types/bun': '^1.1.5',
 } as const
 
 type TDependencies = keyof typeof dependencyMap

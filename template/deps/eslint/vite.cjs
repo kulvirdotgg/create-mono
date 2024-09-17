@@ -8,7 +8,11 @@ For more information, see https://github.com/vercel/style-guide
 
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
-    extends: ["eslint:recommended", "prettier", "turbo"],
+    extends: [
+        '@vercel/style-guide/eslint/browser',
+        '@vercel/style-guide/eslint/typescript',
+        '@vercel/style-guide/eslint/react',
+    ].map(require.resolve),
     plugins: ['only-warn'],
     globals: {
         JSX: true,
@@ -28,10 +32,15 @@ module.exports = {
         },
     },
     ignorePatterns: ['node_modules/', 'dist/', '.eslintrc.cjs', '**/*.css'],
-    overrides: [
-        { files: ["*.js?(x)", "*.ts?(x)"] },
-    ],
+    overrides: [{ files: ['*.js?(x)', '*.ts?(x)'] }],
     rules: {
         'import/no-default-export': 'off',
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        'import/order': [
+            'error',
+            {
+                'newlines-between': 'ignore',
+            },
+        ],
     },
 }

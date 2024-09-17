@@ -8,8 +8,11 @@ https://github.com/vercel/style-guide
 
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
-    extends: ["eslint:recommended", "prettier", "turbo"],
-    plugins: ['only-warn'],
+    extends: [
+        '@vercel/style-guide/eslint/node',
+        '@vercel/style-guide/eslint/typescript',
+    ].map(require.resolve),
+
     parserOptions: {
         project,
     },
@@ -17,6 +20,7 @@ module.exports = {
         node: true,
         es6: true,
     },
+    plugins: ['only-warn'],
     settings: {
         'import/resolver': {
             typescript: {
@@ -28,5 +32,13 @@ module.exports = {
     ignorePatterns: ['.*.js', 'node_modules/', 'dist/'],
     rules: {
         'import/no-default-export': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
+        'no-console': 'off',
+        'import/order': [
+            'error',
+            {
+                'newlines-between': 'ignore',
+            },
+        ],
     },
 }
