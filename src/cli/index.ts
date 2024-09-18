@@ -6,7 +6,7 @@ import { validateName } from '../utils/validate-name'
 async function cli() {
     const userInputs = await p.group(
         {
-            projectName: () =>
+            name: () =>
                 p.text({
                     message: 'Name of your project',
                     defaultValue: '.',
@@ -98,7 +98,7 @@ async function cli() {
     )
 
     return {
-        projectName: userInputs.projectName,
+        userInputName: userInputs.name,
         packageManager: userInputs.packageManager,
         applications: [...userInputs.applications] as string[],
         importAlias: userInputs.importAlias,

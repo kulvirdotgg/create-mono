@@ -6,6 +6,7 @@ import { addDependencies } from '../utils/add-dependencies'
 import { TDependencies } from '../utils/dependencies'
 import { ROOT } from '../CONSTS'
 
+// appDir = repoName/apps/appName
 function drizzleInstaller(appDir: string, dbProvider: string) {
     const devPkg: TDependencies[] = ['drizzle-kit']
     addDependencies(devPkg, true, appDir)
@@ -18,8 +19,8 @@ function drizzleInstaller(appDir: string, dbProvider: string) {
     }
     addDependencies(pkg, false, appDir)
 
-    // add ORM scripts
     const packageJSON = fse.readJSONSync(path.join(appDir, 'package.json'))
+
     packageJSON.scripts['db:generate'] = 'drizzle-kit generate'
     packageJSON.scripts['db:migrate'] = 'drizzle-kit migrate '
     packageJSON.scripts['db:push'] = 'drizzle-kit push'
@@ -37,10 +38,7 @@ function drizzleInstaller(appDir: string, dbProvider: string) {
         |  |  schema.ts
         drizzle.connfig.ts
     */
-
     const depsDir = path.join(ROOT, 'template/deps')
-
-    // create the drizzle directory first inside src
     const drizzle = path.join(appDir, 'src/drizzle')
     fse.ensureDirSync(drizzle)
 

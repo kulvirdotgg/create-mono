@@ -22,7 +22,7 @@ async function baseSetup(projectName: string, projectDir: string) {
             spin.stopAndPersist()
 
             const overwrite = await p.select({
-                message: `${chalk.redBright.bold('warning: ')}: ${chalk.cyan.bold(projectName)} exists, Still wanna proceed?`,
+                message: `${chalk.redBright.bold('warning: ')}: ${chalk.bold.yellow(projectName)} ${chalk.yellow('exists, Still wanna proceed?')}`,
                 options: [
                     {
                         label: 'Stop installation (recommended)',

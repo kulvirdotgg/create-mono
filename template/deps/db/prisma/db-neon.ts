@@ -12,7 +12,7 @@ config({ path: '.env' })
 
 const dbUrl = process.env.DATABASE_URL!
 
-const client = () => {
+const prismaClientSingleton = () => {
     const postgres = neon(dbUrl)
     const adapter = new PrismaNeonHTTP(postgres)
     return new PrismaClient({ adapter })
@@ -22,11 +22,13 @@ const client = () => {
     caching connections to avoid multiple connections with HMR in dev env
     https://www.prisma.io/docs/orm/more/help-and-troubleshooting/help-articles/nextjs-prisma-client-dev-practices
 */
-declare const globalDB: {
-    conn: ReturnType<typeof client>
+
+declare const globalThis: {
+    prismaGlobal: ReturnType<typeof prismaClientSingleton>
 } & typeof global
-const prisma = globalDB.conn ?? client()
+
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
 
 export default prisma
 
-if (process.env.NODE_ENV !== 'production') globalDB.conn = prisma
+if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma

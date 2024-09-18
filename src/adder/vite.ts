@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fse from 'fs-extra'
 import path from 'path'
 
 import type { TVite } from '../cli/deps'
@@ -11,7 +11,7 @@ function addViteDependencies(appDir: string, vite: TVite) {
     const pagesDir = path.join(ROOT, 'template/applications/pages')
 
     if (tw) {
-        fs.copyFileSync(
+        fse.copyFileSync(
             path.join(pagesDir, 'vite-tw.tsx'),
             path.join(appDir, 'src/app/index.tsx')
         )

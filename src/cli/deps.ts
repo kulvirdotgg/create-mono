@@ -1,7 +1,12 @@
 import * as p from '@clack/prompts'
+import chalk from 'chalk'
 
 async function deps(apps: string[]) {
-    const express = apps.includes('express') ? await expressResponse() : null
+    p.note(chalk.greenBright.bold('Adding dependencies for your applications'))
+
+    const express: TExpress = apps.includes('express')
+        ? await expressResponse()
+        : null
 
     const vite: TVite = apps.includes('vite') ? await viteReponse() : null
 
@@ -15,7 +20,7 @@ async function expressResponse() {
         {
             orm: () => {
                 return p.select({
-                    message: 'What Orm would you like to use',
+                    message: 'What Orm would you like to use for express app',
                     options: [
                         { value: 'none', label: 'None' },
                         { value: 'drizzle', label: 'Drizzle' },
@@ -27,8 +32,7 @@ async function expressResponse() {
             database: ({ results }) => {
                 if (results.orm !== 'none') {
                     return p.select({
-                        message:
-                            'Select Database provider for your express application',
+                        message: 'Select Database provider for express app',
                         options: [
                             { value: 'neon', label: 'Neon' },
                             { value: 'supabase', label: 'Supabase' },
@@ -44,7 +48,7 @@ async function expressResponse() {
             },
         }
     )
-    return express
+    return express as TExpress
 }
 
 async function viteReponse() {
@@ -52,7 +56,7 @@ async function viteReponse() {
         {
             tailwind: () => {
                 return p.confirm({
-                    message: 'Do you want to use tailwind in your vite app',
+                    message: 'Do you want to use tailwind in vite app?',
                 })
             },
         },

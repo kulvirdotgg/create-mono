@@ -18,8 +18,8 @@ function prismaInstaller(appDir: string, dbProvider: string) {
     }
     addDependencies(pkg, false, appDir)
 
-    // add ORM scripts
     const packageJSON = fse.readJSONSync(path.join(appDir, 'package.json'))
+
     packageJSON.scripts['db:generate'] = 'prisma migrate dev'
     packageJSON.scripts['db:migrate'] = 'prisma migrate deploy'
     packageJSON.scripts['db:push'] = 'prisma db push'
@@ -39,12 +39,11 @@ function prismaInstaller(appDir: string, dbProvider: string) {
     */
 
     const depsDir = path.join(ROOT, 'template/deps')
-
     fse.copySync(path.join(depsDir, 'prisma'), path.join(appDir, 'prisma'))
 
-    // create the prisma directory first inside src
     const prisma = path.join(appDir, 'src/prisma')
     fse.ensureDirSync(prisma)
+
     fse.copySync(
         path.join(
             depsDir,

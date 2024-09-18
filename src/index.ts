@@ -17,19 +17,15 @@ async function main() {
     //TODO: render some kind of title before begining the process. (shameless plug)
     // ASCII art something like theo's t3 could be used.
 
-    const {
-        applications,
-        packageManager,
-        projectName: repoName,
-        importAlias,
-    } = await cli()
+    const { applications, packageManager, userInputName, importAlias } =
+        await cli()
 
     /*
         path/@repo/package
         scopedName: @repo/package
         projectName: path/package
     */
-    const [scopedName, projectName] = pathDetails(repoName)
+    const [scopedName, projectName] = pathDetails(userInputName)
     await init({ projectName, applications, packageManager })
 
     const basePackageJSON = fse.readJSONSync(

@@ -6,7 +6,7 @@ import { dependencyMap, type TDependencies } from './dependencies'
 
 function addDependencies(
     dependencies: TDependencies[],
-    devDep: boolean,
+    devDepencies: boolean,
     projectDir: string
 ) {
     const packageJSON = fse.readJSONSync(path.join(projectDir, 'package.json'))
@@ -14,7 +14,7 @@ function addDependencies(
     dependencies.forEach((dep) => {
         const version = dependencyMap[dep]
 
-        if (devDep) {
+        if (devDepencies) {
             packageJSON.devDependencies[dep] = version
         } else {
             packageJSON.dependencies[dep] = version
