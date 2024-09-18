@@ -39,6 +39,20 @@ module.exports = {
         'import/order': [
             'error',
             {
+                "groups":
+                    [
+                        'builtin',
+                        ['sibling', 'parent', 'index'],
+                        'external',
+                        'type'
+                    ],
+                "pathGroups": [
+                    {
+                        "pattern": "@/**",
+                        "group": "external",
+                        "position": "after"
+                    }
+                ],
                 'newlines-between': 'ignore',
             },
         ],

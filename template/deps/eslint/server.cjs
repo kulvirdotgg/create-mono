@@ -33,11 +33,24 @@ module.exports = {
     rules: {
         'import/no-default-export': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
-        'no-console': 'off',
         'import/order': [
             'error',
             {
-                'newlines-between': 'ignore',
+                "groups":
+                    [
+                        'builtin',
+                        'external',
+                        ['sibling', 'parent'],
+                        'type'
+                    ],
+                "pathGroups": [
+                    {
+                        "pattern": "@/**",
+                        "group": "parent",
+                        "position": "after"
+                    }
+                ],
+                'newlines-between': 'always',
             },
         ],
     },
