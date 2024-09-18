@@ -4,7 +4,7 @@ import path from 'node:path'
 
 import { ROOT } from '../CONSTS'
 
-function viteJSON(projectDir: string, packageManager: string) {
+function vite(projectDir: string, packageManager: string) {
     fse.copySync(
         path.join(ROOT, 'template/applications/vite'),
         path.join(projectDir, 'apps/vite')
@@ -12,30 +12,30 @@ function viteJSON(projectDir: string, packageManager: string) {
 
     // pnpm workspaces fucks everytime
     if (packageManager === 'pnpm') {
-        const pkgJSON = fse.readJSONSync(
+        const packageJSON = fse.readJSONSync(
             path.join(projectDir, 'apps/vite/package.json')
         )
 
-        pkgJSON.devDependencies['@repo/eslint-config'] = 'workspace:*'
-        pkgJSON.devDependencies['@repo/typescript-config'] = 'workspace:*'
+        packageJSON.devDependencies['@repo/eslint-config'] = 'workspace:*'
+        packageJSON.devDependencies['@repo/typescript-config'] = 'workspace:*'
 
         fse.writeJsonSync(
             path.join(projectDir, 'apps/vite/package.json'),
-            pkgJSON,
+            packageJSON,
             {
                 spaces: 4,
             }
         )
     }
 
-    fs.copyFileSync(
+    fse.copyFileSync(
         path.join(ROOT, 'template/deps/eslint/vite.cjs'),
         path.join(projectDir, 'packages/eslint-config/vite.cjs')
     )
-    fs.copyFileSync(
+    fse.copyFileSync(
         path.join(ROOT, 'template/deps/tsconfig/vite.json'),
         path.join(projectDir, 'packages/typescript-config/vite.json')
     )
 }
 
-export { viteJSON }
+export { vite }

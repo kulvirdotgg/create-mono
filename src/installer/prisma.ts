@@ -44,8 +44,7 @@ function prismaInstaller(appDir: string, dbProvider: string) {
 
     // create the prisma directory first inside src
     const prisma = path.join(appDir, 'src/prisma')
-    fse.ensureDir(prisma)
-    // .then(() => {
+    fse.ensureDirSync(prisma)
     fse.copySync(
         path.join(
             depsDir,
@@ -54,10 +53,6 @@ function prismaInstaller(appDir: string, dbProvider: string) {
         ),
         path.join(prisma, 'db.ts')
     )
-    // })
-    // .catch((err) => {
-    //     console.log('error in installing prisma', err)
-    // })
 }
 
 export { prismaInstaller }

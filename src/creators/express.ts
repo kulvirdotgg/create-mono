@@ -6,33 +6,35 @@ import { ROOT } from '../CONSTS'
 import { sortPackageJson } from 'sort-package-json'
 import { dependencyMap } from '../utils/dependencies'
 
-function expressJSON(projectDir: string, packageManager: string) {
+function express(projectDir: string, packageManager: string) {
     fse.copySync(
         path.join(ROOT, 'template/applications/express'),
         path.join(projectDir, 'apps/express')
     )
 
-    const pkgJSON = fse.readJSONSync(
+    const packageJSON = fse.readJSONSync(
         path.join(projectDir, 'apps/express/package.json')
     )
 
     // `node run dist/index.js` for other than bun.
     if (packageManager !== 'bun') {
-        pkgJSON.scripts.start = 'node dist/index.js'
-        pkgJSON.scripts.dev = 'tsup --watch --onSuccess "node dist/index.cjs"'
+        packageJSON.scripts.start = 'node dist/index.js'
+        packageJSON.scripts.dev =
+            'tsup --watch --onSuccess "node dist/index.cjs"'
 
-        pkgJSON.devDependencies['@types/node'] = dependencyMap['types/node']
+        packageJSON.devDependencies['@types/node'] = dependencyMap['types/node']
 
         // pnpm workspaces fucks me everytime
         if (packageManager === 'pnpm') {
-            pkgJSON.devDependencies['@repo/eslint-config'] = 'workspace:*'
-            pkgJSON.devDependencies['@repo/typescript-config'] = 'workspace:*'
+            packageJSON.devDependencies['@repo/eslint-config'] = 'workspace:*'
+            packageJSON.devDependencies['@repo/typescript-config'] =
+                'workspace:*'
         }
     } else {
-        pkgJSON.devDependencies['@types/bun'] = dependencyMap['types/bun']
+        packageJSON.devDependencies['@types/bun'] = dependencyMap['types/bun']
     }
 
-    const sortedPackageJSON = sortPackageJson(pkgJSON)
+    const sortedPackageJSON = sortPackageJson(packageJSON)
     fse.writeJsonSync(
         path.join(projectDir, 'apps/express/package.json'),
         sortedPackageJSON,
@@ -47,4 +49,4 @@ function expressJSON(projectDir: string, packageManager: string) {
     )
 }
 
-export { expressJSON }
+export { express }

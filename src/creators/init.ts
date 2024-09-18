@@ -1,10 +1,9 @@
-import fs from 'fs'
 import path from 'path'
 import fse from 'fs-extra'
 
-import { createBase } from './base-setup'
-import { expressJSON } from './express-json'
-import { viteJSON } from './vite-json'
+import { baseSetup } from './base-setup'
+import { express } from './express'
+import { vite } from './vite'
 import { ROOT } from '../CONSTS'
 
 async function init({
@@ -14,31 +13,30 @@ async function init({
 }: TInitProject) {
     const projectDir = path.resolve(process.cwd(), projectName)
 
-    await createBase(projectName, projectDir)
+    await baseSetup(projectName, projectDir)
 
-    // pnpm got weird workspaces things
+    // pnpm got weird workspaces setup
     if (packageManager === 'pnpm') {
-        const pkgJSON = fse.readJSONSync(
+        const packageJSON = fse.readJSONSync(
             path.resolve(projectDir, 'package.json')
         )
-        delete pkgJSON['workspaces']
-
-        fse.writeJsonSync(path.join(projectDir, 'package.json'), pkgJSON, {
+        delete packageJSON['workspaces']
+        fse.writeJsonSync(path.join(projectDir, 'package.json'), packageJSON, {
             spaces: 4,
         })
 
-        fs.copyFileSync(
+        fse.copyFileSync(
             path.join(ROOT, 'template/deps/configs/pnpm-workspace.yaml'),
             path.join(projectDir, 'pnpm-workspace.yaml')
         )
     }
 
     if (applications.includes('vite')) {
-        viteJSON(projectDir, packageManager)
+        vite(projectDir, packageManager)
     }
 
     if (applications.includes('express')) {
-        expressJSON(projectDir, packageManager)
+        express(projectDir, packageManager)
     }
 }
 

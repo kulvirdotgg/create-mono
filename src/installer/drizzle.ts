@@ -42,21 +42,19 @@ function drizzleInstaller(appDir: string, dbProvider: string) {
 
     // create the drizzle directory first inside src
     const drizzle = path.join(appDir, 'src/drizzle')
-    fse.ensureDir(drizzle)
-    // .then(() => {
-    // drizzle config
+    fse.ensureDirSync(drizzle)
+
     fse.copyFileSync(
         path.join(depsDir, 'configs/drizzle.config.ts'),
         path.join(appDir, 'drizzle.config.ts')
     )
 
-    // schema
     fse.copyFileSync(
         path.join(depsDir, 'db/drizzle/schema.ts'),
         path.join(drizzle, 'schema.ts')
     )
 
-    fse.copySync(
+    fse.copyFileSync(
         path.join(
             depsDir,
             'db/drizzle',
@@ -64,10 +62,6 @@ function drizzleInstaller(appDir: string, dbProvider: string) {
         ),
         path.join(drizzle, 'db.ts')
     )
-    // })
-    // .catch((err) => {
-    //     console.log('error in drizzle path copying', err)
-    // })
 }
 
 export { drizzleInstaller }

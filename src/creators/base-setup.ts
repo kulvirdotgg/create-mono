@@ -6,24 +6,23 @@ import * as p from '@clack/prompts'
 
 import { ROOT } from '../CONSTS'
 
-async function createBase(projectName: string, projectDir: string) {
-    const spin = ora('Starting monorepo in: ' + projectDir + '...\n').start()
+async function baseSetup(projectName: string, projectDir: string) {
+    const spin = ora(
+        `Initializing monorepo in: ${chalk.bold(projectDir)}...\n`
+    ).start()
 
     if (fse.existsSync(projectDir)) {
         if (fse.readdirSync(projectDir).length === 0) {
-            if (projectName !== '.')
-                spin.info(
-                    chalk.cyan.bold(projectName) +
-                        ' present but empty (like life), continuing...\n'
+            if (projectName !== '.') {
+                spin.warn(
+                    `${chalk.bold.cyan(projectName)} ${chalk.yellow('present but empty (dejavu of life), continuing...\n')}`
                 )
+            }
         } else {
             spin.stopAndPersist()
 
             const overwrite = await p.select({
-                message:
-                    chalk.redBright.bold('warning: ') +
-                    chalk.cyan.bold(projectName) +
-                    ' exists, Still proceed?',
+                message: `${chalk.redBright.bold('warning: ')}: ${chalk.cyan.bold(projectName)} exists, Still wanna proceed?`,
                 options: [
                     {
                         label: 'Stop installation (recommended)',
@@ -51,7 +50,7 @@ async function createBase(projectName: string, projectDir: string) {
                     : 'overwrite conflicting files'
 
             const confirmOverwrite = await p.confirm({
-                message: 'Are you sure you want to ' + action,
+                message: `Are you sure you want to  ${action}`,
                 initialValue: false,
             })
 
@@ -62,11 +61,10 @@ async function createBase(projectName: string, projectDir: string) {
 
             if (overwrite === 'clear') {
                 spin.info(
-                    chalk.cyan.bold(projectName) + 'clearning and continuing...'
+                    `${chalk.cyan.bold(projectName)} clearning and continuing...`
                 )
                 fse.emptyDirSync(projectDir)
             }
-
             spin.stopAndPersist()
         }
     }
@@ -78,8 +76,9 @@ async function createBase(projectName: string, projectDir: string) {
         path.join(projectDir, 'gitignore'),
         path.join(projectDir, '.gitignore')
     )
+
     const baseName = projectName === '.' ? 'App' : chalk.cyan.bold(projectName)
-    spin.succeed(baseName + ' created successfully...\n')
+    spin.succeed(`Monorepo ${baseName} initialized successfully...\n`)
 }
 
-export { createBase }
+export { baseSetup }

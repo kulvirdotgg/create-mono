@@ -6,13 +6,13 @@ import { validateName } from '../utils/validate-name'
 async function cli() {
     const userInputs = await p.group(
         {
-            repoName: () =>
+            projectName: () =>
                 p.text({
                     message: 'Name of your project',
                     defaultValue: '.',
                     validate: validateName,
                 }),
-            pacMan: () => {
+            packageManager: () => {
                 return p.select({
                     message: 'Choose your package manager',
                     options: [
@@ -24,8 +24,7 @@ async function cli() {
                     initialValue: 'bun',
                 })
             },
-            // TODO: add next and astro templates.
-            apps: () => {
+            applications: () => {
                 return p.multiselect({
                     message:
                         'What applications you want to have in your monorepo?' +
@@ -42,11 +41,6 @@ async function cli() {
                             hint: 'not available yet',
                         },
                         { value: 'vite', label: 'Vite SPA' },
-                        {
-                            value: 'hono',
-                            label: chalk.redBright('Hono API'),
-                            hint: 'not available yet',
-                        },
                         { value: 'express', label: 'Express API' },
                     ],
                 })
@@ -54,9 +48,8 @@ async function cli() {
             //TODO: Remove when next and astro template is added
             _: ({ results }) => {
                 if (
-                    results.apps?.includes('hono') ||
-                    results.apps?.includes('next') ||
-                    results.apps?.includes('astro')
+                    results.applications?.includes('next') ||
+                    results.applications?.includes('astro')
                 ) {
                     p.cancel(
                         chalk.redBright(
@@ -105,9 +98,9 @@ async function cli() {
     )
 
     return {
-        repoName: userInputs.repoName,
-        packageManager: userInputs.pacMan,
-        applications: [...userInputs.apps] as string[],
+        projectName: userInputs.projectName,
+        packageManager: userInputs.packageManager,
+        applications: [...userInputs.applications] as string[],
         importAlias: userInputs.importAlias,
     }
 }

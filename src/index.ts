@@ -3,6 +3,7 @@
 import fse from 'fs-extra'
 import path from 'node:path'
 import { execa } from 'execa'
+import ora from 'ora'
 
 import { cli } from './cli/index'
 import { pathDetails } from './utils/path-details'
@@ -10,31 +11,56 @@ import { init } from './creators/init'
 import { deps } from './cli/deps'
 import { addAppDeps } from './adder'
 import { updateImportAlias, updateViteAlias } from './utils/update-import-alisa'
+import chalk from 'chalk'
 
 async function main() {
     //TODO: render some kind of title before begining the process. (shameless plug)
     // ASCII art something like theo's t3 could be used.
 
-    const { applications, packageManager, repoName, importAlias } = await cli()
+    const {
+        applications,
+        packageManager,
+        projectName: repoName,
+        importAlias,
+    } = await cli()
 
+    /*
+        path/@repo/package
+        scopedName: @repo/package
+        projectName: path/package
+    */
     const [scopedName, projectName] = pathDetails(repoName)
     await init({ projectName, applications, packageManager })
 
-    const basePkgJSON = fse.readJSONSync(path.join(projectName, 'package.json'))
-    basePkgJSON.name = scopedName
+    const basePackageJSON = fse.readJSONSync(
+        path.join(projectName, 'package.json')
+    )
+    basePackageJSON.name = scopedName
 
-    // TODO: try catch block here, if user doens't have that package manager installed exit.
     try {
         const { stdout } = await execa(packageManager, ['-v'], {
             cwd: projectName,
         })
 
-        basePkgJSON.packageManager = packageManager + '@' + stdout.trim()
-        fse.writeJsonSync(path.join(projectName, 'package.json'), basePkgJSON, {
-            spaces: 4,
-        })
+        basePackageJSON.packageManager = packageManager + '@' + stdout.trim()
+        fse.writeJsonSync(
+            path.join(projectName, 'package.json'),
+            basePackageJSON,
+            {
+                spaces: 4,
+            }
+        )
     } catch (err) {
-        console.log('failed')
+        console.log(
+            chalk.bold.redBright(
+                `${packageManager} does not exist on this machine`
+            )
+        )
+        const spin = ora(
+            `Project creation failed... removing ${chalk.bold.cyanBright(projectName)}`
+        ).start()
+        await execa('rm', ['-rf', projectName])
+        spin.fail()
         process.exit(1)
     }
 

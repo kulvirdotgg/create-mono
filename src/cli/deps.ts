@@ -11,43 +11,57 @@ async function deps(apps: string[]) {
 export { deps }
 
 async function expressResponse() {
-    const express = await p.group({
-        orm: () => {
-            return p.select({
-                message: 'What Orm would you like to use',
-                options: [
-                    { value: 'none', label: 'None' },
-                    { value: 'drizzle', label: 'Drizzle' },
-                    { value: 'prisma', label: 'Prisma' },
-                ],
-                initialValue: 'none',
-            })
-        },
-        database: ({ results }) => {
-            if (results.orm !== 'none') {
+    const express = await p.group(
+        {
+            orm: () => {
                 return p.select({
-                    message:
-                        'Select Database provider for your express application',
+                    message: 'What Orm would you like to use',
                     options: [
-                        { value: 'neon', label: 'Neon' },
-                        { value: 'supabase', label: 'Supabase' },
+                        { value: 'none', label: 'None' },
+                        { value: 'drizzle', label: 'Drizzle' },
+                        { value: 'prisma', label: 'Prisma' },
                     ],
-                    initialValue: 'neon',
+                    initialValue: 'none',
                 })
-            }
+            },
+            database: ({ results }) => {
+                if (results.orm !== 'none') {
+                    return p.select({
+                        message:
+                            'Select Database provider for your express application',
+                        options: [
+                            { value: 'neon', label: 'Neon' },
+                            { value: 'supabase', label: 'Supabase' },
+                        ],
+                        initialValue: 'neon',
+                    })
+                }
+            },
         },
-    })
+        {
+            onCancel() {
+                process.exit(0)
+            },
+        }
+    )
     return express
 }
 
 async function viteReponse() {
-    const vite = await p.group({
-        tailwind: () => {
-            return p.confirm({
-                message: 'Do you want to use tailwind in your vite app',
-            })
+    const vite = await p.group(
+        {
+            tailwind: () => {
+                return p.confirm({
+                    message: 'Do you want to use tailwind in your vite app',
+                })
+            },
         },
-    })
+        {
+            onCancel() {
+                process.exit(0)
+            },
+        }
+    )
     return vite
 }
 
