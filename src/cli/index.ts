@@ -1,7 +1,7 @@
 import * as p from '@clack/prompts'
 import chalk from 'chalk'
 
-import { validateName } from '../utils/validate-name'
+import { validateName } from '@/utils/validate-name'
 
 async function cli() {
     const userInputs = await p.group(
@@ -24,11 +24,33 @@ async function cli() {
                     initialValue: 'bun',
                 })
             },
+            language: () => {
+                return p.select({
+                    message:
+                        'Will you be using Javascript or Typescript in monorepo?',
+                    options: [
+                        { value: 'typescript', label: 'Typescript' },
+                        {
+                            value: 'javascript',
+                            label: 'Javascript',
+                            hint: 'Skill issues',
+                        },
+                    ],
+                    initialValue: 'typescript',
+                })
+            },
+            _: ({ results }) => {
+                if (results.language === 'javascript') {
+                    return p.note(
+                        chalk.redBright(
+                            'Skill issues, you will use only Typescript'
+                        )
+                    )
+                }
+            },
             applications: () => {
                 return p.multiselect({
-                    message:
-                        'What applications you want to have in your monorepo?' +
-                        chalk.cyan('(space to select)'),
+                    message: `What application packages do you want to add?' ${chalk.cyan('(space to select)')}`,
                     options: [
                         {
                             value: 'astro',
@@ -46,7 +68,7 @@ async function cli() {
                 })
             },
             //TODO: Remove when next and astro template is added
-            _: ({ results }) => {
+            __: ({ results }) => {
                 if (
                     results.applications?.includes('next') ||
                     results.applications?.includes('astro')
@@ -59,34 +81,37 @@ async function cli() {
                     process.exit(0)
                 }
             },
-            language: () => {
-                return p.select({
-                    message:
-                        'Will you be using Javascript or Typescript in all application?',
+            packages: () => {
+                return p.multiselect({
+                    message: `What shared packages do you want to add?' ${chalk.cyan('(optional)')}`,
                     options: [
-                        { value: 'typescript', label: 'Typescript' },
-                        {
-                            value: 'javascript',
-                            label: 'Javascript',
-                            hint: 'Skill issues',
-                        },
+                        { value: 'drizzle', label: 'Drizzle' },
+                        { value: 'prisma', label: 'Prisma' },
+                        { value: 'tailwind', label: 'UI w tailwind' },
                     ],
-                    initialValue: 'typescript',
+                    required: false,
                 })
             },
-            __: ({ results }) => {
-                if (results.language === 'javascript') {
-                    return p.note(
-                        chalk.redBright(
-                            'Skill issues, you will use only Typescript'
-                        )
-                    )
+            database: ({ results }) => {
+                if (
+                    results.packages?.includes('drizzle') ||
+                    results.packages?.includes('prisma')
+                ) {
+                    return p.select({
+                        message: 'Select Database provider',
+                        options: [
+                            { value: 'neon', label: 'Neon Serverless' },
+                            { value: 'supabase', label: 'Supabase' },
+                        ],
+                        initialValue: 'neon',
+                    })
                 }
             },
             importAlias: () => {
                 return p.text({
                     message: 'Import alias',
                     defaultValue: '@/',
+                    placeholder: '@/',
                 })
             },
         },
@@ -99,10 +124,20 @@ async function cli() {
 
     return {
         userInputName: userInputs.name,
-        packageManager: userInputs.packageManager,
-        applications: [...userInputs.applications] as string[],
+        packageManager: userInputs.packageManager as TPackageManager,
+        applications: [...userInputs.applications] as TApplication[],
+        packages: [...userInputs.packages] as TPackage[],
+        database: userInputs.database as TDatabase,
         importAlias: userInputs.importAlias,
     }
 }
 
 export { cli }
+
+export type TPackageManager = 'bun' | 'npm' | 'pnpm' | 'yarn'
+
+export type TApplication = 'astro' | 'express' | 'next' | 'vite'
+
+export type TPackage = 'drizzle' | 'prisma' | 'tailwind' | null
+
+export type TDatabase = 'neon' | 'supabase' | null

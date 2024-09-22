@@ -4,9 +4,9 @@ import { serial, text, timestamp, pgTableCreator } from 'drizzle-orm/pg-core'
     MULTI PROJECT SCHEMA
     https://orm.drizzle.team/docs/goodies#multi-project-schema
 */
-const pgTable = pgTableCreator((name) => `mono_express_${name}`)
+const pgTable = pgTableCreator((name) => `mono_${name}`)
 
-export const postsTable = pgTable('posts_table', {
+export const posts = pgTable('posts', {
     id: serial('id').primaryKey(),
     title: text('title').notNull(),
     createdAt: timestamp('created_at').notNull().defaultNow(),

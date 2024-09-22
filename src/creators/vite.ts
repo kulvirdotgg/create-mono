@@ -1,39 +1,30 @@
-import fs from 'fs'
 import fse from 'fs-extra'
 import path from 'node:path'
 
-import { ROOT } from '../CONSTS'
+import { ROOT } from '@/CONSTS'
+import { updatePnpmWorkspace } from '@/utils/workspace-pnpm'
 
-function vite(projectDir: string, packageManager: string) {
+import type { TPackageManager } from '@/cli'
+
+function vite(projectDir: string, packageManager: TPackageManager) {
     fse.copySync(
         path.join(ROOT, 'template/applications/vite'),
         path.join(projectDir, 'apps/vite')
     )
 
-    // pnpm workspaces fucks everytime
+    // pnpm workspaces fucks me everytime
     if (packageManager === 'pnpm') {
-        const packageJSON = fse.readJSONSync(
-            path.join(projectDir, 'apps/vite/package.json')
-        )
+        const appDir = path.join(projectDir, 'apps/vite')
 
-        packageJSON.devDependencies['@repo/eslint-config'] = 'workspace:*'
-        packageJSON.devDependencies['@repo/typescript-config'] = 'workspace:*'
-
-        fse.writeJsonSync(
-            path.join(projectDir, 'apps/vite/package.json'),
-            packageJSON,
-            {
-                spaces: 4,
-            }
-        )
+        updatePnpmWorkspace(appDir)
     }
 
     fse.copyFileSync(
-        path.join(ROOT, 'template/deps/eslint/vite.cjs'),
+        path.join(ROOT, 'template/packages/eslint/vite.cjs'),
         path.join(projectDir, 'packages/eslint-config/vite.cjs')
     )
     fse.copyFileSync(
-        path.join(ROOT, 'template/deps/tsconfig/vite.json'),
+        path.join(ROOT, 'template/packages/tsconfig/vite.json'),
         path.join(projectDir, 'packages/typescript-config/vite.json')
     )
 }

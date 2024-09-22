@@ -4,7 +4,7 @@ import ora from 'ora'
 import path from 'node:path'
 import * as p from '@clack/prompts'
 
-import { ROOT } from '../CONSTS'
+import { ROOT } from '@/CONSTS'
 
 async function baseSetup(projectName: string, projectDir: string) {
     const spin = ora(

@@ -1,4 +1,0 @@
-PORT = 42069
-
-# Database connection string
-DATABASE_URL="postgresql://postgres:<password>@host:5432/project-name"

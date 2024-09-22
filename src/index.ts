@@ -4,21 +4,25 @@ import fse from 'fs-extra'
 import path from 'node:path'
 import { execa } from 'execa'
 import ora from 'ora'
-
-import { cli } from './cli/index'
-import { pathDetails } from './utils/path-details'
-import { init } from './creators/init'
-import { deps } from './cli/deps'
-import { addAppDeps } from './adder'
-import { updateImportAlias, updateViteAlias } from './utils/update-import-alisa'
 import chalk from 'chalk'
+
+import { cli } from '@/cli/index'
+import { pathDetails } from '@/utils/path-details'
+import { init } from '@/creators/init'
+import { updateImportAlias, updateViteAlias } from '@/utils/update-import-alias'
 
 async function main() {
     //TODO: render some kind of title before begining the process. (shameless plug)
     // ASCII art something like theo's t3 could be used.
 
-    const { applications, packageManager, userInputName, importAlias } =
-        await cli()
+    const {
+        userInputName,
+        packageManager,
+        applications,
+        packages,
+        database,
+        importAlias,
+    } = await cli()
 
     /*
         path/@repo/package
@@ -26,14 +30,13 @@ async function main() {
         projectName: path/package
     */
     const [scopedName, projectName] = pathDetails(userInputName)
-    await init({ projectName, applications, packageManager })
-
-    const basePackageJSON = fse.readJSONSync(
-        path.join(projectName, 'package.json')
-    )
-    basePackageJSON.name = scopedName
+    await init(projectName, packageManager, applications, packages, database)
 
     try {
+        const basePackageJSON = fse.readJSONSync(
+            path.join(projectName, 'package.json')
+        )
+        basePackageJSON.name = scopedName
         const { stdout } = await execa(packageManager, ['-v'], {
             cwd: projectName,
         })
@@ -49,23 +52,17 @@ async function main() {
     } catch (err) {
         console.log(
             chalk.bold.redBright(
-                `${packageManager} does not exist on this machine`
+                `${packageManager} not found. Try again after installing.`
             )
         )
-        const spin = ora(
-            `Project creation failed... removing ${chalk.bold.cyanBright(projectName)}`
-        ).start()
+        const spin = ora('Project creation failed...').start()
         await execa('rm', ['-rf', projectName])
         spin.fail()
         process.exit(1)
     }
 
-    const { vite, express } = await deps(applications)
-    await addAppDeps(projectName, express, vite)
-
-    // update the import alias
     updateImportAlias(projectName, importAlias)
-    if (vite) {
+    if (applications.includes('vite')) {
         const vitePath = path.join(projectName, 'apps/vite/vite.config.ts')
         updateViteAlias(vitePath, importAlias)
     }

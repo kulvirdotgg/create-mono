@@ -1,7 +1,7 @@
 {
     "name": "create-mono",
     "version": "1.0.0",
-    "description": "Initialize your monorepos with Turborepo.",
+    "description": "Initialize your monorepos with ease.",
     "lisence": "MIT",
     "author": "Kulvir Singh",
     "repository": {
@@ -11,16 +11,13 @@
     },
     "keywords": [
         "turborepo",
-        "vite",
-        "express",
-        "hono",
-        "elysia",
         "next.js",
+        "prisma",
         "react.js",
         "tailwind",
-        "Shadcn-ui",
         "drizzle",
-        "prisma"
+        "vite",
+        "express"
     ],
     "type": "module",
     "exports": "./dist/index.js",

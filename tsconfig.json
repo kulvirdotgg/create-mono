@@ -1,13 +1,15 @@
 {
     "compilerOptions": {
-        "lib": ["ESNext", "DOM"],
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
         "target": "ESNext",
         "module": "ESNext",
         "moduleResolution": "Bundler",
         "moduleDetection": "force",
         "allowJs": true,
         "checkJs": true,
-
         "outDir": "./dist",
         "noEmit": true, // TSUP takes care of emitting js for us, in a MUCH faster way
         "declaration": true,
@@ -16,18 +18,21 @@
         "removeComments": true,
         "allowImportingTsExtensions": true,
         "verbatimModuleSyntax": true,
-
         "strict": true,
         "skipLibCheck": true,
         "noFallthroughCasesInSwitch": true,
         "noUnusedLocals": false,
         "noUnusedParameters": false,
         "noPropertyAccessFromIndexSignature": false,
-
-        "baseUrl": "./",
+        "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": [
+                "./src/*"
+            ]
         }
     },
-    "include": ["cli", "tsup.config.ts"]
+    "include": [
+        "src",
+        "tsup.config.ts"
+    ]
 }
