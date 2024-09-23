@@ -10,7 +10,7 @@
         "db:push": "drizzle-kit push",
         "db:studio": "prisma studio",
         "dev": "tsup src/* --watch",
-        "lint": "eslint src/"
+        "lint": "eslint ."
     },
     "dependencies": {
         "dotenv": "^16.4.5"
@@ -19,6 +19,7 @@
         "@repo/eslint-config": "*",
         "@repo/typescript-config": "*",
         "@types/eslint": "^8.56.10",
-        "tsup": "^8.0.2"
+        "tsup": "^8.0.2",
+        "typescript": "^5.5.4"
     }
 }

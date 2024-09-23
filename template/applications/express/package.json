@@ -4,12 +4,12 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "start": "bun dist/index.js",
-        "dev": "tsup --watch --onSuccess \"bun dist/index.cjs\"",
         "build": "tsup",
         "clean": "rm -rf dist",
-        "typecheck": "tsc --noEmit",
-        "lint": "eslint src/"
+        "dev": "tsup --watch --onSuccess \"bun dist/index.cjs\"",
+        "lint": "eslint .",
+        "start": "bun dist/index.cjs",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "body-parser": "^1.20.2",

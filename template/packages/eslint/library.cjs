@@ -6,12 +6,8 @@ const project = resolve(process.cwd(), 'tsconfig.json')
 module.exports = {
     extends: ['eslint:recommended', 'prettier', 'turbo'],
     plugins: ['only-warn'],
-    globals: {
-        React: true,
-        JSX: true,
-    },
-    env: {
-        node: true,
+    parserOptions: {
+        project,
     },
     settings: {
         'import/resolver': {
@@ -20,10 +16,9 @@ module.exports = {
             },
         },
     },
-    ignorePatterns: ['.*.js', 'node_modules/', 'dist/'],
-    overrides: [
-        {
-            files: ['*.js?(x)', '*.ts?(x)'],
-        },
-    ],
+    ignorePatterns: ['node_modules/', '.*.js', 'dist/'],
+    overrides: [{ files: ['*.js', '*.ts'] }],
+    rules: {
+        'import/no-default-export': 'off',
+    },
 }

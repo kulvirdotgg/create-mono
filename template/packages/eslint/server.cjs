@@ -2,16 +2,16 @@ const { resolve } = require('node:path')
 
 const project = resolve(process.cwd(), 'tsconfig.json')
 
-/** @type {import("eslint").Linter.Config} */
+// Checkout this for more info: https://github.com/vercel/style-guide
+
+/** @type {import("eslint").Linter.Config}*/
 module.exports = {
     extends: [
-        'eslint:recommended',
-        'prettier',
         'turbo',
-        'plugin:@typescript-eslint/recommended-type-checked',
-        'plugin:@typescript-eslint/stylistic-type-checked',
+        require.resolve('@vercel/style-guide/eslint/node'),
+        require.resolve('@vercel/style-guide/eslint/typescript'),
     ],
-    plugins: ['only-warn', '@typescript-eslint'],
+    plugins: ['only-warn'],
     parserOptions: {
         project,
     },
@@ -26,13 +26,9 @@ module.exports = {
             },
         },
     },
-    overrides: [
-        {
-            files: ['*.js?(x)', '*.ts?(x)'],
-        },
-    ],
     ignorePatterns: ['.*.js', 'node_modules/', 'dist/'],
     rules: {
+        'import/no-default-export': 'off',
         '@typescript-eslint/array-type': 'off',
         '@typescript-eslint/consistent-type-definitions': 'off',
         '@typescript-eslint/consistent-type-imports': [
@@ -43,7 +39,27 @@ module.exports = {
         ],
         '@typescript-eslint/no-unused-vars': [
             'warn',
-            { argsIgnorePattern: '^_' },
+            {
+                argsIgnorePattern: '^_',
+            },
+        ],
+        'import/order': [
+            'error',
+            {
+                'newlines-between': 'always',
+                groups: [
+                    ['builtin', 'external'],
+                    ['sibling', 'parent'],
+                    'type',
+                ],
+                pathGroups: [
+                    {
+                        pattern: '@/**',
+                        group: 'parent',
+                        position: 'after',
+                    },
+                ],
+            },
         ],
     },
 }
