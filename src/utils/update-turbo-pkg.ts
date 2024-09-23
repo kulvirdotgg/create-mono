@@ -18,17 +18,29 @@ function updateTurboPkgJSON(projectDir: string, orm: TOrm) {
             'turbo run migrate:deploy'
         rootPacakgeJSON.scripts['db:push'] = 'turbo run db:push'
 
-        turboJSON.tasks['db:generate'] = {}
-        turboJSON.tasks['db:migrate:deploy'] = {}
-        turboJSON.tasks['db:push'] = {}
+        turboJSON.tasks['db:generate'] = {
+            cache: false,
+        }
+        turboJSON.tasks['db:migrate:deploy'] = {
+            cache: false,
+        }
+        turboJSON.tasks['db:push'] = {
+            cache: false,
+        }
     } else if (orm === 'drizzle') {
         rootPacakgeJSON.scripts['db:generate'] = 'turbo run db:generate'
         rootPacakgeJSON.scripts['db:migrate'] = 'turbo run db:migrate'
         rootPacakgeJSON.scripts['db:push'] = 'turbo run db:push'
 
-        turboJSON.tasks['db:generate'] = {}
-        turboJSON.tasks['db:migrate'] = {}
-        turboJSON.tasks['db:push'] = {}
+        turboJSON.tasks['db:generate'] = {
+            cache: false,
+        }
+        turboJSON.tasks['db:migrate'] = {
+            cache: false,
+        }
+        turboJSON.tasks['db:push'] = {
+            cache: false,
+        }
     }
     const sortedTurboJSON = sortPackageJson(turboJSON)
     fse.writeJSONSync(path.join(projectDir, 'turbo.json'), sortedTurboJSON, {

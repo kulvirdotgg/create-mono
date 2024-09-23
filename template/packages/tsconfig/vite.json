@@ -5,8 +5,13 @@
     "compilerOptions": {
         "allowJs": false,
         "esModuleInterop": false,
+        "isolatedModules": true,
         "jsx": "react-jsx",
-        "lib": ["dom", "dom.iterable", "esnext"],
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ESNext"
+        ],
         "module": "ESNext",
         "moduleDetection": "force",
         "moduleResolution": "bundler",
@@ -15,7 +20,11 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "skipLibCheck": true,
+        "strict": true,
         "target": "ESNext",
-        "types": ["vite/client"]
+        "types": [
+            "vite/client"
+        ],
+        "useDefineForClassFields": true
     }
 }
