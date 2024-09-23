@@ -81,22 +81,19 @@ async function cli() {
                     process.exit(0)
                 }
             },
-            packages: () => {
-                return p.multiselect({
-                    message: `What shared packages do you want to add?' ${chalk.cyan('(optional)')}`,
+            orm: () => {
+                return p.select({
+                    message: 'What ORM would you like to use?',
                     options: [
+                        { value: 'none', label: 'None' },
                         { value: 'drizzle', label: 'Drizzle' },
                         { value: 'prisma', label: 'Prisma' },
-                        { value: 'tailwind', label: 'UI w tailwind' },
                     ],
-                    required: false,
+                    initialValue: 'none',
                 })
             },
             database: ({ results }) => {
-                if (
-                    results.packages?.includes('drizzle') ||
-                    results.packages?.includes('prisma')
-                ) {
+                if (results.orm !== 'none') {
                     return p.select({
                         message: 'Select Database provider',
                         options: [
@@ -126,7 +123,7 @@ async function cli() {
         userInputName: userInputs.name,
         packageManager: userInputs.packageManager as TPackageManager,
         applications: [...userInputs.applications] as TApplication[],
-        packages: [...userInputs.packages] as TPackage[],
+        orm: userInputs.orm as TOrm,
         database: userInputs.database as TDatabase,
         importAlias: userInputs.importAlias,
     }
@@ -138,6 +135,6 @@ export type TPackageManager = 'bun' | 'npm' | 'pnpm' | 'yarn'
 
 export type TApplication = 'astro' | 'express' | 'next' | 'vite'
 
-export type TPackage = 'drizzle' | 'prisma' | 'tailwind' | null
+export type TOrm = 'drizzle' | 'prisma' | 'none'
 
 export type TDatabase = 'neon' | 'supabase' | null

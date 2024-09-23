@@ -19,7 +19,7 @@ async function main() {
         userInputName,
         packageManager,
         applications,
-        packages,
+        orm,
         database,
         importAlias,
     } = await cli()
@@ -30,7 +30,7 @@ async function main() {
         projectName: path/package
     */
     const [scopedName, projectName] = pathDetails(userInputName)
-    await init(projectName, packageManager, applications, packages, database)
+    await init(projectName, packageManager, applications, orm, database)
 
     try {
         const basePackageJSON = fse.readJSONSync(

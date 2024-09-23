@@ -10,7 +10,7 @@ import { addDatabase } from './database'
 import type {
     TApplication,
     TDatabase,
-    TPackage,
+    TOrm,
     TPackageManager,
 } from '@/cli/index'
 
@@ -18,7 +18,7 @@ async function init(
     projectName: string,
     packageManager: TPackageManager,
     applications: TApplication[],
-    packages: TPackage[],
+    orm: TOrm,
     database: TDatabase
 ) {
     const projectDir = path.resolve(process.cwd(), projectName)
@@ -49,12 +49,7 @@ async function init(
         express(projectDir, packageManager)
     }
 
-    if (packages.includes('prisma')) {
-        addDatabase(projectDir, packageManager, 'prisma', database)
-    }
-    if (packages.includes('drizzle')) {
-        addDatabase(projectDir, packageManager, 'drizzle', database)
-    }
+    orm !== 'none' && addDatabase(projectDir, packageManager, orm, database)
 }
 
 export { init }

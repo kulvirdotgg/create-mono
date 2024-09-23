@@ -13,16 +13,10 @@ const dependencyMap = {
     '@prisma/adapter-neon': '^5.19.1',
     prisma: '^5.19.1',
 
-    tailwindcss: '^3.4.10',
-    postcss: '^8.4.44',
-    autoprefixer: '^10.4.20',
-
-    prettier: '^3.3.3',
-    'prettier-plugin-tailwindcss': '^0.6.6',
     'types/node': '^20.16.3',
     'types/bun': '^1.1.5',
 } as const
 
-type TDependencies = keyof typeof dependencyMap
+export type TDependencies = keyof typeof dependencyMap
 
-export { dependencyMap, TDependencies }
+export { dependencyMap }

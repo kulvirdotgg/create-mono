@@ -2,11 +2,11 @@ import path from 'node:path'
 import fse from 'fs-extra'
 import { sortPackageJson } from 'sort-package-json'
 
-import type { TPackage } from '@/cli'
+import type { TOrm } from '@/cli'
 
 // TODO: Maybe add database seed thing here tooo, yk it will be very nice, adds no value thoo
 
-function updateTurboPkgJSON(projectDir: string, orm: TORM) {
+function updateTurboPkgJSON(projectDir: string, orm: TOrm) {
     const turboJSON = fse.readJSONSync(path.join(projectDir, 'turbo.json'))
     const rootPacakgeJSON = fse.readJSONSync(
         path.join(projectDir, 'package.json')
@@ -46,5 +46,3 @@ function updateTurboPkgJSON(projectDir: string, orm: TORM) {
 }
 
 export { updateTurboPkgJSON }
-
-type TORM = Extract<TPackage, 'prisma' | 'drizzle'>

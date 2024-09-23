@@ -4,15 +4,15 @@ import path from 'node:path'
 import { ROOT } from '@/CONSTS'
 import { addDependencies } from '@/utils/add-dependencies'
 import { updatePnpmWorkspace } from '@/utils/workspace-pnpm'
-
-import type { TDatabase, TPackage, TPackageManager } from '@/cli/index'
-import type { TDependencies } from '@/utils/dependencies'
 import { updateTurboPkgJSON } from '@/utils/update-turbo-pkg'
+
+import type { TDatabase, TOrm, TPackageManager } from '@/cli/index'
+import type { TDependencies } from '@/utils/dependencies'
 
 function addDatabase(
     projectDir: string,
     packageManager: TPackageManager,
-    pkg: TPackage,
+    orm: TOrm,
     database: TDatabase
 ) {
     // Put in library eslint config in `@repo/eslint-config`
@@ -24,7 +24,7 @@ function addDatabase(
     const dbTemplate = path.join(ROOT, 'template/packages/databases')
     let dbPackage = ''
 
-    if (pkg === 'prisma') {
+    if (orm === 'prisma') {
         dbPackage = path.join(projectDir, 'packages/prisma-config')
         fse.ensureDirSync(dbPackage)
 
@@ -50,7 +50,7 @@ function addDatabase(
         addDependencies(pkg, false, dbPackage)
 
         updateTurboPkgJSON(projectDir, 'prisma')
-    } else if (pkg === 'drizzle') {
+    } else if (orm === 'drizzle') {
         dbPackage = path.join(projectDir, 'packages/drizzle-config')
 
         fse.ensureDirSync(dbPackage)
