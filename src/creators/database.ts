@@ -35,7 +35,7 @@ function addDatabase(
                 'template/prisma',
                 database === 'neon' ? 'db-neon.ts' : 'db-supabase.ts'
             ),
-            path.join(dbPackage, 'src/db.ts')
+            path.join(dbPackage, 'src/client.ts')
         )
 
         // Prisma specific dependencies

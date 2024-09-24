@@ -15,7 +15,7 @@ function updateTurboPkgJSON(projectDir: string, orm: TOrm) {
     if (orm === 'prisma') {
         rootPacakgeJSON.scripts['db:generate'] = 'turbo run db:generate'
         rootPacakgeJSON.scripts['db:migrate:deploy'] =
-            'turbo run migrate:deploy'
+            'turbo run db:migrate:deploy'
         rootPacakgeJSON.scripts['db:push'] = 'turbo run db:push'
 
         turboJSON.tasks['db:generate'] = {

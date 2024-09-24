@@ -2,27 +2,28 @@
     "name": "@repo/prisma-config",
     "version": "0.0.0",
     "exports": {
-        ".": "./src/db.ts"
+        ".": "./src/client.ts"
     },
     "scripts": {
         "db:generate": "prisma generate",
         "db:migrate:deploy": "prisma migrate deploy",
         "db:migrate:dev": "prisma migrate dev",
         "db:push": "prisma db push",
-        "db:studio": "prisma studio",
+        "db:studio": "prsma studio",
         "dev": "tsup src/* --watch",
         "format": "prisma format",
-        "lint": "eslint src/",
+        "lint": "eslint .",
         "prebuild": "npm run db:generate",
         "predev": "npm run db:generate"
     },
-    "dependencies": {
-        "dotenv": "^16.4.5"
-    },
+    "dependencies": {},
     "devDependencies": {
         "@repo/eslint-config": "*",
         "@repo/typescript-config": "*",
         "@types/eslint": "^8.56.10",
-        "tsup": "^8.0.2"
+        "@types/node": "^22.6.1",
+        "global": "^4.4.0",
+        "tsup": "^8.3.0",
+        "typescript": "^5.5.4"
     }
 }

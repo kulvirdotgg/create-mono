@@ -13,7 +13,7 @@ const dependencyMap = {
     '@prisma/adapter-neon': '^5.19.1',
     prisma: '^5.19.1',
 
-    'types/node': '^20.16.3',
+    'types/node': '^22.6.1',
     'types/bun': '^1.1.5',
 } as const
 

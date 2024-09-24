@@ -47,7 +47,7 @@
         "@types/bun": "latest",
         "@types/fs-extra": "^11.0.4",
         "prettier": "^3.3.3",
-        "tsup": "^8.2.4",
+        "tsup": "^8.3.0",
         "typescript": "^5.0.0"
     }
 }
