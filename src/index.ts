@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 
+import figlet from 'figlet'
 import fse from 'fs-extra'
 import path from 'node:path'
 import { execa } from 'execa'
@@ -12,8 +13,8 @@ import { init } from '@/creators/init'
 import { updateImportAlias, updateViteAlias } from '@/utils/update-import-alias'
 
 async function main() {
-    //TODO: render some kind of title before begining the process. (shameless plug)
-    // ASCII art something like theo's t3 could be used.
+    const TITLE = figlet.textSync('create-mono')
+    console.log(chalk.cyan(TITLE))
 
     const {
         userInputName,
