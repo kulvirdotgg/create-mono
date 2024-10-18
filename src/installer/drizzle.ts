@@ -3,8 +3,9 @@ import fse from 'fs-extra'
 import { sortPackageJson } from 'sort-package-json'
 
 import { addDependencies } from '../utils/add-dependencies'
-import { TDependencies } from '../utils/dependencies'
 import { ROOT } from '../CONSTS'
+
+import type { TDependencies } from '../utils/dependencies'
 
 // appDir = repoName/apps/appName
 function drizzleInstaller(appDir: string, dbProvider: string) {

@@ -28,30 +28,38 @@ module.exports = {
     },
     ignorePatterns: ['.*.js', 'node_modules/', 'dist/'],
     rules: {
-        "import/no-default-export": "off",
+        'import/no-default-export': 'off',
         '@typescript-eslint/array-type': 'off',
         '@typescript-eslint/consistent-type-definitions': 'off',
-        '@typescript-eslint/consistent-type-imports': ['warn', {
-            prefer: 'type-imports',
-        }],
-        '@typescript-eslint/no-unused-vars': ['warn', {
-            argsIgnorePattern: '^_'
-        }],
-        'import/order': ['error', {
-            'newlines-between': 'always',
-            "groups":
-                [
+        '@typescript-eslint/consistent-type-imports': [
+            'warn',
+            {
+                prefer: 'type-imports',
+            },
+        ],
+        '@typescript-eslint/no-unused-vars': [
+            'warn',
+            {
+                argsIgnorePattern: '^_',
+            },
+        ],
+        'import/order': [
+            'error',
+            {
+                'newlines-between': 'always',
+                groups: [
                     ['builtin', 'external'],
                     ['sibling', 'parent'],
-                    'type'
+                    'type',
                 ],
-            "pathGroups": [
-                {
-                    "pattern": "@/**",
-                    "group": "parent",
-                    "position": "after"
-                }
-            ],
-        }],
+                pathGroups: [
+                    {
+                        pattern: '@/**',
+                        group: 'parent',
+                        position: 'after',
+                    },
+                ],
+            },
+        ],
     },
 }

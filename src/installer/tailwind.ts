@@ -7,11 +7,12 @@ import { ROOT } from '../CONSTS'
 
 // appDir = repoName/apps/appName
 function twInstaller(appDir: string) {
+    // TODO: if tw stays update this one too
     const devPkg: TDependencies[] = [
-        'tailwindcss',
-        'autoprefixer',
-        'postcss',
-        'prettier-plugin-tailwindcss',
+        // 'tailwindcss',
+        // 'autoprefixer',
+        // 'postcss',
+        // 'prettier-plugin-tailwindcss',
     ]
     addDependencies(devPkg, true, appDir)
 
@@ -20,28 +21,12 @@ function twInstaller(appDir: string) {
     |  globals.css
     tailwind.configs.ts
     postcss.config.cjs
-    prettier.config.js
+    prettier.config.mjs
     */
 
-    const configsDir = path.join(ROOT, 'template/deps/configs')
-
-    // prettier config for tailwind classes
     fse.copyFileSync(
-        path.join(configsDir, 'prettier.config.js'),
+        path.join(ROOT, 'prettier-config.mjs'),
         path.join(appDir, 'prettier.config.js')
-    )
-
-    fse.copyFileSync(
-        path.join(configsDir, 'globals.css'),
-        path.join(appDir, 'src/globals.css')
-    )
-    fse.copyFileSync(
-        path.join(configsDir, 'tailwind.config.ts'),
-        path.join(appDir, 'tailwind.config.ts')
-    )
-    fse.copyFileSync(
-        path.join(configsDir, 'postcss.config.cjs'),
-        path.join(appDir, 'postcss.config.cjs')
     )
 }
 

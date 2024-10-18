@@ -73,6 +73,10 @@ async function baseSetup(projectName: string, projectDir: string) {
     const base = path.join(ROOT, 'template/base')
     fse.copySync(base, projectDir)
     fse.renameSync(
+        path.join(projectDir, 'prettier-config.mjs'),
+        path.join(projectDir, 'prettier.config.mjs')
+    )
+    fse.renameSync(
         path.join(projectDir, 'gitignore'),
         path.join(projectDir, '.gitignore')
     )
