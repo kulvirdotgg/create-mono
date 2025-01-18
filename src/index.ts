@@ -25,11 +25,11 @@ async function main() {
         importAlias,
     } = await cli()
 
-    /*
-        path/@repo/package
-        scopedName: @repo/package
-        projectName: path/package
-    */
+    /**
+     * /some/path/@repo/package
+     * scopedName: @repo/package
+     * projectName: /some/path/package
+     */
     const [scopedName, projectName] = pathDetails(userInputName)
     await init(projectName, packageManager, applications, orm, database)
 

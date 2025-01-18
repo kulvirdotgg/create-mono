@@ -50,47 +50,47 @@ async function cli() {
             },
             applications: () => {
                 return p.multiselect({
-                    message: `What application packages do you want to add?' ${chalk.cyan('(space to select)')}`,
+                    message: 'What application packages do you want to add?',
                     options: [
-                        {
-                            value: 'astro',
-                            label: chalk.redBright('Astro app'),
-                            hint: 'not available yet',
-                        },
+                        // {
+                        //     value: 'astro',
+                        //     label: 'Astro app',
+                        //     hint: 'not available yet',
+                        // },
                         {
                             value: 'next',
-                            label: chalk.redBright('Next App') + '(app router)',
-                            hint: 'not available yet',
+                            label: 'Next App',
                         },
                         { value: 'vite', label: 'Vite SPA' },
                         { value: 'express', label: 'Express API' },
                     ],
                 })
             },
-            //TODO: Remove when next and astro template is added
-            __: ({ results }) => {
-                if (
-                    results.applications?.includes('next') ||
-                    results.applications?.includes('astro')
-                ) {
-                    p.cancel(
-                        chalk.redBright(
-                            'This framework is not yet supported, If needed create on your own.'
-                        )
-                    )
-                    process.exit(0)
-                }
-            },
             orm: () => {
                 return p.select({
                     message: 'What ORM would you like to use?',
                     options: [
                         { value: 'none', label: 'None' },
-                        { value: 'drizzle', label: 'Drizzle' },
+                        {
+                            value: 'drizzle',
+                            label: `${chalk.redBright('Drizzle')}`,
+                            hint: 'not available yet',
+                        },
                         { value: 'prisma', label: 'Prisma' },
                     ],
                     initialValue: 'none',
                 })
+            },
+            //TODO: Remove when next and astro template is added
+            __: ({ results }) => {
+                if (results.orm === 'drizzle') {
+                    p.cancel(
+                        chalk.redBright(
+                            `Selected options are not available yet, can't you see.`
+                        )
+                    )
+                    process.exit(0)
+                }
             },
             database: ({ results }) => {
                 if (results.orm !== 'none') {
