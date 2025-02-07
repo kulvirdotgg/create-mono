@@ -8,7 +8,11 @@
             }
         ],
         "incremental": true,
-        "lib": ["dom", "dom.iterable", "esnext"],
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
         "module": "ESNext",
         "moduleResolution": "Bundler",
         "allowJs": true,
