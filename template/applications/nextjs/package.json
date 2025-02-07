@@ -1,7 +1,7 @@
 {
     "name": "next-app",
     "version": "0.0.0",
-    "private": true,
+    "type": "module",
     "scripts": {
         "build": "next build",
         "clean": "rm -rf dist",
@@ -16,11 +16,11 @@
         "next": "15.1.6"
     },
     "devDependencies": {
-        "@repo/eslint-config": "*",
-        "@repo/typescript-config": "*",
+        "@repo/eslint": "*",
+        "@repo/tsconfig": "*",
         "@types/node": "^22",
-        "@types/react": "^19",
-        "@types/react-dom": "^19",
-        "typescript": "^5"
+        "@types/react": "^19.0.8",
+        "@types/react-dom": "^19.0.8",
+        "typescript": "^5.7.3"
     }
 }

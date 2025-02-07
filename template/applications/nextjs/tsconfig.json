@@ -1,5 +1,5 @@
 {
-    "extends": "@repo/typescript-config/nextjs.json",
+    "extends": "@repo/typescript/next.json",
     "compilerOptions": {
         "plugins": [
             {
@@ -8,7 +8,9 @@
         ],
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": [
+                "./src/*"
+            ]
         }
     },
     "include": [
@@ -18,5 +20,7 @@
         "**/*.tsx",
         ".next/types/**/*.ts"
     ],
-    "exclude": ["node_modules"]
+    "exclude": [
+        "node_modules"
+    ]
 }
