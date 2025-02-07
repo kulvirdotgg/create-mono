@@ -1,22 +1,19 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "extends": "./base.json",
-    "display": "Next.js",
     "compilerOptions": {
         "plugins": [
             {
                 "name": "next"
             }
         ],
-        "allowJs": true,
-        "declaration": false,
-        "declarationMap": false,
         "incremental": true,
-        "jsx": "preserve",
         "lib": ["dom", "dom.iterable", "esnext"],
-        "module": "esnext",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "allowJs": true,
+        "jsx": "preserve",
         "noEmit": true,
-        "resolveJsonModule": true,
-        "target": "es2022"
+        "resolveJsonModule": true
     }
 }
