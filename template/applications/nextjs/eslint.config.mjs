@@ -1,3 +1,3 @@
-import { next } from "@repo/eslint/next";
+import { next } from '@repo/eslint/next'
 
-export default next;
+export default next

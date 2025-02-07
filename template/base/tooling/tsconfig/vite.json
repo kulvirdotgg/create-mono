@@ -5,18 +5,12 @@
         "esModuleInterop": false,
         "isolatedModules": true,
         "jsx": "react-jsx",
-        "lib": [
-            "DOM",
-            "DOM.Iterable",
-            "ESNext"
-        ],
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "module": "ESNext",
         "moduleResolution": "bundler",
         "noEmit": true,
         "target": "ESNext",
-        "types": [
-            "vite/client"
-        ],
+        "types": ["vite/client"],
         "resolveJsonModule": true
     }
 }
