@@ -1,4 +1,3 @@
-import fs from 'fs'
 import fse from 'fs-extra'
 import path from 'node:path'
 import { sortPackageJson } from 'sort-package-json'
@@ -27,13 +26,12 @@ function express(projectDir: string, packageManager: TPackageManager) {
         use node to run files, when not using bun, but seriously use bun, its better
         `node run dist/index.js`
     */
-    if (packageManager !== 'bun') {
-        packageJSON.scripts.start = 'node dist/index.cjs'
-        packageJSON.scripts.dev =
-            'tsup --watch --onSuccess "node dist/index.cjs"'
-        packageJSON.devDependencies['@types/node'] = dependencyMap['types/node']
-    } else {
+    if (packageManager === 'bun') {
+        packageJSON.scripts.start = 'bun dist/index.js'
+        packageJSON.scripts.dev = 'tsup --watch --onSuccess "bun dist/index.js"'
         packageJSON.devDependencies['@types/bun'] = dependencyMap['types/bun']
+    } else {
+        packageJSON.devDependencies['@types/node'] = dependencyMap['types/node']
     }
 
     const sortedPackageJSON = sortPackageJson(packageJSON)
@@ -43,11 +41,6 @@ function express(projectDir: string, packageManager: TPackageManager) {
         {
             spaces: 4,
         }
-    )
-
-    fs.copyFileSync(
-        path.join(ROOT, 'template/packages/eslint/server.cjs'),
-        path.join(projectDir, 'packages/eslint-config/server.cjs')
     )
 }
 

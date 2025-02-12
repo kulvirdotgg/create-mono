@@ -73,16 +73,21 @@ async function baseSetup(projectName: string, projectDir: string) {
     const base = path.join(ROOT, 'template/base')
     fse.copySync(base, projectDir)
     fse.renameSync(
-        path.join(projectDir, 'prettier-config.mjs'),
-        path.join(projectDir, 'prettier.config.mjs')
+        path.join(projectDir, 'prettier-config.js'),
+        path.join(projectDir, 'prettier.config.js')
     )
     fse.renameSync(
         path.join(projectDir, 'gitignore'),
         path.join(projectDir, '.gitignore')
     )
 
+    fse.renameSync(
+        path.join(projectDir, 'prettierignore'),
+        path.join(projectDir, '.prettierignore')
+    )
+
     const baseName = projectName === '.' ? 'App' : chalk.cyan.bold(projectName)
-    spin.succeed(`Monorepo ${baseName} initialized successfully...\n`)
+    spin.succeed(`${baseName} initialized successfully...\n`)
 }
 
 export { baseSetup }

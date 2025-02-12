@@ -18,15 +18,6 @@ function vite(projectDir: string, packageManager: TPackageManager) {
 
         updatePnpmWorkspace(appDir)
     }
-
-    fse.copyFileSync(
-        path.join(ROOT, 'template/packages/eslint/vite.cjs'),
-        path.join(projectDir, 'packages/eslint-config/vite.cjs')
-    )
-    fse.copyFileSync(
-        path.join(ROOT, 'template/packages/tsconfig/vite.json'),
-        path.join(projectDir, 'packages/typescript-config/vite.json')
-    )
 }
 
 export { vite }

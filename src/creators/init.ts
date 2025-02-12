@@ -25,20 +25,22 @@ async function init(
 
     await baseSetup(projectName, projectDir)
 
-    // pnpm got weird workspaces setup
     if (packageManager === 'pnpm') {
-        const packageJSON = fse.readJSONSync(
-            path.resolve(projectDir, 'package.json')
-        )
-        delete packageJSON['workspaces']
-        fse.writeJsonSync(path.join(projectDir, 'package.json'), packageJSON, {
-            spaces: 4,
-        })
-
+        // copy over the pnpm workspaces file for monorepo setup
         fse.copyFileSync(
             path.join(ROOT, 'template/pnpm-workspace.yaml'),
             path.join(projectDir, 'pnpm-workspace.yaml')
         )
+    } else {
+        // if package manager is anything except pnpm
+        // set workspaces key in `package.json`
+        const packageJSON = fse.readJSONSync(
+            path.resolve(projectDir, 'package.json')
+        )
+        packageJSON['workspaces'].push('apps/*', 'packages/*', 'tooling/*')
+        fse.writeJsonSync(path.join(projectDir, 'package.json'), packageJSON, {
+            spaces: 4,
+        })
     }
 
     if (applications.includes('vite')) {
@@ -49,7 +51,7 @@ async function init(
         express(projectDir, packageManager)
     }
 
-    orm !== 'none' && addDatabase(projectDir, packageManager, orm, database)
+    // orm !== 'none' && addDatabase(projectDir, packageManager, orm, database)
 }
 
 export { init }
