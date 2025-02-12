@@ -13,8 +13,8 @@ const dependencyMap = {
     '@prisma/adapter-neon': '^5.19.1',
     prisma: '^5.19.1',
 
-    'types/node': '^22.6.1',
-    'types/bun': '^1.1.5',
+    'types/node': '^22.13.1',
+    'types/bun': '^1.2.2',
 } as const
 
 export type TDependencies = keyof typeof dependencyMap
