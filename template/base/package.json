@@ -6,19 +6,17 @@
         "clean": "turbo run clean",
         "dev": "turbo run dev",
         "lint": "turbo run lint",
-        "format": "prettier '**/*.{cjs,mjs,ts,tsx,md,json}' --write",
-        "format:check": "prettier '**/*.{cjs,mjs,ts,tsx,md,json}' --check",
+        "format": "prettier . --write",
+        "format:check": "prettier . --check",
         "typecheck": "turbo run typecheck"
     },
     "devDependencies": {
         "prettier": "^3.3.3",
         "turbo": "^2.1.2"
     },
-    "engines": {
-        "node": ">=18"
-    },
     "workspaces": [
         "apps/*",
-        "packages/*"
+        "packages/*",
+        "tooling/*"
     ]
 }
