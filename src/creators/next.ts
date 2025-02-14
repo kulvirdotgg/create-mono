@@ -6,17 +6,17 @@ import { updateWorkspaceDependencies } from '@/utils/workspace-dependancy'
 
 import type { TPackageManager } from '@/cli'
 
-function vite(projectDir: string, packageManager: TPackageManager) {
-    // copy the Vite template to user's machine
+function next(projectDir: string, packageManager: TPackageManager) {
+    // copy the Next template to user's machine
     fse.copySync(
-        path.join(ROOT, 'template/applications/vite'),
-        path.join(projectDir, 'apps/vite')
+        path.join(ROOT, 'template/applications/next'),
+        path.join(projectDir, 'apps/next')
     )
 
     if (packageManager === 'pnpm' || packageManager === 'bun') {
-        const appDir = path.join(projectDir, 'apps/vite')
+        const appDir = path.join(projectDir, 'apps/next')
         updateWorkspaceDependencies(appDir)
     }
 }
 
-export { vite }
+export { next }

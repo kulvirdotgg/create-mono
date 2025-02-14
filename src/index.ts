@@ -42,6 +42,8 @@ async function main() {
             cwd: projectName,
         })
 
+        // Set package manager field in root package.json
+        // required for monorepo setup
         basePackageJSON.packageManager = packageManager + '@' + stdout.trim()
         fse.writeJsonSync(
             path.join(projectName, 'package.json'),
@@ -52,7 +54,7 @@ async function main() {
         )
     } catch (err) {
         console.log(
-            chalk.bold.redBright(
+            chalk.redBright(
                 `${packageManager} not found. Try again after installing.`
             )
         )
@@ -63,6 +65,7 @@ async function main() {
     }
 
     updateImportAlias(projectName, importAlias)
+    // need to inform vite too about the import aliases
     if (applications.includes('vite')) {
         const vitePath = path.join(projectName, 'apps/vite/vite.config.ts')
         updateViteAlias(vitePath, importAlias)

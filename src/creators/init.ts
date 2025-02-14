@@ -13,6 +13,7 @@ import type {
     TOrm,
     TPackageManager,
 } from '@/cli/index'
+import { next } from './next'
 
 async function init(
     projectName: string,
@@ -21,6 +22,7 @@ async function init(
     orm: TOrm,
     database: TDatabase
 ) {
+    // absolute path for the project
     const projectDir = path.resolve(process.cwd(), projectName)
 
     await baseSetup(projectName, projectDir)
@@ -49,6 +51,10 @@ async function init(
 
     if (applications.includes('express')) {
         express(projectDir, packageManager)
+    }
+
+    if (applications.includes('next')) {
+        next(projectDir, packageManager)
     }
 
     // orm !== 'none' && addDatabase(projectDir, packageManager, orm, database)

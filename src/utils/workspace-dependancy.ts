@@ -1,9 +1,10 @@
 import path from 'node:path'
 import fse from 'fs-extra'
 
-function updatePnpmWorkspace(appDir: string) {
+function updateWorkspaceDependencies(appDir: string) {
     const packageJSON = fse.readJSONSync(path.resolve(appDir, 'package.json'))
 
+    // Don't know how this is working, but it works
     for (let [key, val] of Object.entries(packageJSON.dependencies)) {
         if (val === '*') packageJSON.devDependencies[key] = 'workspace:*'
     }
@@ -17,4 +18,4 @@ function updatePnpmWorkspace(appDir: string) {
     })
 }
 
-export { updatePnpmWorkspace }
+export { updateWorkspaceDependencies }

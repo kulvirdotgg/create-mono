@@ -6,17 +6,18 @@ import { ROOT } from '@/CONSTS'
 import { dependencyMap } from '@/utils/dependencies'
 
 import type { TPackageManager } from '@/cli'
-import { updatePnpmWorkspace } from '@/utils/workspace-pnpm'
+import { updateWorkspaceDependencies } from '@/utils/workspace-dependancy'
 
 function express(projectDir: string, packageManager: TPackageManager) {
+    // copy the Express template to user's machine
     fse.copySync(
         path.join(ROOT, 'template/applications/express'),
         path.join(projectDir, 'apps/express')
     )
 
-    if (packageManager === 'pnpm') {
+    if (packageManager === 'pnpm' || packageManager === 'bun') {
         const appDir = path.join(projectDir, 'apps/express')
-        updatePnpmWorkspace(appDir)
+        updateWorkspaceDependencies(appDir)
     }
 
     const packageJSON = fse.readJSONSync(
