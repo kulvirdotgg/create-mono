@@ -1,6 +1,6 @@
 function GET() {
     return Response.json({
-        message: 'pong',
+        message: 'uWu oniii chan :p',
     })
 }
 
