@@ -1,5 +1,5 @@
-import { createServer } from '@/server'
 import { env } from '@/env'
+import { createServer } from '@/server'
 
 const app = createServer()
 

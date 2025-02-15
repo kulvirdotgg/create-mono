@@ -1,15 +1,15 @@
-import eslintConfigPrettier from "eslint-config-prettier";
 import globals from 'globals'
-import pluginReactHooks from "eslint-plugin-react-hooks";
+import pluginReactHooks from 'eslint-plugin-react-hooks'
+import pluginReact from 'eslint-plugin-react'
 import reactRefresh from 'eslint-plugin-react-refresh'
-import { baseConfig } from "./base.js";
+
+import { baseConfig } from './index.js'
 
 export const vite = [
     ...baseConfig,
-    reactRefresh,
-    eslintConfigPrettier,
+    pluginReact.configs.flat.recommended,
     {
-        files: ['**/*.{ts,tsx}']
+        files: ['**/*.{ts,tsx}'],
     },
     {
         languageOptions: {
@@ -19,17 +19,17 @@ export const vite = [
                 ...globals.browser,
             },
 
-            ecmaVersion: "latest",
+            ecmaVersion: 'latest',
             globals: globals.browser,
-            sourceType: "module"
+            sourceType: 'module',
         },
     },
     {
         plugins: {
-            "react-hooks": pluginReactHooks,
+            'react-hooks': pluginReactHooks,
             'react-refresh': reactRefresh,
         },
-        settings: { react: { version: "detect" } },
+        settings: { react: { version: 'detect' } },
         rules: {
             ...pluginReactHooks.configs.recommended.rules,
             'react/react-in-jsx-scope': 'off',

@@ -1,6 +1,6 @@
-import express, { json, urlencoded, type Express } from 'express'
-import morgan from 'morgan'
 import cors from 'cors'
+import express, { type Express, json, urlencoded } from 'express'
+import morgan from 'morgan'
 
 import { router } from '@/routes'
 

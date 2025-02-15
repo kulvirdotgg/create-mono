@@ -1,12 +1,18 @@
-import prettierPlugin from 'eslint-plugin-prettier/recommended'
+import eslintConfigPrettier from 'eslint-config-prettier'
 import js from '@eslint/js'
 import onlyWarn from 'eslint-plugin-only-warn'
+import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import turboPlugin from 'eslint-plugin-turbo'
 import tseslint from 'typescript-eslint'
 
+/**
+ * A shared ESLint configuration for the repository.
+ *
+ * @type {import("eslint").Linter.Config}
+ */
 export const baseConfig = [
     js.configs.recommended,
-    prettierPlugin,
+    eslintConfigPrettier,
     ...tseslint.configs.recommended,
     {
         plugins: {
@@ -23,11 +29,11 @@ export const baseConfig = [
     },
     {
         plugins: {
-            "simple-import-sort": simpleImportSort,
+            'simple-import-sort': simpleImportSort,
         },
         rules: {
-            "simple-import-sort/imports": "error",
-            "simple-import-sort/exports": "error",
+            'simple-import-sort/imports': 'error',
+            'simple-import-sort/exports': 'error',
         },
     },
     {

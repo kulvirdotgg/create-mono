@@ -2,6 +2,7 @@ import globals from 'globals'
 import pluginNext from '@next/eslint-plugin-next'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
+
 import { baseConfig } from './index.js'
 
 export const next = [
