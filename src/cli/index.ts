@@ -8,13 +8,13 @@ async function cli() {
         {
             name: () =>
                 p.text({
-                    message: 'Name of your project',
+                    message: 'What name would you like to give your monorepo?',
                     defaultValue: '.',
                     validate: validateName,
                 }),
             packageManager: () => {
                 return p.select({
-                    message: 'Choose your package manager',
+                    message: 'What package manager would you like to use?',
                     options: [
                         { value: 'bun', label: 'Bun' },
                         { value: 'npm', label: 'npm' },
@@ -26,15 +26,10 @@ async function cli() {
             },
             language: () => {
                 return p.select({
-                    message:
-                        'Will you be using Javascript or Typescript in monorepo?',
+                    message: 'Choose your preferred language',
                     options: [
                         { value: 'typescript', label: 'Typescript' },
-                        {
-                            value: 'javascript',
-                            label: 'Javascript',
-                            hint: 'Skill issues',
-                        },
+                        { value: 'javascript', label: 'Javascript' },
                     ],
                     initialValue: 'typescript',
                 })
@@ -43,14 +38,15 @@ async function cli() {
                 if (results.language === 'javascript') {
                     return p.note(
                         chalk.redBright(
-                            'Skill issues, you will use only Typescript'
+                            'Skill issues, only Typescript is allowed.'
                         )
                     )
                 }
             },
             applications: () => {
                 return p.multiselect({
-                    message: 'What application packages do you want to add?',
+                    message:
+                        'What applications will your monorepo contain? (Select all that apply)',
                     options: [
                         // {
                         //     value: 'astro',
@@ -59,54 +55,52 @@ async function cli() {
                         // },
                         {
                             value: 'next',
-                            label: 'Next App',
+                            label: 'Next.js (Fullstack/SSR)',
                         },
-                        { value: 'vite', label: 'Vite SPA' },
-                        { value: 'express', label: 'Express API' },
+                        { value: 'vite', label: 'Vite (React App)' },
+                        { value: 'express', label: 'Express (Backend API)' },
                     ],
                 })
             },
-            orm: () => {
+            database: () => {
                 return p.select({
-                    message: 'What ORM would you like to use?',
+                    message: 'Which database do you plan to use?',
                     options: [
                         { value: 'none', label: 'None' },
-                        {
-                            value: 'drizzle',
-                            label: `${chalk.redBright('Drizzle')}`,
-                            hint: 'not available yet',
-                        },
-                        { value: 'prisma', label: 'Prisma' },
+                        { value: 'postgres', label: 'Postgres' },
+                        { value: 'sqlite', label: 'SQLite', hint: 'based' },
                     ],
                     initialValue: 'none',
                 })
             },
-            //TODO: Remove when next and astro template is added
-            __: ({ results }) => {
-                if (results.orm === 'drizzle') {
-                    p.cancel(
-                        chalk.redBright(
-                            `Selected options are not available yet, can't you see.`
-                        )
-                    )
-                    process.exit(0)
-                }
-            },
-            database: ({ results }) => {
-                if (results.orm !== 'none') {
+            orm: ({ results }) => {
+                if (results.database !== 'none') {
                     return p.select({
-                        message: 'Select Database provider',
+                        message: 'Which ORM would you like to use?',
                         options: [
-                            { value: 'neon', label: 'Neon Serverless' },
-                            { value: 'supabase', label: 'Supabase' },
+                            {
+                                value: 'none',
+                                label: 'None',
+                                hint: 'I like to rawdawg sequel',
+                            },
+                            {
+                                value: 'drizzle',
+                                label: 'Drizzle',
+                                hint: 'W move',
+                            },
+                            {
+                                value: 'prisma',
+                                label: 'Prisma',
+                            },
                         ],
-                        initialValue: 'neon',
+                        initialValue: 'none',
                     })
                 }
             },
             importAlias: () => {
                 return p.text({
-                    message: 'Import alias',
+                    message:
+                        'Would you like to change the default import alias?(`@/*`)',
                     defaultValue: '@/',
                     placeholder: '@/',
                 })
