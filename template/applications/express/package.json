@@ -14,13 +14,16 @@
     "dependencies": {
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
-        "express": "^5.0.0"
+        "express": "^5.0.0",
+        "morgan": "1.10.0",
+        "zod": "^3.24.1"
     },
     "devDependencies": {
         "@repo/eslint": "*",
         "@repo/tsconfig": "*",
         "@types/cors": "^2.8.17",
         "@types/express": "^4.17.21",
+        "@types/morgan": "^1.9.9",
         "tsup": "^8.3.6",
         "typescript": "^5.7.3"
     }

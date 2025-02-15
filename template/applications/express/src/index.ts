@@ -1,19 +1,9 @@
-import express, { urlencoded, type Express } from 'express'
-import cors from 'cors'
-import { config } from 'dotenv'
+import { createServer } from '@/server'
+import { env } from '@/env'
 
-import { router } from '@/routes'
+const app = createServer()
 
-config()
-
-const PORT = process.env.PORT || 42069
-
-const app: Express = express()
-app.use(cors())
-app.use(urlencoded())
-
-app.use('/api/v1', router)
-
+const PORT = env.PORT || 42069
 app.listen(PORT, () => {
     console.log(`express api running happily on ${PORT}`)
 })
