@@ -10,12 +10,8 @@
         "directory": "src"
     },
     "keywords": [
-        "turborepo",
-        "next.js",
-        "react.js",
-        "drizzle",
-        "vite",
-        "express"
+        "create-mono",
+        "turborepo"
     ],
     "type": "module",
     "exports": "./dist/index.js",
@@ -46,5 +42,6 @@
         "prettier": "^3.3.3",
         "tsup": "^8.3.0",
         "typescript": "^5.0.0"
-    }
+    },
+    "packageManager": "bun@1.2.2"
 }

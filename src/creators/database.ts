@@ -3,7 +3,7 @@ import path from 'node:path'
 
 import { ROOT } from '@/CONSTS'
 import { addDependencies } from '@/utils/add-dependencies'
-import { updatePnpmWorkspace } from '@/utils/workspace-pnpm'
+import { updateWorkspaceDependencies } from '@/utils/workspace-dependancy'
 import { updateTurboPkgJSON } from '@/utils/update-turbo-pkg'
 
 import type { TDatabase, TOrm, TPackageManager } from '@/cli/index'
@@ -83,7 +83,7 @@ function addDatabase(
     // pnpm workspace thingie... idk its annoying
     if (packageManager === 'pnpm') {
         const appDir = dbPackage
-        updatePnpmWorkspace(appDir)
+        updateWorkspaceDependencies(appDir)
     }
 
     fse.renameSync(path.join(dbPackage, 'env'), path.join(dbPackage, '.env'))
