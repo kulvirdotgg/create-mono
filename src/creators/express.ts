@@ -18,7 +18,6 @@ function addExpressApp(projectDir: string, packageManager: TPackageManager) {
     // copy the Express template to user's machine
     fse.copySync(path.join(ROOT, 'template/applications/express'), expressDir)
 
-    // dependencies required for our express app
     const deps: TDependencies[] = ['cors', 'dotenv', 'express', 'morgan', 'zod']
     const devDeps: TDevDependencies[] = [
         '@types/cors',
