@@ -37,14 +37,11 @@ function addDatabase(
     switch (orm) {
         case 'drizzle':
             const deps: TDependencies[] = ['drizzle-orm', 'dotenv', 'zod']
-            const devDeps: TDevDependencies[] = [
-                'drizzle-kit',
-                'drizzle-seed',
-                'eslint',
-            ]
+            const devDeps: TDevDependencies[] = ['drizzle-kit', 'eslint']
             switch (database) {
                 case 'postgres':
-                    deps.push('postgres')
+                    deps.push('pg')
+                    devDeps.push('drizzle-seed')
                     break
                 default:
                     deps.push('@libsql/client')

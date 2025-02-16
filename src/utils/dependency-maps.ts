@@ -10,7 +10,7 @@ const dependencyMap = {
     morgan: '1.10.0',
     next: '15.1.6',
     '@prisma/client': '^6.3.1',
-    postgres: '^3.4.5',
+    pg: '^8.13.3',
     react: '^19.0.0',
     'react-dom': '^19.0.0',
     zod: '^3.24.1',
