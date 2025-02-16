@@ -3,48 +3,55 @@ import path from 'node:path'
 import { sortPackageJson } from 'sort-package-json'
 
 import { ROOT } from '@/CONSTS'
-import { devDependencyMap } from '@/utils/dependency-maps'
+import {
+    devDependencyMap,
+    type TDependencies,
+    type TDevDependencies,
+} from '@/utils/dependency-maps'
 
 import type { TPackageManager } from '@/cli'
-import { updateWorkspaceDependencies } from '@/utils/workspace-dependancy'
+import { updateMonorepoPackagedependencies } from '@/utils/monorepo-packages-dependencies'
+import { addDependencies } from '@/utils/add-dependencies'
 
-function express(projectDir: string, packageManager: TPackageManager) {
+function addExpressApp(projectDir: string, packageManager: TPackageManager) {
+    const expressDir = path.join(projectDir, 'apps/express')
+
     // copy the Express template to user's machine
-    fse.copySync(
-        path.join(ROOT, 'template/applications/express'),
-        path.join(projectDir, 'apps/express')
-    )
+    fse.copySync(path.join(ROOT, 'template/applications/express'), expressDir)
 
-    if (packageManager === 'pnpm' || packageManager === 'bun') {
-        const appDir = path.join(projectDir, 'apps/express')
-        updateWorkspaceDependencies(appDir)
-    }
+    const packageJSON = fse.readJSONSync(path.join(expressDir, 'package.json'))
 
-    const packageJSON = fse.readJSONSync(
-        path.join(projectDir, 'apps/express/package.json')
-    )
-    /*
-        use node to run files, when not using bun, but seriously use bun, its better
-        `node run dist/index.js`
-    */
+    const deps: TDependencies[] = ['cors', 'dotenv', 'express', 'morgan', 'zod']
+    const devDeps: TDevDependencies[] = [
+        '@types/cors',
+        '@types/express',
+        '@types/morgan',
+        'eslint',
+        'tsup',
+    ]
     if (packageManager === 'bun') {
+        devDeps.push('@types/bun')
+        addDependencies(deps, devDeps, expressDir)
+
         packageJSON.scripts.start = 'bun dist/index.js'
         packageJSON.scripts.dev = 'tsup --watch --onSuccess "bun dist/index.js"'
-        packageJSON.devDependencies['@types/bun'] =
-            devDependencyMap['@types/bun']
     } else {
-        packageJSON.devDependencies['@types/node'] =
-            devDependencyMap['@types/node']
+        devDeps.push('@types/node')
+        addDependencies(deps, devDeps, expressDir)
     }
 
     const sortedPackageJSON = sortPackageJson(packageJSON)
     fse.writeJsonSync(
-        path.join(projectDir, 'apps/express/package.json'),
+        path.join(expressDir, 'package.json'),
         sortedPackageJSON,
         {
             spaces: 4,
         }
     )
+
+    if (packageManager === 'pnpm' || packageManager === 'bun') {
+        updateMonorepoPackagedependencies(expressDir)
+    }
 }
 
-export { express }
+export { addExpressApp }

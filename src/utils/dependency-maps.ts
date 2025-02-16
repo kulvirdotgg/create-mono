@@ -2,21 +2,35 @@
     Thanks Theo, if you see stuff copied T3 code then it is actually. (Opensource BTW)
 */
 const dependencyMap = {
+    cors: '^2.8.5',
+    dotenv: '^16.4.7',
+    express: '^5.0.0',
     'drizzle-orm': '^0.39.3',
+    morgan: '1.10.0',
+    next: '15.1.6',
     '@prisma/client': '^6.3.1',
     postgres: '^3.4.5',
+    react: '^19.0.0',
+    'react-dom': '^19.0.0',
+    zod: '^3.24.1',
 } as const
 
 const devDependencyMap = {
     // types
-    '@types/node': '^22.13.1',
     '@types/bun': '^1.2.2',
+    '@types/cors': '^2.8.17',
+    '@types/express': '^4.17.21',
+    '@types/morgan': '^1.9.9',
+    '@types/node': '^22.13.4',
+    '@types/react': '^19.0.9',
+    '@types/react-dom': '^19.0.3',
 
-    // drizzle
     'drizzle-kit': '^0.30.4',
-
-    // prisma
+    eslint: '^9.20.1',
     prisma: '^6.3.1',
+    tsup: '^8.3.6',
+    vite: '^6.1.0',
+    '@vitejs/plugin-react': '^4.3.4',
 } as const
 
 export type TDependencies = keyof typeof dependencyMap

@@ -2,7 +2,7 @@ import fse from 'fs-extra'
 import path from 'node:path'
 
 import { ROOT } from '@/CONSTS'
-import { updateWorkspaceDependencies } from '@/utils/workspace-dependancy'
+import { updateMonorepoPackagedependencies } from '@/utils/monorepo-packages-dependencies'
 
 import type { TDatabase, TOrm, TPackageManager } from '@/cli'
 
@@ -38,9 +38,11 @@ function addDatabase(
      * - update the env file with appropriate variables
      * - update the env file with proper db name
      **/
+
+    const packageJSON = fse.readJSONSync(
+        path.resolve(dbPackagePath, 'package.json')
+    )
     switch (orm) {
-        case 'none':
-            break
         case 'drizzle':
             if (database === 'sqlite') {
                 // TODO: create a db file tooo.... idk but yeah
@@ -48,10 +50,12 @@ function addDatabase(
             break
         case 'prisma':
             break
+        default:
+            break
     }
 
     if (packageManager === 'pnpm' || packageManager === 'bun') {
-        updateWorkspaceDependencies(dbPackagePath)
+        updateMonorepoPackagedependencies(dbPackagePath)
     }
 
     fse.renameSync(

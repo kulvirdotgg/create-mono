@@ -3,7 +3,7 @@ import path from 'path'
 
 import { baseSetup } from './base-setup'
 import { addDatabase } from './database'
-import { express } from './express'
+import { addExpressApp } from './express'
 import { next } from './next'
 import { vite } from './vite'
 import { ROOT } from '@/CONSTS'
@@ -50,7 +50,7 @@ async function init(
     }
 
     if (applications.includes('express')) {
-        express(projectDir, packageManager)
+        addExpressApp(projectDir, packageManager)
     }
 
     if (applications.includes('next')) {
