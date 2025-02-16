@@ -1,7 +1,7 @@
 import * as p from '@clack/prompts'
 import chalk from 'chalk'
 
-import { validateName } from '@/utils/validate-name'
+import { validateProjectName } from '@/utils/validate-project-name'
 
 async function cli() {
     const userInputs = await p.group(
@@ -10,7 +10,7 @@ async function cli() {
                 p.text({
                     message: 'What name would you like to give your monorepo?',
                     defaultValue: '.',
-                    validate: validateName,
+                    validate: validateProjectName,
                 }),
             packageManager: () => {
                 return p.select({

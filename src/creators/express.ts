@@ -3,7 +3,7 @@ import path from 'node:path'
 import { sortPackageJson } from 'sort-package-json'
 
 import { ROOT } from '@/CONSTS'
-import { dependencyMap } from '@/utils/dependencies'
+import { devDependencyMap } from '@/utils/dependency-maps'
 
 import type { TPackageManager } from '@/cli'
 import { updateWorkspaceDependencies } from '@/utils/workspace-dependancy'
@@ -30,9 +30,11 @@ function express(projectDir: string, packageManager: TPackageManager) {
     if (packageManager === 'bun') {
         packageJSON.scripts.start = 'bun dist/index.js'
         packageJSON.scripts.dev = 'tsup --watch --onSuccess "bun dist/index.js"'
-        packageJSON.devDependencies['@types/bun'] = dependencyMap['types/bun']
+        packageJSON.devDependencies['@types/bun'] =
+            devDependencyMap['@types/bun']
     } else {
-        packageJSON.devDependencies['@types/node'] = dependencyMap['types/node']
+        packageJSON.devDependencies['@types/node'] =
+            devDependencyMap['@types/node']
     }
 
     const sortedPackageJSON = sortPackageJson(packageJSON)

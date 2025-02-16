@@ -5,7 +5,7 @@
 
 const re = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
 
-function validateName(input: string) {
+function validateProjectName(input: string) {
     if (input.length > 1 && input.endsWith('/')) {
         input = input.slice(0, -1)
     }
@@ -20,4 +20,4 @@ function validateName(input: string) {
     }
 }
 
-export { validateName }
+export { validateProjectName }

@@ -1,9 +1,5 @@
-import fs from 'fs'
-import path from 'path'
-
-/*
-    oh Theo my savior. Whenever I have some issue your OSS comes to my help
-*/
+import fs from 'node:fs'
+import path from 'node:path'
 
 function replaceTextInFiles(
     directory: string,
@@ -28,11 +24,12 @@ function replaceTextInFiles(
     })
 }
 
-const updateImportAlias = (projectDir: string, importAlias: string) => {
+function updateImportAlias(projectDir: string, importAlias: string) {
     const normalizedImportAlias = importAlias
         .replace(/\*/g, '')
         .replace(/[^\/]$/, '$&/') // ensure trailing slash (@ -> ~/)
 
+    // by default `@/` import alias is used
     replaceTextInFiles(projectDir, `@/`, normalizedImportAlias)
 }
 
@@ -40,12 +37,14 @@ const updateImportAlias = (projectDir: string, importAlias: string) => {
     Remove the trailing `/` for vite config too
     @/ -> @
 */
-const updateViteAlias = (viteConfigPath: string, importAlias: string) => {
+function updateViteAlias(viteConfigPath: string, importAlias: string) {
     const normalizedImportAlias = importAlias
         .replace(/\*/g, '')
         .replace(/\//g, '')
 
     const data = fs.readFileSync(viteConfigPath, 'utf8')
+    // certain packages also start with `@/library` so it will replace that too
+    // instead check for `'@'` type of pattern to replace
     const updatedData = data.replace(/@'/g, `${normalizedImportAlias}'`)
     fs.writeFileSync(viteConfigPath, updatedData, 'utf8')
 }

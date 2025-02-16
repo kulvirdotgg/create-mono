@@ -2,24 +2,30 @@ import path from 'node:path'
 import fse from 'fs-extra'
 import sortPackageJson from 'sort-package-json'
 
-import { dependencyMap, type TDependencies } from './dependencies'
+import {
+    dependencyMap,
+    devDependencyMap,
+    type TDependencies,
+    type TDevDependencies,
+} from './dependency-maps'
 
 function addDependencies(
     dependencies: TDependencies[],
-    devDepencies: boolean,
+    devDepencies: TDevDependencies[],
     projectDir: string
 ) {
     const packageJSON = fse.readJSONSync(path.join(projectDir, 'package.json'))
 
     dependencies.forEach((dep) => {
         const version = dependencyMap[dep]
-
-        if (devDepencies) {
-            packageJSON.devDependencies[dep] = version
-        } else {
-            packageJSON.dependencies[dep] = version
-        }
+        packageJSON.dependencies[dep] = version
     })
+
+    devDepencies.forEach((dep) => {
+        const version = devDependencyMap[dep]
+        packageJSON.devDependencies[dep] = version
+    })
+
     const sortedPackageJSON = sortPackageJson(packageJSON)
     fse.writeJSONSync(
         path.join(projectDir, 'package.json'),
