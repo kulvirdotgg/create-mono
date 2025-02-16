@@ -1,7 +1,9 @@
 {
     "extends": "@repo/tsconfig/base.json",
     "compilerOptions": {
-        "incremental": true
+        "incremental": true,
+        "module": "ESNext",
+        "moduleResolution": "bundler"
     },
     "exclude": ["node_modules"]
 }
