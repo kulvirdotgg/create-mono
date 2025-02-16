@@ -68,7 +68,12 @@ async function cli() {
                     options: [
                         { value: 'none', label: 'None' },
                         { value: 'postgres', label: 'Postgres' },
-                        { value: 'sqlite', label: 'SQLite', hint: 'based' },
+                        {
+                            value: 'turso',
+                            label: 'Turso',
+                            hint: 'Better SQLite',
+                        },
+                        { value: 'sqlite', label: 'SQLite' },
                     ],
                     initialValue: 'none',
                 })
@@ -86,7 +91,6 @@ async function cli() {
                             {
                                 value: 'drizzle',
                                 label: 'Drizzle',
-                                hint: 'W move',
                             },
                             {
                                 value: 'prisma',
@@ -131,4 +135,4 @@ export type TApplication = 'astro' | 'express' | 'next' | 'vite'
 
 export type TOrm = 'drizzle' | 'prisma' | 'none'
 
-export type TDatabase = 'neon' | 'supabase' | null
+export type TDatabase = 'postgres' | 'sqlite' | 'turso' | null
