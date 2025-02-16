@@ -103,8 +103,7 @@ async function cli() {
             },
             importAlias: () => {
                 return p.text({
-                    message:
-                        'Would you like to change the default import alias?(`@/*`)',
+                    message: `Would you like to change the default import alias? ${chalk.bold('(default "@/*")')}`,
                     defaultValue: '@/',
                     placeholder: '@/',
                 })
