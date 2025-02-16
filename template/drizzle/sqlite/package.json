@@ -1,0 +1,27 @@
+{
+    "name": "@repo/database",
+    "version": "0.0.0",
+    "exports": {
+        ".": "./src/index.ts",
+        "./schema": "./src/db/schema.ts"
+    },
+    "scripts": {
+        "db:generate": "drizzle-kit generate",
+        "db:migrate": "drizzle-kit migrate",
+        "db:push": "drizzle-kit push",
+        "db:studio": "drizzle-kit studio",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix"
+    },
+    "dependencies": {
+        "drizzle-orm": "^0.38.4",
+        "@libsql/client": "0.14.0",
+        "zod": "^3.24.1"
+    },
+    "devDependencies": {
+        "@repo/eslint": "workspace:*",
+        "@repo/tsconfig": "workspace:*",
+        "drizzle-kit": "0.30.4",
+        "drizzle-seed": "0.3.0"
+    }
+}
