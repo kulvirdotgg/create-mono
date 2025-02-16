@@ -53,7 +53,7 @@ function addDatabase(
 
             addDependencies(deps, devDeps, dbPackagePath)
 
-            addExports(['drizzle-db', 'drizzle-schema'], packageManager)
+            addExports(['drizzle-db', 'drizzle-schema'], dbPackagePath)
 
             addScripts(
                 ['drizzle-generate', 'drizzle-migrate', 'drizzle-studio'],
