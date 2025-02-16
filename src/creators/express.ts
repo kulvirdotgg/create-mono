@@ -10,7 +10,7 @@ import {
 import type { TPackageManager } from '@/cli'
 import { updateMonorepoPackagedependencies } from '@/utils/monorepo-packages-dependencies'
 import { addDependencies } from '@/utils/add-dependencies'
-import { addScripts } from '@/utils/add-scripts'
+import { addScripts } from '@/utils/add-fields'
 
 function addExpressApp(projectDir: string, packageManager: TPackageManager) {
     const expressDir = path.join(projectDir, 'apps/express')

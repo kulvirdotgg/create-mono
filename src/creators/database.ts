@@ -5,6 +5,9 @@ import { ROOT } from '@/CONSTS'
 import { updateMonorepoPackagedependencies } from '@/utils/monorepo-packages-dependencies'
 
 import type { TDatabase, TOrm, TPackageManager } from '@/cli'
+import type { TDependencies, TDevDependencies } from '@/utils/dependency-maps'
+import { addDependencies } from '@/utils/add-dependencies'
+import { addExports, addScripts } from '@/utils/add-fields'
 
 /*
  * TODO:
@@ -17,11 +20,8 @@ function addDatabase(
     orm: TOrm,
     database: TDatabase
 ) {
-    // path where database package will be located in monorepo
-    // `repo/packages/database`
     const dbPackagePath = path.join(projectDir, 'packages/database')
 
-    // Copy neccessary files like `package.json` and `tsconfig.json`.....
     fse.copySync(path.join(ROOT, 'template/database'), dbPackagePath)
 
     // TODO: handle no orm setup
@@ -32,25 +32,39 @@ function addDatabase(
         )
     }
 
-    /*
-     * TODO:
-     * - construct package.json with dependencies
-     * - update the env file with appropriate variables
-     * - update the env file with proper db name
-     **/
+    // TODO: update the env file with proper db name
 
-    const packageJSON = fse.readJSONSync(
-        path.resolve(dbPackagePath, 'package.json')
-    )
     switch (orm) {
         case 'drizzle':
-            if (database === 'sqlite') {
-                // TODO: create a db file tooo.... idk but yeah
+            const deps: TDependencies[] = ['drizzle-orm', 'dotenv', 'zod']
+            const devDeps: TDevDependencies[] = [
+                'drizzle-kit',
+                'drizzle-seed',
+                'eslint',
+            ]
+            switch (database) {
+                case 'postgres':
+                    deps.push('postgres')
+                    break
+                default:
+                    deps.push('@libsql/client')
+                    break
             }
+
+            addDependencies(deps, devDeps, dbPackagePath)
+
+            addExports(['drizzle-db', 'drizzle-schema'], packageManager)
+
+            addScripts(
+                ['drizzle-generate', 'drizzle-migrate', 'drizzle-studio'],
+                dbPackagePath
+            )
             break
         case 'prisma':
+            // TODO: to be implemented
             break
         default:
+            // TODO: to be implemented
             break
     }
 

@@ -95,6 +95,10 @@ async function cli() {
                             {
                                 value: 'prisma',
                                 label: 'Prisma',
+                                hint:
+                                    results.database === 'turso'
+                                        ? 'Early Access'
+                                        : '',
                             },
                         ],
                         initialValue: 'none',
