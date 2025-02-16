@@ -1,11 +1,12 @@
-import path from 'path'
 import fse from 'fs-extra'
+import path from 'path'
 
-import { ROOT } from '@/CONSTS'
 import { baseSetup } from './base-setup'
-import { express } from './express'
-import { vite } from './vite'
 import { addDatabase } from './database'
+import { express } from './express'
+import { next } from './next'
+import { vite } from './vite'
+import { ROOT } from '@/CONSTS'
 
 import type {
     TApplication,
@@ -13,7 +14,6 @@ import type {
     TOrm,
     TPackageManager,
 } from '@/cli/index'
-import { next } from './next'
 
 async function init(
     projectName: string,
@@ -35,7 +35,7 @@ async function init(
         )
     } else {
         // if package manager is anything except pnpm
-        // set workspaces key in `package.json`
+        // set workspaces in `package.json`
         const packageJSON = fse.readJSONSync(
             path.resolve(projectDir, 'package.json')
         )
@@ -57,7 +57,9 @@ async function init(
         next(projectDir, packageManager)
     }
 
-    // orm !== 'none' && addDatabase(projectDir, packageManager, orm, database)
+    if (database) {
+        addDatabase(projectDir, packageManager, orm, database)
+    }
 }
 
 export { init }

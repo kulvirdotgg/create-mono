@@ -2,12 +2,14 @@ import fse from 'fs-extra'
 import path from 'node:path'
 
 import { ROOT } from '@/CONSTS'
-import { addDependencies } from '@/utils/add-dependencies'
 import { updateWorkspaceDependencies } from '@/utils/workspace-dependancy'
-import { updateTurboPkgJSON } from '@/utils/update-turbo-pkg'
 
-import type { TDatabase, TOrm, TPackageManager } from '@/cli/index'
-import type { TDependencies } from '@/utils/dependencies'
+import type { TDatabase, TOrm, TPackageManager } from '@/cli'
+
+/*
+ * TODO:
+ * - setup a docker compose file to setup db
+ **/
 
 function addDatabase(
     projectDir: string,
@@ -15,81 +17,46 @@ function addDatabase(
     orm: TOrm,
     database: TDatabase
 ) {
-    // Put in library eslint config in `@repo/eslint-config`
-    fse.copyFileSync(
-        path.join(ROOT, 'template/packages/eslint/library.cjs'),
-        path.join(projectDir, 'packages/eslint-config/library.cjs')
-    )
+    // path where database package will be located in monorepo
+    // `repo/packages/database`
+    const dbPackagePath = path.join(projectDir, 'packages/database')
 
-    const dbTemplate = path.join(ROOT, 'template/packages/databases')
-    let dbPackage = ''
+    // Copy neccessary files like `package.json` and `tsconfig.json`.....
+    fse.copySync(path.join(ROOT, 'template/database'), dbPackagePath)
 
-    if (orm === 'prisma') {
-        dbPackage = path.join(projectDir, 'packages/prisma-config')
-        fse.ensureDirSync(dbPackage)
-
-        fse.copySync(path.join(dbTemplate, 'prisma'), dbPackage)
-        fse.copyFileSync(
-            path.join(
-                ROOT,
-                'template/prisma',
-                database === 'neon' ? 'db-neon.ts' : 'db-supabase.ts'
-            ),
-            path.join(dbPackage, 'src/client.ts')
+    // TODO: handle no orm setup
+    if (orm !== 'none') {
+        fse.copySync(
+            path.join(ROOT, `template/${orm}/${database}`),
+            dbPackagePath
         )
-
-        // Prisma specific dependencies
-        const devDependencies: TDependencies[] = ['prisma']
-        addDependencies(devDependencies, true, dbPackage)
-
-        const pkg: TDependencies[] = ['@prisma/client']
-        if (database === 'neon') {
-            pkg.push('@prisma/adapter-neon')
-            pkg.push('@neondatabase/serverless')
-        }
-        addDependencies(pkg, false, dbPackage)
-
-        updateTurboPkgJSON(projectDir, 'prisma')
-    } else if (orm === 'drizzle') {
-        dbPackage = path.join(projectDir, 'packages/drizzle-config')
-
-        fse.ensureDirSync(dbPackage)
-
-        fse.copySync(path.join(dbTemplate, 'drizzle'), dbPackage)
-        fse.copyFileSync(
-            path.join(
-                ROOT,
-                'template/drizzle',
-                database === 'neon' ? 'db-neon.ts' : 'db-supabase.ts'
-            ),
-            path.join(dbPackage, 'src/db.ts')
-        )
-
-        // drizzle specific dependencies
-        const devDependencies: TDependencies[] = ['drizzle-kit']
-        addDependencies(devDependencies, true, dbPackage)
-
-        const dependencies: TDependencies[] = ['drizzle-orm']
-        if (database === 'neon') {
-            dependencies.push('@neondatabase/serverless')
-        } else if (database === 'supabase') {
-            dependencies.push('postgres')
-        }
-        addDependencies(dependencies, false, dbPackage)
-
-        updateTurboPkgJSON(projectDir, 'drizzle')
     }
 
-    // pnpm workspace thingie... idk its annoying
-    if (packageManager === 'pnpm') {
-        const appDir = dbPackage
-        updateWorkspaceDependencies(appDir)
+    /*
+     * TODO:
+     * - construct package.json with dependencies
+     * - update the env file with appropriate variables
+     * - update the env file with proper db name
+     **/
+    switch (orm) {
+        case 'none':
+            break
+        case 'drizzle':
+            if (database === 'sqlite') {
+                // TODO: create a db file tooo.... idk but yeah
+            }
+            break
+        case 'prisma':
+            break
     }
 
-    fse.renameSync(path.join(dbPackage, 'env'), path.join(dbPackage, '.env'))
+    if (packageManager === 'pnpm' || packageManager === 'bun') {
+        updateWorkspaceDependencies(dbPackagePath)
+    }
+
     fse.renameSync(
-        path.join(dbPackage, 'eslintrc.cjs'),
-        path.join(dbPackage, '.eslintrc.cjs')
+        path.join(dbPackagePath, 'env'),
+        path.join(dbPackagePath, '.env')
     )
 }
 
