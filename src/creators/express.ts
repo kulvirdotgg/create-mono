@@ -4,7 +4,6 @@ import { sortPackageJson } from 'sort-package-json'
 
 import { ROOT } from '@/CONSTS'
 import {
-    devDependencyMap,
     type TDependencies,
     type TDevDependencies,
 } from '@/utils/dependency-maps'
@@ -12,6 +11,7 @@ import {
 import type { TPackageManager } from '@/cli'
 import { updateMonorepoPackagedependencies } from '@/utils/monorepo-packages-dependencies'
 import { addDependencies } from '@/utils/add-dependencies'
+import { addScripts } from '@/utils/add-scripts'
 
 function addExpressApp(projectDir: string, packageManager: TPackageManager) {
     const expressDir = path.join(projectDir, 'apps/express')
@@ -21,6 +21,7 @@ function addExpressApp(projectDir: string, packageManager: TPackageManager) {
 
     const packageJSON = fse.readJSONSync(path.join(expressDir, 'package.json'))
 
+    // dependencies required for our express app
     const deps: TDependencies[] = ['cors', 'dotenv', 'express', 'morgan', 'zod']
     const devDeps: TDevDependencies[] = [
         '@types/cors',
@@ -33,11 +34,11 @@ function addExpressApp(projectDir: string, packageManager: TPackageManager) {
         devDeps.push('@types/bun')
         addDependencies(deps, devDeps, expressDir)
 
-        packageJSON.scripts.start = 'bun dist/index.js'
-        packageJSON.scripts.dev = 'tsup --watch --onSuccess "bun dist/index.js"'
+        addScripts(['express-bun-dev', 'express-bun-start'], expressDir)
     } else {
         devDeps.push('@types/node')
         addDependencies(deps, devDeps, expressDir)
+        addScripts(['express-node-dev', 'express-node-start'], expressDir)
     }
 
     const sortedPackageJSON = sortPackageJson(packageJSON)
