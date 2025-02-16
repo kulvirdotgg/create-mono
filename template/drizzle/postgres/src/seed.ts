@@ -1,11 +1,11 @@
 import { seed } from 'drizzle-seed'
 
+import { posts, users } from './db/schema'
 import { db } from './index'
-import * as schema from './db/schema'
 
 async function main() {
     console.log('starting the seeding')
-    await seed(db, { schema }, { count: 10 })
+    await seed(db, { users, posts }, { count: 10 })
 }
 
 main()
