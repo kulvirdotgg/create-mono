@@ -1,18 +1,18 @@
 const ScriptsMap = {
     'express-bun-dev': {
-        name: 'start',
+        name: 'dev',
         script: 'tsup --watch --onSuccess "bun dist/index.js"',
     },
     'express-bun-start': {
-        name: 'dev',
+        name: 'start',
         script: 'bun dist/index.js',
     },
     'express-node-dev': {
-        name: 'start',
+        name: 'dev',
         script: 'tsup --watch --onSuccess "node dist/index.js"',
     },
     'express-node-start': {
-        name: 'dev',
+        name: 'start',
         script: 'node dist/index.js',
     },
 } as const

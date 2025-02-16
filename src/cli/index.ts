@@ -16,7 +16,7 @@ async function cli() {
                 return p.select({
                     message: 'What package manager would you like to use?',
                     options: [
-                        { value: 'bun', label: 'Bun' },
+                        { value: 'bun', label: 'bun' },
                         { value: 'npm', label: 'npm' },
                         { value: 'pnpm', label: 'pnpm' },
                         { value: 'yarn', label: 'yarn' },
