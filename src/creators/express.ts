@@ -1,6 +1,5 @@
 import fse from 'fs-extra'
 import path from 'node:path'
-import { sortPackageJson } from 'sort-package-json'
 
 import { ROOT } from '@/CONSTS'
 import {
@@ -18,8 +17,6 @@ function addExpressApp(projectDir: string, packageManager: TPackageManager) {
 
     // copy the Express template to user's machine
     fse.copySync(path.join(ROOT, 'template/applications/express'), expressDir)
-
-    const packageJSON = fse.readJSONSync(path.join(expressDir, 'package.json'))
 
     // dependencies required for our express app
     const deps: TDependencies[] = ['cors', 'dotenv', 'express', 'morgan', 'zod']
@@ -40,15 +37,6 @@ function addExpressApp(projectDir: string, packageManager: TPackageManager) {
         addDependencies(deps, devDeps, expressDir)
         addScripts(['express-node-dev', 'express-node-start'], expressDir)
     }
-
-    const sortedPackageJSON = sortPackageJson(packageJSON)
-    fse.writeJsonSync(
-        path.join(expressDir, 'package.json'),
-        sortedPackageJSON,
-        {
-            spaces: 4,
-        }
-    )
 
     if (packageManager === 'pnpm' || packageManager === 'bun') {
         updateMonorepoPackagedependencies(expressDir)
