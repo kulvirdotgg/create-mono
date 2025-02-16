@@ -6,6 +6,7 @@ const dependencyMap = {
     dotenv: '^16.4.7',
     express: '^5.0.0',
     'drizzle-orm': '^0.39.3',
+    '@libsql/client': '^0.14.0',
     morgan: '1.10.0',
     next: '15.1.6',
     '@prisma/client': '^6.3.1',
@@ -26,6 +27,7 @@ const devDependencyMap = {
     '@types/react-dom': '^19.0.3',
 
     'drizzle-kit': '^0.30.4',
+    'drizzle-seed': '^0.3.0',
     eslint: '^9.20.1',
     prisma: '^6.3.1',
     tsup: '^8.3.6',
