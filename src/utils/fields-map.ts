@@ -32,8 +32,12 @@ export const ScriptsMap = {
         script: 'prisma generate',
     },
     'prisma-migrate': {
-        name: 'db:migrate:dev',
-        script: 'prisma migrate dev',
+        name: 'db:migrate',
+        script: 'prisma migrate dev --skip-generate',
+    },
+    'prisma-deploy': {
+        name: 'db:deploy',
+        script: 'prisma migrate deploy',
     },
     'prisma-studio': {
         name: 'db:studio',
@@ -55,6 +59,10 @@ export const ExportsMap = {
     'drizzle-schema': {
         name: './schema',
         exp: './src/db/schema.ts',
+    },
+    prisma: {
+        name: '.',
+        exp: './src/index.ts',
     },
 } as const
 
