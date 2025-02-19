@@ -36,19 +36,23 @@ function addDatabase(
 
     switch (orm) {
         case 'drizzle':
-            const deps: TDependencies[] = ['drizzle-orm', 'dotenv', 'zod']
-            const devDeps: TDevDependencies[] = ['drizzle-kit', 'eslint']
+            const drizzleDeps: TDependencies[] = [
+                'drizzle-orm',
+                'dotenv',
+                'zod',
+            ]
+            const drizzleDevDeps: TDevDependencies[] = ['drizzle-kit', 'eslint']
             switch (database) {
                 case 'postgres':
-                    deps.push('pg')
-                    devDeps.push('drizzle-seed')
+                    drizzleDeps.push('pg')
+                    drizzleDevDeps.push('drizzle-seed')
                     break
                 default:
-                    deps.push('@libsql/client')
+                    drizzleDeps.push('@libsql/client')
                     break
             }
 
-            addDependencies(deps, devDeps, dbPackagePath)
+            addDependencies(drizzleDeps, drizzleDevDeps, dbPackagePath)
 
             addExports(['drizzle-db', 'drizzle-schema'], dbPackagePath)
 
@@ -58,7 +62,28 @@ function addDatabase(
             )
             break
         case 'prisma':
-            // TODO: to be implemented
+            const prismaDeps: TDependencies[] = ['@prisma/client', 'dotenv']
+            const prismaDevDeps: TDevDependencies[] = ['prisma', 'eslint']
+
+            if (packageManager === 'bun') {
+                prismaDevDeps.push('@types/bun')
+            } else {
+                prismaDevDeps.push('@types/node')
+            }
+            addDependencies(prismaDeps, prismaDevDeps, dbPackagePath)
+
+            addExports(['prisma'], dbPackagePath)
+
+            addScripts(
+                [
+                    'prisma-generate',
+                    'prisma-migrate',
+                    'prisma-deploy',
+                    'prisma-studio',
+                    'prisma-format',
+                ],
+                dbPackagePath
+            )
             break
         default:
             // TODO: to be implemented
