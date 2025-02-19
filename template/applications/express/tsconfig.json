@@ -1,7 +1,6 @@
 {
     "extends": "@repo/tsconfig/base.json",
     "compilerOptions": {
-        "lib": ["ESNext", "DOM"],
         "module": "ESNext",
         "moduleResolution": "bundler",
         "outDir": "./dist",
