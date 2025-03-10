@@ -5,6 +5,9 @@ import pluginReactHooks from 'eslint-plugin-react-hooks'
 
 import { baseConfig } from './index.js'
 
+/**
+ * @type {import("eslint").Linter.Config}
+ */
 export const next = [
     ...baseConfig,
     {

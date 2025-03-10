@@ -5,6 +5,9 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 
 import { baseConfig } from './index.js'
 
+/**
+ * @type {import("eslint").Linter.Config}
+ */
 export const vite = [
     ...baseConfig,
     pluginReact.configs.flat.recommended,
