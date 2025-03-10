@@ -2,7 +2,6 @@
     "name": "express-api",
     "version": "0.0.1",
     "private": true,
-    "type": "module",
     "scripts": {
         "build": "tsup",
         "clean": "rm -rf dist",
