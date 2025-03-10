@@ -44,7 +44,8 @@ function addDatabase(
             const drizzleDevDeps: TDevDependencies[] = ['drizzle-kit', 'eslint']
             switch (database) {
                 case 'postgres':
-                    drizzleDeps.push('pg')
+                    // drizzle recommends pg driver, but it was creating some issue hence using postgres driver
+                    drizzleDeps.push('postgres')
                     drizzleDevDeps.push('drizzle-seed')
                     break
                 default:
