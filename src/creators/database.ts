@@ -4,22 +4,17 @@ import path from 'node:path'
 import { ROOT } from '@/CONSTS'
 import { updateMonorepoPackagedependencies } from '@/utils/monorepo-packages-dependencies'
 
-import type { TDatabase, TOrm, TPackageManager } from '@/cli'
-import type { TDependencies, TDevDependencies } from '@/utils/dependency-maps'
 import { addDependencies } from '@/utils/add-dependencies'
 import { addExports, addScripts } from '@/utils/add-fields'
+import type { TInitOpts } from '@/utils/types'
+import type { TDependencies, TDevDependencies } from '@/utils/dependency-maps'
 
 /*
  * TODO:
  * - setup a docker compose file to setup db
  **/
 
-function addDatabase(
-    projectDir: string,
-    packageManager: TPackageManager,
-    orm: TOrm,
-    database: TDatabase
-) {
+function addDatabase({ projectDir, packageManager, orm, database }: TInitOpts) {
     const dbPackagePath = path.join(projectDir, 'packages/database')
 
     fse.copySync(path.join(ROOT, 'template/database'), dbPackagePath)

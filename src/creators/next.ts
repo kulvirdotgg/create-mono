@@ -4,14 +4,13 @@ import path from 'node:path'
 import { ROOT } from '@/CONSTS'
 import { updateMonorepoPackagedependencies } from '@/utils/monorepo-packages-dependencies'
 
-import type { TPackageManager } from '@/cli'
 import type { TDependencies, TDevDependencies } from '@/utils/dependency-maps'
 import { addDependencies } from '@/utils/add-dependencies'
+import type { TInitOpts } from '@/utils/types'
 
-function next(projectDir: string, packageManager: TPackageManager) {
+function next({ projectName, projectDir, packageManager }: TInitOpts) {
     const nextAppDir = path.join(projectDir, 'apps/next')
 
-    // copy the Next template to user's machine
     fse.copySync(path.join(ROOT, 'template/applications/next'), nextAppDir)
 
     const deps: TDependencies[] = ['react', 'react-dom', 'next']

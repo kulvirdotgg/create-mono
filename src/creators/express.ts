@@ -7,15 +7,14 @@ import {
     type TDevDependencies,
 } from '@/utils/dependency-maps'
 
-import type { TPackageManager } from '@/cli'
 import { updateMonorepoPackagedependencies } from '@/utils/monorepo-packages-dependencies'
 import { addDependencies } from '@/utils/add-dependencies'
 import { addScripts } from '@/utils/add-fields'
+import type { TInitOpts } from '@/utils/types'
 
-function addExpressApp(projectDir: string, packageManager: TPackageManager) {
+function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
     const expressDir = path.join(projectDir, 'apps/express')
 
-    // copy the Express template to user's machine
     fse.copySync(path.join(ROOT, 'template/applications/express'), expressDir)
 
     const deps: TDependencies[] = ['cors', 'dotenv', 'express', 'morgan', 'zod']

@@ -1,21 +1,27 @@
 import chalk from 'chalk'
+import { execa } from 'execa'
 import fse from 'fs-extra'
 import ora from 'ora'
 import path from 'node:path'
 import * as p from '@clack/prompts'
 
 import { ROOT } from '@/CONSTS'
+import type { TInitOpts } from '@/utils/types'
 
-async function baseSetup(projectName: string, projectDir: string) {
+async function baseSetup({
+    projectName,
+    projectDir,
+    packageManager,
+}: TInitOpts) {
     const spin = ora(
         `Initializing monorepo in: ${chalk.bold(projectDir)}...\n`
     ).start()
 
     if (fse.existsSync(projectDir)) {
         if (fse.readdirSync(projectDir).length === 0) {
-            if (projectName !== '.') {
+            if (projectDir !== '.') {
                 spin.warn(
-                    `${chalk.bold.cyan(projectName)} ${chalk.yellow('present but empty (dejavu of life), continuing...\n')}`
+                    `${chalk.bold.cyan(projectDir)} ${chalk.yellow('present but empty, continuing...\n')}`
                 )
             }
         } else {
@@ -86,8 +92,29 @@ async function baseSetup(projectName: string, projectDir: string) {
         path.join(projectDir, '.prettierignore')
     )
 
-    const baseName = projectName === '.' ? 'App' : chalk.cyan.bold(projectName)
-    spin.succeed(`${baseName} initialized successfully...\n`)
+    try {
+        // set the name of repo in package.json
+        const packageJSON = fse.readJSONSync(
+            path.join(projectDir, 'package.json')
+        )
+        packageJSON.name = projectName
+
+        // set package manager field in root package.json
+        const { stdout } = await execa(packageManager!, ['-v'], {
+            cwd: projectDir,
+        })
+        packageJSON.packageManager = packageManager + '@' + stdout.trim()
+
+        fse.writeJsonSync(path.join(projectDir, 'package.json'), packageJSON, {
+            spaces: 4,
+        })
+    } catch (err: unknown) {
+        throw new Error('ERR_NO_PKG_MANAGER')
+    }
+
+    spin.succeed(
+        `${chalk.cyan.bold(projectName)} initialized successfully...\n`
+    )
 }
 
 export { baseSetup }

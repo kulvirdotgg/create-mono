@@ -1,30 +1,28 @@
 import { basename } from 'node:path'
 
-/*
-    dir/@mono/app => ["@mono/app", "dir/app"]
-    dir/app => ["app", "dir/app"]
-*/
+/**
+ * Extract project name and project directory from the project path entered by user.
+ * Ignore the scoped naming because, I believe that monorepo's name shouln't be scoped.
+ *
+ * dir/app => ["app", "dir/app"]
+ * dir/@mono/app => ["app", "dir/app"]
+ */
 function pathDetails(input: string) {
     if (input.length > 1 && input.endsWith('/')) input = input.slice(0, -1)
 
     const paths = input.split('/')
 
-    let monorepoName = paths[paths.length - 1]
+    let projectName = paths[paths.length - 1]
 
     // when user runs `create-app .`
-    if (monorepoName === '.') {
+    if (projectName === '.') {
         const cwd = process.cwd()
-        monorepoName = basename(cwd)
+        projectName = basename(cwd)
     }
 
-    const idxDelimeter = paths.findIndex((p) => p.startsWith('@'))
-    if (paths.findIndex((p) => p.startsWith('@')) !== -1) {
-        monorepoName = paths.slice(idxDelimeter).join('/')
-    }
+    const projectDir = paths.filter((p) => !p.startsWith('@')).join('/')
 
-    const pathToProject = paths.filter((p) => !p.startsWith('@')).join('/')
-
-    return [monorepoName, pathToProject] as const
+    return [projectName, projectDir] as const
 }
 
 export { pathDetails }

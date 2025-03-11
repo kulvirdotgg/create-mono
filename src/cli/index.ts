@@ -121,7 +121,7 @@ async function cli() {
     )
 
     return {
-        userInputName: userInputs.name,
+        userInputPath: userInputs.name,
         packageManager: userInputs.packageManager as TPackageManager,
         applications: [...userInputs.applications] as TApplication[],
         orm: userInputs.orm as TOrm,

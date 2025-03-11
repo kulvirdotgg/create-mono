@@ -7,25 +7,17 @@ import { addExpressApp } from './express'
 import { next } from './next'
 import { vite } from './vite'
 import { ROOT } from '@/CONSTS'
+import type { TInitOpts } from '@/utils/types'
 
-import type {
-    TApplication,
-    TDatabase,
-    TOrm,
-    TPackageManager,
-} from '@/cli/index'
-
-async function init(
-    projectName: string,
-    packageManager: TPackageManager,
-    applications: TApplication[],
-    orm: TOrm,
-    database: TDatabase
-) {
-    // absolute path for the project
-    const projectDir = path.resolve(process.cwd(), projectName)
-
-    await baseSetup(projectName, projectDir)
+async function init({
+    projectDir,
+    projectName,
+    packageManager,
+    applications,
+    orm,
+    database,
+}: TInitOpts) {
+    await baseSetup({ projectName, projectDir, packageManager })
 
     if (packageManager === 'pnpm') {
         // copy over the pnpm workspaces file for monorepo setup
@@ -39,26 +31,27 @@ async function init(
         const packageJSON = fse.readJSONSync(
             path.resolve(projectDir, 'package.json')
         )
+
         packageJSON['workspaces'].push('apps/*', 'packages/*', 'tooling/*')
         fse.writeJsonSync(path.join(projectDir, 'package.json'), packageJSON, {
             spaces: 4,
         })
     }
 
-    if (applications.includes('vite')) {
-        vite(projectDir, packageManager)
+    if (applications?.includes('vite')) {
+        vite({ projectName, projectDir, packageManager })
     }
 
-    if (applications.includes('express')) {
-        addExpressApp(projectDir, packageManager)
+    if (applications?.includes('express')) {
+        addExpressApp({ projectName, projectDir, packageManager })
     }
 
-    if (applications.includes('next')) {
-        next(projectDir, packageManager)
+    if (applications?.includes('next')) {
+        next({ projectName, projectDir, packageManager })
     }
 
     if (database) {
-        addDatabase(projectDir, packageManager, orm, database)
+        addDatabase({ projectName, projectDir, packageManager, orm, database })
     }
 }
 

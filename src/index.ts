@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 
 import figlet from 'figlet'
-import fse from 'fs-extra'
 import path from 'node:path'
 import { execa } from 'execa'
 import ora from 'ora'
@@ -16,8 +15,9 @@ async function main() {
     const TITLE = figlet.textSync('create-mono')
     console.log(chalk.cyan(TITLE))
 
+    // TODO: check for available package manager in cli phase only
     const {
-        userInputName,
+        userInputPath,
         packageManager,
         applications,
         orm,
@@ -25,50 +25,37 @@ async function main() {
         importAlias,
     } = await cli()
 
-    /**
-     * /some/path/@repo/package
-     * scopedName: @repo/package
-     * projectName: /some/path/package
-     */
-    const [scopedName, projectName] = pathDetails(userInputName)
-    await init(projectName, packageManager, applications, orm, database)
+    const [projectName, projectDir] = pathDetails(userInputPath)
 
     try {
-        const basePackageJSON = fse.readJSONSync(
-            path.join(projectName, 'package.json')
-        )
-        basePackageJSON.name = scopedName
-        const { stdout } = await execa(packageManager, ['-v'], {
-            cwd: projectName,
+        await init({
+            projectName,
+            projectDir,
+            packageManager,
+            applications,
+            orm,
+            database,
         })
 
-        // Set package manager field in root package.json
-        // required for monorepo setup
-        basePackageJSON.packageManager = packageManager + '@' + stdout.trim()
-        fse.writeJsonSync(
-            path.join(projectName, 'package.json'),
-            basePackageJSON,
-            {
-                spaces: 4,
-            }
-        )
-    } catch (err) {
-        console.log(
-            chalk.redBright(
-                `${packageManager} not found. Try again after installing.`
+        updateImportAlias(projectDir, importAlias)
+
+        // TODO: move this to some creators
+        if (applications.includes('vite')) {
+            const vitePath = path.join(projectDir, 'apps/vite/vite.config.ts')
+            updateViteAlias(vitePath, importAlias)
+        }
+    } catch (err: any) {
+        if (err.message === 'ERR_NO_PKG_MANAGER') {
+            console.log(
+                chalk.redBright(
+                    `${packageManager} not found. Try again after installing.`
+                )
             )
-        )
+        }
         const spin = ora('Project creation failed...').start()
-        await execa('rm', ['-rf', projectName])
+        await execa('rm', ['-rf', projectDir])
         spin.fail()
         process.exit(1)
-    }
-
-    updateImportAlias(projectName, importAlias)
-    // need to inform vite too about the import aliases
-    if (applications.includes('vite')) {
-        const vitePath = path.join(projectName, 'apps/vite/vite.config.ts')
-        updateViteAlias(vitePath, importAlias)
     }
 
     process.exit(0)
