@@ -92,6 +92,20 @@ async function baseSetup({
         path.join(projectDir, '.prettierignore')
     )
 
+    const eslintPath = path.join(projectDir, 'tooling/eslint', 'package.json')
+    const eslintPkgJSON = fse.readJSONSync(eslintPath)
+    eslintPkgJSON.name = `@${projectName}/eslint`
+    fse.writeJsonSync(eslintPath, eslintPkgJSON, {
+        spaces: 4,
+    })
+
+    const tsPath = path.join(projectDir, 'tooling/tsconfig', 'package.json')
+    const tsPkgJSON = fse.readJSONSync(tsPath)
+    tsPkgJSON.name = `@${projectName}/tsconfig`
+    fse.writeJsonSync(tsPath, tsPkgJSON, {
+        spaces: 4,
+    })
+
     try {
         // set the name of repo in package.json
         const packageJSON = fse.readJSONSync(

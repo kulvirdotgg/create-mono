@@ -36,16 +36,28 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
         addScripts(['express-node-dev', 'express-node-start'], expressDir)
     }
 
-    if (packageManager === 'pnpm' || packageManager === 'bun') {
-        updateMonorepoPackagedependencies(expressDir)
-    }
-
     const packageJSON = fse.readJSONSync(path.join(expressDir, 'package.json'))
     packageJSON.name = `@${projectName}/express-api`
+
+    delete packageJSON.devDependencies['@repo/eslint']
+    delete packageJSON.devDependencies['@repo/tsconfig']
+
+    packageJSON.devDependencies[`@${projectName}/eslint`] = '*'
+    packageJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
 
     fse.writeJsonSync(path.join(expressDir, 'package.json'), packageJSON, {
         spaces: 4,
     })
+
+    const tsconfig = fse.readJSONSync(path.join(expressDir, 'tsconfig.json'))
+    tsconfig['extends'] = `@${projectName}/tsconfig/base.json`
+    fse.writeJsonSync(path.join(expressDir, 'tsconfig.json'), tsconfig, {
+        spaces: 4,
+    })
+
+    if (packageManager === 'pnpm' || packageManager === 'bun') {
+        updateMonorepoPackagedependencies(expressDir)
+    }
 }
 
 export { addExpressApp }

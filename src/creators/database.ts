@@ -78,10 +78,6 @@ function addDatabase({
             break
     }
 
-    if (packageManager === 'pnpm' || packageManager === 'bun') {
-        updateMonorepoPackagedependencies(dbPackagePath)
-    }
-
     fse.renameSync(
         path.join(dbPackagePath, 'env'),
         path.join(dbPackagePath, '.env')
@@ -92,9 +88,25 @@ function addDatabase({
     )
     packageJSON.name = `@${projectName}/database`
 
+    delete packageJSON.devDependencies['@repo/eslint']
+    delete packageJSON.devDependencies['@repo/tsconfig']
+
+    packageJSON.devDependencies[`@${projectName}/eslint`] = '*'
+    packageJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
+
     fse.writeJsonSync(path.join(dbPackagePath, 'package.json'), packageJSON, {
         spaces: 4,
     })
+
+    const tsconfig = fse.readJSONSync(path.join(dbPackagePath, 'tsconfig.json'))
+    tsconfig['extends'] = `@${projectName}/tsconfig/base.json`
+    fse.writeJsonSync(path.join(dbPackagePath, 'tsconfig.json'), tsconfig, {
+        spaces: 4,
+    })
+
+    if (packageManager === 'pnpm' || packageManager === 'bun') {
+        updateMonorepoPackagedependencies(dbPackagePath)
+    }
 }
 
 export { addDatabase }

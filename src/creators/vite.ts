@@ -23,16 +23,28 @@ function vite({ projectName, projectDir, packageManager }: TInitOpts) {
     ]
     addDependencies(deps, devDeps, viteAppDir)
 
-    if (packageManager === 'pnpm' || packageManager === 'bun') {
-        updateMonorepoPackagedependencies(viteAppDir)
-    }
-
     const packageJSON = fse.readJSONSync(path.join(viteAppDir, 'package.json'))
     packageJSON.name = `@${projectName}/vite`
+
+    delete packageJSON.devDependencies['@repo/eslint']
+    delete packageJSON.devDependencies['@repo/tsconfig']
+
+    packageJSON.devDependencies[`@${projectName}/eslint`] = '*'
+    packageJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
 
     fse.writeJsonSync(path.join(viteAppDir, 'package.json'), packageJSON, {
         spaces: 4,
     })
+
+    const tsconfig = fse.readJSONSync(path.join(viteAppDir, 'tsconfig.json'))
+    tsconfig['extends'] = `@${projectName}/tsconfig/vite.json`
+    fse.writeJsonSync(path.join(viteAppDir, 'tsconfig.json'), tsconfig, {
+        spaces: 4,
+    })
+
+    if (packageManager === 'pnpm' || packageManager === 'bun') {
+        updateMonorepoPackagedependencies(viteAppDir)
+    }
 }
 
 export { vite }

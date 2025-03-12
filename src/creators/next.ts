@@ -22,16 +22,28 @@ function next({ projectName, projectDir, packageManager }: TInitOpts) {
     ]
     addDependencies(deps, devDeps, nextAppDir)
 
-    if (packageManager === 'pnpm' || packageManager === 'bun') {
-        updateMonorepoPackagedependencies(nextAppDir)
-    }
-
     const packageJSON = fse.readJSONSync(path.join(nextAppDir, 'package.json'))
     packageJSON.name = `@${projectName}/next`
+
+    delete packageJSON.devDependencies['@repo/eslint']
+    delete packageJSON.devDependencies['@repo/tsconfig']
+
+    packageJSON.devDependencies[`@${projectName}/eslint`] = '*'
+    packageJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
 
     fse.writeJsonSync(path.join(nextAppDir, 'package.json'), packageJSON, {
         spaces: 4,
     })
+
+    const tsconfig = fse.readJSONSync(path.join(nextAppDir, 'tsconfig.json'))
+    tsconfig['extends'] = `@${projectName}/tsconfig/next.json`
+    fse.writeJsonSync(path.join(nextAppDir, 'tsconfig.json'), tsconfig, {
+        spaces: 4,
+    })
+
+    if (packageManager === 'pnpm' || packageManager === 'bun') {
+        updateMonorepoPackagedependencies(nextAppDir)
+    }
 }
 
 export { next }
