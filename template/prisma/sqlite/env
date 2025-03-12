@@ -1,1 +1,2 @@
-DATABASE_FILE_NAME="file:../db/sqlite.db"
+# This points to the root of monorepo for ez access across apps
+DATABASE_FILE_NAME="file:../../sqlite.db"
