@@ -39,6 +39,13 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
     if (packageManager === 'pnpm' || packageManager === 'bun') {
         updateMonorepoPackagedependencies(expressDir)
     }
+
+    const packageJSON = fse.readJSONSync(path.join(expressDir, 'package.json'))
+    packageJSON.name = `@${projectName}/express-api`
+
+    fse.writeJsonSync(path.join(expressDir, 'package.json'), packageJSON, {
+        spaces: 4,
+    })
 }
 
 export { addExpressApp }

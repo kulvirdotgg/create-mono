@@ -25,6 +25,13 @@ function next({ projectName, projectDir, packageManager }: TInitOpts) {
     if (packageManager === 'pnpm' || packageManager === 'bun') {
         updateMonorepoPackagedependencies(nextAppDir)
     }
+
+    const packageJSON = fse.readJSONSync(path.join(nextAppDir, 'package.json'))
+    packageJSON.name = `@${projectName}/next`
+
+    fse.writeJsonSync(path.join(nextAppDir, 'package.json'), packageJSON, {
+        spaces: 4,
+    })
 }
 
 export { next }

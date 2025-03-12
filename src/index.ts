@@ -39,7 +39,6 @@ async function main() {
 
         updateImportAlias(projectDir, importAlias)
 
-        // TODO: move this to some creators
         if (applications.includes('vite')) {
             const vitePath = path.join(projectDir, 'apps/vite/vite.config.ts')
             updateViteAlias(vitePath, importAlias)

@@ -1,5 +1,0 @@
-# NOTE: when you add a new env variable here, add it to `src/env.ts` too
-# its typesafe way of using env variables
-
-# TURSO_DATABASE_URL=
-# TURSO_AUTH_TOKEN=

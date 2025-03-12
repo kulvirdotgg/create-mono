@@ -26,6 +26,13 @@ function vite({ projectName, projectDir, packageManager }: TInitOpts) {
     if (packageManager === 'pnpm' || packageManager === 'bun') {
         updateMonorepoPackagedependencies(viteAppDir)
     }
+
+    const packageJSON = fse.readJSONSync(path.join(viteAppDir, 'package.json'))
+    packageJSON.name = `@${projectName}/vite`
+
+    fse.writeJsonSync(path.join(viteAppDir, 'package.json'), packageJSON, {
+        spaces: 4,
+    })
 }
 
 export { vite }
