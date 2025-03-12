@@ -62,44 +62,34 @@ async function cli() {
                     ],
                 })
             },
-            database: () => {
+            orm: () => {
                 return p.select({
-                    message: 'Which database do you plan to use?',
+                    message: 'Which ORM would you like to use?',
                     options: [
-                        { value: 'none', label: 'None' },
-                        { value: 'postgres', label: 'Postgres' },
                         {
-                            value: 'turso',
-                            label: 'Turso',
-                            hint: 'Better SQLite',
+                            value: 'none',
+                            label: 'None',
+                            hint: 'I like to rawdawg my SEQUEL',
                         },
-                        { value: 'sqlite', label: 'SQLite' },
+                        {
+                            value: 'drizzle',
+                            label: 'Drizzle',
+                        },
+                        {
+                            value: 'prisma',
+                            label: 'Prisma',
+                        },
                     ],
                     initialValue: 'none',
                 })
             },
-            orm: ({ results }) => {
-                if (results.database !== 'none') {
+            database: ({ results }) => {
+                if (results.orm !== 'none') {
                     return p.select({
-                        message: 'Which ORM would you like to use?',
+                        message: 'Which database do you plan to use?',
                         options: [
-                            {
-                                value: 'none',
-                                label: 'None',
-                                hint: 'I like to rawdawg sequel',
-                            },
-                            {
-                                value: 'drizzle',
-                                label: 'Drizzle',
-                            },
-                            {
-                                value: 'prisma',
-                                label: 'Prisma',
-                                hint:
-                                    results.database === 'turso'
-                                        ? 'Early Access'
-                                        : '',
-                            },
+                            { value: 'postgres', label: 'Postgres' },
+                            { value: 'sqlite', label: 'SQLite (LibSQL)' },
                         ],
                         initialValue: 'none',
                     })
@@ -107,7 +97,7 @@ async function cli() {
             },
             importAlias: () => {
                 return p.text({
-                    message: `Would you like to change the default import alias? ${chalk.bold('(default "@/*")')}`,
+                    message: 'What import alias would you like to use?',
                     defaultValue: '@/',
                     placeholder: '@/',
                 })
@@ -134,8 +124,8 @@ export { cli }
 
 export type TPackageManager = 'bun' | 'npm' | 'pnpm' | 'yarn'
 
-export type TApplication = 'astro' | 'express' | 'next' | 'vite'
+export type TApplication = 'astro' | 'express' | 'next' | 'vite' | 'rn'
 
-export type TOrm = 'drizzle' | 'prisma' | 'none'
+export type TOrm = 'drizzle' | 'none' | 'prisma'
 
-export type TDatabase = 'postgres' | 'sqlite' | 'turso' | null
+export type TDatabase = 'postgres' | 'sqlite'

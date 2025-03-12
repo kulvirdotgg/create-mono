@@ -9,23 +9,18 @@ import { addExports, addScripts } from '@/utils/add-fields'
 import type { TInitOpts } from '@/utils/types'
 import type { TDependencies, TDevDependencies } from '@/utils/dependency-maps'
 
-/*
- * TODO:
- * - setup a docker compose file to setup db
- **/
-
-function addDatabase({ projectDir, packageManager, orm, database }: TInitOpts) {
+function addDatabase({
+    projectName,
+    projectDir,
+    packageManager,
+    orm,
+    database,
+}: TInitOpts) {
     const dbPackagePath = path.join(projectDir, 'packages/database')
 
     fse.copySync(path.join(ROOT, 'template/database'), dbPackagePath)
 
-    // TODO: handle no orm setup
-    if (orm !== 'none') {
-        fse.copySync(
-            path.join(ROOT, `template/${orm}/${database}`),
-            dbPackagePath
-        )
-    }
+    fse.copySync(path.join(ROOT, `template/${orm}/${database}`), dbPackagePath)
 
     // TODO: update the env file with proper db name
 
@@ -36,15 +31,16 @@ function addDatabase({ projectDir, packageManager, orm, database }: TInitOpts) {
                 'dotenv',
                 'zod',
             ]
-            const drizzleDevDeps: TDevDependencies[] = ['drizzle-kit', 'eslint']
-            switch (database) {
-                case 'postgres':
-                    drizzleDeps.push('pg')
-                    drizzleDevDeps.push('drizzle-seed')
-                    break
-                default:
-                    drizzleDeps.push('@libsql/client')
-                    break
+            const drizzleDevDeps: TDevDependencies[] = [
+                'drizzle-kit',
+                'eslint',
+                'drizzle-seed',
+            ]
+
+            if (database === 'postgres') {
+                drizzleDeps.push('pg')
+            } else {
+                drizzleDeps.push('@libsql/client')
             }
 
             addDependencies(drizzleDeps, drizzleDevDeps, dbPackagePath)
@@ -80,9 +76,6 @@ function addDatabase({ projectDir, packageManager, orm, database }: TInitOpts) {
                 dbPackagePath
             )
             break
-        default:
-            // TODO: to be implemented
-            break
     }
 
     if (packageManager === 'pnpm' || packageManager === 'bun') {
@@ -93,6 +86,15 @@ function addDatabase({ projectDir, packageManager, orm, database }: TInitOpts) {
         path.join(dbPackagePath, 'env'),
         path.join(dbPackagePath, '.env')
     )
+
+    const packageJSON = fse.readJSONSync(
+        path.join(dbPackagePath, 'package.json')
+    )
+    packageJSON.name = `@${projectName}/database`
+
+    fse.writeJsonSync(path.join(dbPackagePath, 'package.json'), packageJSON, {
+        spaces: 4,
+    })
 }
 
 export { addDatabase }

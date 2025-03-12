@@ -50,7 +50,7 @@ async function init({
         next({ projectName, projectDir, packageManager })
     }
 
-    if (database) {
+    if (orm !== 'none') {
         addDatabase({ projectName, projectDir, packageManager, orm, database })
     }
 }
