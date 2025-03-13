@@ -13,11 +13,16 @@ import { updateImportAlias, updateViteAlias } from '@/utils/update-import-alias'
 import { runInstall } from '@/utils/run-install'
 import { initializeGit } from '@/utils/git-init'
 
+/**
+ * If you think this project looks soo much like `create t3-app`, Its because it is ackchyually inspired from `create t3-app`
+ * Infact some code snippets are directly copy pasted from there, Because people who build `create t3-app` are more skilled than me.
+ *
+ * https://github.com/t3-oss/create-t3-app/blob/main/LICENSE
+ */
 async function main() {
     const TITLE = figlet.textSync('create-mono')
     console.log(chalk.cyan(TITLE))
 
-    // TODO: check for available package manager in cli phase only
     const {
         userInputPath,
         packageManager,
@@ -68,6 +73,8 @@ async function main() {
         spin.fail()
         process.exit(1)
     }
+
+    // TODO: CTA to the docs then publish
 
     process.exit(0)
 }
