@@ -56,7 +56,7 @@ export const initializeGit = async (projectDir: string) => {
         const overwriteGit = await p.confirm({
             message: `${chalk.redBright.bold(
                 'Warning:'
-            )} Git is already initialized in "${dirName}". Initializing a new git repository would delete the previous history. Would you like to continue anyways?`,
+            )} Git is already initialized in ${chalk.cyan(dirName)}. Initializing a new git repository would delete the previous history. Would you like to continue anyways?`,
             initialValue: false,
         })
 
@@ -71,7 +71,7 @@ export const initializeGit = async (projectDir: string) => {
         const initializeChildGitRepo = await p.confirm({
             message: `${chalk.redBright.bold(
                 'Warning:'
-            )} "${dirName}" is already in a git worktree. Would you still like to initialize a new git repository in this directory?`,
+            )} ${chalk.cyan(dirName)} is already in a git worktree. Would you still like to initialize a new git repository in this directory?`,
             initialValue: false,
         })
         if (!initializeChildGitRepo) {

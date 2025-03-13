@@ -21,14 +21,14 @@ async function baseSetup({
         if (fse.readdirSync(projectDir).length === 0) {
             if (projectDir !== '.') {
                 spin.warn(
-                    `${chalk.bold.cyan(projectDir)} ${chalk.yellow('present but empty, continuing...\n')}`
+                    `${chalk.bold.cyan(projectDir)} present but empty, continuing...\n'`
                 )
             }
         } else {
             spin.stopAndPersist()
 
             const overwrite = await p.select({
-                message: `${chalk.redBright.bold('warning: ')}: ${chalk.bold.yellow(projectName)} ${chalk.yellow('exists, Still wanna proceed?')}`,
+                message: `${chalk.redBright.bold('warning: ')}${chalk.bold.cyan(projectDir)} exists, Still wanna proceed?}`,
                 options: [
                     {
                         label: 'Stop installation (recommended)',
@@ -56,7 +56,7 @@ async function baseSetup({
                     : 'overwrite conflicting files'
 
             const confirmOverwrite = await p.confirm({
-                message: `Are you sure you want to  ${action}`,
+                message: `Are you sure you want to ${action}`,
                 initialValue: false,
             })
 
@@ -67,7 +67,7 @@ async function baseSetup({
 
             if (overwrite === 'clear') {
                 spin.info(
-                    `${chalk.cyan.bold(projectName)} clearning and continuing...`
+                    `clearing ${chalk.cyan.bold(projectDir)} and continuing...`
                 )
                 fse.emptyDirSync(projectDir)
             }
@@ -131,9 +131,7 @@ async function baseSetup({
         throw new Error('ERR_NO_PKG_MANAGER')
     }
 
-    spin.succeed(
-        `${chalk.cyan.bold(projectName)} initialized successfully...\n`
-    )
+    spin.succeed(`${chalk.cyan.bold(projectName)} initialized successfully!\n`)
 }
 
 export { baseSetup }
