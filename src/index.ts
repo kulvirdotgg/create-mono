@@ -6,10 +6,12 @@ import { execa } from 'execa'
 import ora from 'ora'
 import chalk from 'chalk'
 
-import { cli } from '@/cli/index'
-import { pathDetails } from '@/utils/path-details'
+import { cli } from '@/cli'
+import { getProjectPath } from '@/utils/project-path'
 import { init } from '@/creators/init'
 import { updateImportAlias, updateViteAlias } from '@/utils/update-import-alias'
+import { runInstall } from '@/utils/run-install'
+import { initializeGit } from '@/utils/git-init'
 
 async function main() {
     const TITLE = figlet.textSync('create-mono')
@@ -23,9 +25,11 @@ async function main() {
         orm,
         database,
         importAlias,
+        gitInit,
+        install,
     } = await cli()
 
-    const [projectName, projectDir] = pathDetails(userInputPath)
+    const [projectName, projectDir] = getProjectPath(userInputPath)
 
     try {
         await init({
@@ -42,6 +46,14 @@ async function main() {
         if (applications.includes('vite')) {
             const vitePath = path.join(projectDir, 'apps/vite/vite.config.ts')
             updateViteAlias(vitePath, importAlias)
+        }
+
+        if (install) {
+            await runInstall(projectDir, packageManager)
+        }
+
+        if (gitInit) {
+            await initializeGit(projectDir)
         }
     } catch (err: any) {
         if (err.message === 'ERR_NO_PKG_MANAGER') {

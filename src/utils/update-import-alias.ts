@@ -33,10 +33,10 @@ function updateImportAlias(projectDir: string, importAlias: string) {
     replaceTextInFiles(projectDir, `@/`, normalizedImportAlias)
 }
 
-/*
-    Remove the trailing `/` for vite config too
-    @/ -> @
-*/
+/**
+ * Remove the trailing `/` for vite config too
+ * @/ -> @
+ */
 function updateViteAlias(viteConfigPath: string, importAlias: string) {
     const normalizedImportAlias = importAlias
         .replace(/\*/g, '')

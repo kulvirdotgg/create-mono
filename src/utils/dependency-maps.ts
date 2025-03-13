@@ -1,6 +1,6 @@
-/*
-    Thanks Theo, if you see stuff copied T3 code then it is actually. (Opensource BTW)
-*/
+/**
+ * https://github.com/t3-oss/create-t3-app/blob/main/LICENSE
+ */
 const dependencyMap = {
     cors: '^2.8.5',
     dotenv: '^16.4.7',

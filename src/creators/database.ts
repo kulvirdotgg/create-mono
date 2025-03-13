@@ -1,13 +1,12 @@
 import fse from 'fs-extra'
 import path from 'node:path'
+import { sortPackageJson } from 'sort-package-json'
 
 import { ROOT } from '@/CONSTS'
-import { updateMonorepoPackagedependencies } from '@/utils/monorepo-packages-dependencies'
-
 import { addDependencies } from '@/utils/add-dependencies'
-import { addExports, addScripts } from '@/utils/add-fields'
-import type { TInitOpts } from '@/utils/types'
+import { updateWorkspacePkgs } from '@/utils/workspace-pkgs'
 import type { TDependencies, TDevDependencies } from '@/utils/dependency-maps'
+import type { TInitOpts } from '@/types'
 
 function addDatabase({
     projectName,
@@ -20,72 +19,88 @@ function addDatabase({
 
     fse.copySync(path.join(ROOT, 'template/database'), dbPackagePath)
 
+    // copy orm specific files for the database
     fse.copySync(path.join(ROOT, `template/${orm}/${database}`), dbPackagePath)
 
-    // TODO: update the env file with proper db name
+    if (orm === 'drizzle') {
+        const drizzleDeps: TDependencies[] = ['drizzle-orm', 'dotenv', 'zod']
+        const drizzleDevDeps: TDevDependencies[] = [
+            'drizzle-kit',
+            'eslint',
+            'drizzle-seed',
+        ]
 
-    switch (orm) {
-        case 'drizzle':
-            const drizzleDeps: TDependencies[] = [
-                'drizzle-orm',
-                'dotenv',
-                'zod',
-            ]
-            const drizzleDevDeps: TDevDependencies[] = [
-                'drizzle-kit',
-                'eslint',
-                'drizzle-seed',
-            ]
+        if (database === 'postgres') {
+            drizzleDeps.push('pg')
+        } else {
+            drizzleDeps.push('@libsql/client')
+        }
 
-            if (database === 'postgres') {
-                drizzleDeps.push('pg')
-            } else {
-                drizzleDeps.push('@libsql/client')
+        addDependencies(drizzleDeps, drizzleDevDeps, dbPackagePath)
+
+        const packageJSON = fse.readJSONSync(
+            path.join(dbPackagePath, 'package.json')
+        )
+
+        packageJSON.scripts['db:generate'] = 'drizzle-kit generate'
+        packageJSON.scripts['db:migrate'] = 'drizzle-kit migrate'
+        packageJSON.scripts['db:studio'] = 'drizzle-kit studio'
+
+        packageJSON.exports['.'] = './src/index.ts'
+        packageJSON.exports['./schema'] = './src/db/schema.ts'
+
+        const sortedFile = sortPackageJson(packageJSON)
+
+        fse.writeJSONSync(
+            path.join(dbPackagePath, 'package.json'),
+            sortedFile,
+            {
+                spaces: 4,
             }
+        )
+    } else if (orm === 'prisma') {
+        const prismaDeps: TDependencies[] = ['@prisma/client', 'dotenv']
+        const prismaDevDeps: TDevDependencies[] = ['prisma', 'eslint']
 
-            addDependencies(drizzleDeps, drizzleDevDeps, dbPackagePath)
+        if (packageManager === 'bun') {
+            prismaDevDeps.push('@types/bun')
+        } else {
+            prismaDevDeps.push('@types/node')
+        }
 
-            addExports(['drizzle-db', 'drizzle-schema'], dbPackagePath)
+        addDependencies(prismaDeps, prismaDevDeps, dbPackagePath)
 
-            addScripts(
-                ['drizzle-generate', 'drizzle-migrate', 'drizzle-studio'],
-                dbPackagePath
-            )
-            break
-        case 'prisma':
-            const prismaDeps: TDependencies[] = ['@prisma/client', 'dotenv']
-            const prismaDevDeps: TDevDependencies[] = ['prisma', 'eslint']
+        const packageJSON = fse.readJSONSync(
+            path.join(dbPackagePath, 'package.json')
+        )
 
-            if (packageManager === 'bun') {
-                prismaDevDeps.push('@types/bun')
-            } else {
-                prismaDevDeps.push('@types/node')
+        packageJSON.scripts['db:deploy'] = 'prisma generate deploy'
+        packageJSON.scripts['db:generate'] = 'prisma generate'
+        packageJSON.scripts['db:studio'] = 'prisma studio'
+        packageJSON.scripts['format'] = 'prisma format'
+
+        packageJSON.exports['.'] = './src/index.ts'
+
+        const sortedFile = sortPackageJson(packageJSON)
+
+        fse.writeJSONSync(
+            path.join(dbPackagePath, 'package.json'),
+            sortedFile,
+            {
+                spaces: 4,
             }
-            addDependencies(prismaDeps, prismaDevDeps, dbPackagePath)
-
-            addExports(['prisma'], dbPackagePath)
-
-            addScripts(
-                [
-                    'prisma-generate',
-                    'prisma-migrate',
-                    'prisma-deploy',
-                    'prisma-studio',
-                    'prisma-format',
-                ],
-                dbPackagePath
-            )
-            break
+        )
     }
 
     fse.renameSync(
-        path.join(dbPackagePath, 'env'),
+        path.join(dbPackagePath, '_env'),
         path.join(dbPackagePath, '.env')
     )
 
     const packageJSON = fse.readJSONSync(
         path.join(dbPackagePath, 'package.json')
     )
+
     packageJSON.name = `@${projectName}/database`
 
     delete packageJSON.devDependencies['@repo/eslint']
@@ -94,7 +109,8 @@ function addDatabase({
     packageJSON.devDependencies[`@${projectName}/eslint`] = '*'
     packageJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
 
-    fse.writeJsonSync(path.join(dbPackagePath, 'package.json'), packageJSON, {
+    const sortedFile = sortPackageJson(packageJSON)
+    fse.writeJsonSync(path.join(dbPackagePath, 'package.json'), sortedFile, {
         spaces: 4,
     })
 
@@ -105,7 +121,7 @@ function addDatabase({
     })
 
     if (packageManager === 'pnpm' || packageManager === 'bun') {
-        updateMonorepoPackagedependencies(dbPackagePath)
+        updateWorkspacePkgs(dbPackagePath)
     }
 }
 

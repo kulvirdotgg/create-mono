@@ -7,7 +7,7 @@ import { basename } from 'node:path'
  * dir/app => ["app", "dir/app"]
  * dir/@mono/app => ["app", "dir/app"]
  */
-function pathDetails(input: string) {
+function getProjectPath(input: string) {
     if (input.length > 1 && input.endsWith('/')) input = input.slice(0, -1)
 
     const paths = input.split('/')
@@ -25,4 +25,4 @@ function pathDetails(input: string) {
     return [projectName, projectDir] as const
 }
 
-export { pathDetails }
+export { getProjectPath }

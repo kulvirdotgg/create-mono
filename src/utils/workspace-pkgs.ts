@@ -2,7 +2,7 @@ import path from 'node:path'
 import fse from 'fs-extra'
 
 // bun and pnpm uses `"dep": "workspace:*"` for local packages
-function updateMonorepoPackagedependencies(appDir: string) {
+function updateWorkspacePkgs(appDir: string) {
     const packageJSON = fse.readJSONSync(path.resolve(appDir, 'package.json'))
 
     for (let [key, val] of Object.entries(packageJSON.dependencies)) {
@@ -18,4 +18,4 @@ function updateMonorepoPackagedependencies(appDir: string) {
     })
 }
 
-export { updateMonorepoPackagedependencies }
+export { updateWorkspacePkgs }

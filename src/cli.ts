@@ -2,6 +2,7 @@ import * as p from '@clack/prompts'
 import chalk from 'chalk'
 
 import { validateProjectName } from '@/utils/validate-project-name'
+import type { TApplication, TDatabase, TOrm, TPackageManager } from '@/types'
 
 async function cli() {
     const userInputs = await p.group(
@@ -102,6 +103,16 @@ async function cli() {
                     placeholder: '@/',
                 })
             },
+            gitInit: () => {
+                return p.confirm({
+                    message: 'Should we initialize Git repository?',
+                })
+            },
+            install: ({ results }) => {
+                return p.confirm({
+                    message: `Should we run '${results.packageManager} install' for you?`,
+                })
+            },
         },
         {
             onCancel() {
@@ -117,15 +128,9 @@ async function cli() {
         orm: userInputs.orm as TOrm,
         database: userInputs.database as TDatabase,
         importAlias: userInputs.importAlias,
+        gitInit: userInputs.gitInit,
+        install: userInputs.install,
     }
 }
 
 export { cli }
-
-export type TPackageManager = 'bun' | 'npm' | 'pnpm' | 'yarn'
-
-export type TApplication = 'astro' | 'express' | 'next' | 'vite' | 'rn'
-
-export type TOrm = 'drizzle' | 'none' | 'prisma'
-
-export type TDatabase = 'postgres' | 'sqlite'

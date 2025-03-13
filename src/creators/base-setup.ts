@@ -6,7 +6,7 @@ import path from 'node:path'
 import * as p from '@clack/prompts'
 
 import { ROOT } from '@/CONSTS'
-import type { TInitOpts } from '@/utils/types'
+import type { TInitOpts } from '@/types'
 
 async function baseSetup({
     projectName,
@@ -76,22 +76,25 @@ async function baseSetup({
     }
     spin.start()
 
+    // copy the base template for monorepo
     const base = path.join(ROOT, 'template/base')
     fse.copySync(base, projectDir)
+
     fse.renameSync(
-        path.join(projectDir, 'prettier-config.js'),
+        path.join(projectDir, '_prettierconfig.js'),
         path.join(projectDir, 'prettier.config.js')
     )
     fse.renameSync(
-        path.join(projectDir, 'gitignore'),
+        path.join(projectDir, '_gitignore'),
         path.join(projectDir, '.gitignore')
     )
-
     fse.renameSync(
-        path.join(projectDir, 'prettierignore'),
+        path.join(projectDir, '_prettierignore'),
         path.join(projectDir, '.prettierignore')
     )
 
+    // choose proper scoped name for eslint package
+    // @repo-name/eslint
     const eslintPath = path.join(projectDir, 'tooling/eslint', 'package.json')
     const eslintPkgJSON = fse.readJSONSync(eslintPath)
     eslintPkgJSON.name = `@${projectName}/eslint`
@@ -99,6 +102,8 @@ async function baseSetup({
         spaces: 4,
     })
 
+    // choose proper scoped name for tsconfig package
+    // @repo-name/tsconfig
     const tsPath = path.join(projectDir, 'tooling/tsconfig', 'package.json')
     const tsPkgJSON = fse.readJSONSync(tsPath)
     tsPkgJSON.name = `@${projectName}/tsconfig`

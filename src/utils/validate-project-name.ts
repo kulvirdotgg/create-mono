@@ -1,7 +1,7 @@
-/*
-    /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
-    Thanks **THEO** I got this from your T3 code.
-*/
+/**
+ * /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
+ *    Thanks **THEO** I got this from your T3 code.
+ */
 
 const re = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
 

@@ -1,12 +1,12 @@
 import fse from 'fs-extra'
 import path from 'node:path'
+import { sortPackageJson } from 'sort-package-json'
 
 import { ROOT } from '@/CONSTS'
-import { updateMonorepoPackagedependencies } from '@/utils/monorepo-packages-dependencies'
-
+import { updateWorkspacePkgs } from '@/utils/workspace-pkgs'
 import type { TDependencies, TDevDependencies } from '@/utils/dependency-maps'
 import { addDependencies } from '@/utils/add-dependencies'
-import type { TInitOpts } from '@/utils/types'
+import type { TInitOpts } from '@/types'
 
 function vite({ projectName, projectDir, packageManager }: TInitOpts) {
     const viteAppDir = path.join(projectDir, 'apps/vite')
@@ -24,6 +24,7 @@ function vite({ projectName, projectDir, packageManager }: TInitOpts) {
     addDependencies(deps, devDeps, viteAppDir)
 
     const packageJSON = fse.readJSONSync(path.join(viteAppDir, 'package.json'))
+
     packageJSON.name = `@${projectName}/vite`
 
     delete packageJSON.devDependencies['@repo/eslint']
@@ -32,7 +33,9 @@ function vite({ projectName, projectDir, packageManager }: TInitOpts) {
     packageJSON.devDependencies[`@${projectName}/eslint`] = '*'
     packageJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
 
-    fse.writeJsonSync(path.join(viteAppDir, 'package.json'), packageJSON, {
+    const sortedFile = sortPackageJson(packageJSON)
+
+    fse.writeJsonSync(path.join(viteAppDir, 'package.json'), sortedFile, {
         spaces: 4,
     })
 
@@ -43,7 +46,7 @@ function vite({ projectName, projectDir, packageManager }: TInitOpts) {
     })
 
     if (packageManager === 'pnpm' || packageManager === 'bun') {
-        updateMonorepoPackagedependencies(viteAppDir)
+        updateWorkspacePkgs(viteAppDir)
     }
 }
 

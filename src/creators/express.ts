@@ -1,20 +1,20 @@
 import fse from 'fs-extra'
 import path from 'node:path'
+import { sortPackageJson } from 'sort-package-json'
 
 import { ROOT } from '@/CONSTS'
+import { addDependencies } from '@/utils/add-dependencies'
+import { updateWorkspacePkgs } from '@/utils/workspace-pkgs'
+import type { TInitOpts } from '@/types'
 import {
     type TDependencies,
     type TDevDependencies,
 } from '@/utils/dependency-maps'
 
-import { updateMonorepoPackagedependencies } from '@/utils/monorepo-packages-dependencies'
-import { addDependencies } from '@/utils/add-dependencies'
-import { addScripts } from '@/utils/add-fields'
-import type { TInitOpts } from '@/utils/types'
-
 function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
     const expressDir = path.join(projectDir, 'apps/express')
 
+    // copy over the express template
     fse.copySync(path.join(ROOT, 'template/applications/express'), expressDir)
 
     const deps: TDependencies[] = ['cors', 'dotenv', 'express', 'morgan', 'zod']
@@ -25,27 +25,56 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
         'eslint',
         'tsup',
     ]
+
     if (packageManager === 'bun') {
         devDeps.push('@types/bun')
         addDependencies(deps, devDeps, expressDir)
 
-        addScripts(['express-bun-dev', 'express-bun-start'], expressDir)
+        const packageJSON = fse.readJSONSync(
+            path.join(expressDir, 'package.json')
+        )
+
+        // set bun specific scripts
+        packageJSON.scripts['dev'] =
+            'tsup --watch --onSuccess "bun dist/index.js"'
+        packageJSON.scripts['start'] = 'bun dist/index.js'
+
+        fse.writeJSONSync(path.join(expressDir, 'package.json'), packageJSON, {
+            spaces: 4,
+        })
     } else {
         devDeps.push('@types/node')
         addDependencies(deps, devDeps, expressDir)
-        addScripts(['express-node-dev', 'express-node-start'], expressDir)
+
+        const packageJSON = fse.readJSONSync(
+            path.join(expressDir, 'package.json')
+        )
+
+        // set node specific scripts
+        packageJSON.scripts['dev'] =
+            'tsup --watch --onSuccess "node dist/index.js"'
+        packageJSON.scripts['start'] = 'node dist/index.js'
+
+        fse.writeJSONSync(path.join(expressDir, 'package.json'), packageJSON, {
+            spaces: 4,
+        })
     }
 
     const packageJSON = fse.readJSONSync(path.join(expressDir, 'package.json'))
+
     packageJSON.name = `@${projectName}/express-api`
 
+    // change the workspace packages names
+    // eg: @repo/eslint -> @monorepo-name/eslint
     delete packageJSON.devDependencies['@repo/eslint']
     delete packageJSON.devDependencies['@repo/tsconfig']
 
     packageJSON.devDependencies[`@${projectName}/eslint`] = '*'
     packageJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
 
-    fse.writeJsonSync(path.join(expressDir, 'package.json'), packageJSON, {
+    const sortedFile = sortPackageJson(packageJSON)
+
+    fse.writeJsonSync(path.join(expressDir, 'package.json'), sortedFile, {
         spaces: 4,
     })
 
@@ -56,7 +85,7 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
     })
 
     if (packageManager === 'pnpm' || packageManager === 'bun') {
-        updateMonorepoPackagedependencies(expressDir)
+        updateWorkspacePkgs(expressDir)
     }
 }
 

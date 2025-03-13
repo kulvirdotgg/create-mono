@@ -1,13 +1,15 @@
 import fse from 'fs-extra'
 import path from 'path'
 
+import { ROOT } from '@/CONSTS'
+import type { TInitOpts } from '@/types'
+
 import { baseSetup } from './base-setup'
 import { addDatabase } from './database'
 import { addExpressApp } from './express'
 import { next } from './next'
 import { vite } from './vite'
-import { ROOT } from '@/CONSTS'
-import type { TInitOpts } from '@/utils/types'
+import { sortPackageJson } from 'sort-package-json'
 
 async function init({
     projectDir,
@@ -33,7 +35,8 @@ async function init({
         )
 
         packageJSON['workspaces'].push('apps/*', 'packages/*', 'tooling/*')
-        fse.writeJsonSync(path.join(projectDir, 'package.json'), packageJSON, {
+        const sortedFile = sortPackageJson(packageJSON)
+        fse.writeJsonSync(path.join(projectDir, 'package.json'), sortedFile, {
             spaces: 4,
         })
     }
