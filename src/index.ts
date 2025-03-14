@@ -15,7 +15,7 @@ import { initializeGit } from '@/utils/git-init'
 
 /**
  * If you think this project looks soo much like `create t3-app`, Its because it is ackchyually inspired from `create t3-app`
- * Infact some code snippets are directly copy pasted from there, Because people who build `create t3-app` are more skilled than me.
+ * Infact some code snippets are directly copy pasted from there, Because people who built `create t3-app` are more skilled than me.
  *
  * https://github.com/t3-oss/create-t3-app/blob/main/LICENSE
  */
