@@ -28,6 +28,7 @@ function addDatabase({
             'drizzle-kit',
             'eslint',
             'drizzle-seed',
+            'tsx',
         ]
 
         if (database === 'postgres') {
@@ -46,6 +47,7 @@ function addDatabase({
         packageJSON.scripts['db:migrate'] = 'drizzle-kit migrate'
         packageJSON.scripts['db:push'] = 'drizzle-kit push'
         packageJSON.scripts['db:studio'] = 'drizzle-kit studio'
+        packageJSON.scripts['db:seed'] = 'tsx src/seed.ts'
 
         packageJSON.exports['.'] = './src/index.ts'
         packageJSON.exports['./schema'] = './src/db/schema.ts'
@@ -61,7 +63,7 @@ function addDatabase({
         )
     } else if (orm === 'prisma') {
         const prismaDeps: TDependencies[] = ['@prisma/client', 'dotenv']
-        const prismaDevDeps: TDevDependencies[] = ['prisma', 'eslint']
+        const prismaDevDeps: TDevDependencies[] = ['prisma', 'eslint', 'tsx']
 
         if (packageManager === 'bun') {
             prismaDevDeps.push('@types/bun')
@@ -79,6 +81,7 @@ function addDatabase({
         packageJSON.scripts['db:generate'] = 'prisma generate'
         packageJSON.scripts['db:migrate'] = 'prisma migrate dev --skip-generate'
         packageJSON.scripts['db:studio'] = 'prisma studio'
+        packageJSON.scripts['db:seed'] = 'tsx src/seed.ts'
         packageJSON.scripts['format'] = 'prisma format'
 
         packageJSON.exports['.'] = './src/index.ts'

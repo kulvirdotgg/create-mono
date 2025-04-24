@@ -31,6 +31,7 @@ const devDependencyMap = {
     eslint: '^9.22.0',
     prisma: '^6.4.1',
     tsup: '^8.4.0',
+    tsx: '^4.19.3',
     vite: '^6.2.1',
     '@vitejs/plugin-react': '^4.3.4',
 } as const
