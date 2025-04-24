@@ -1,0 +1,15 @@
+services:
+  db:
+    image: mysql
+    container_name: test-mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/var/lib/mysql/data
+    environment:
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      MYSQL_DB: test
+
+volumes:
+  data:
