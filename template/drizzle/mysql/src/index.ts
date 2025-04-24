@@ -1,8 +1,7 @@
 import { drizzle } from 'drizzle-orm/mysql2'
 
 import { env } from './env'
-import * as schema from './db/schema'
 
-const db = drizzle(env.DATABASE_URL, { schema })
+const db = drizzle(env.DATABASE_URL)
 
 export { db }
