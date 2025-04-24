@@ -44,6 +44,7 @@ function addDatabase({
 
         packageJSON.scripts['db:generate'] = 'drizzle-kit generate'
         packageJSON.scripts['db:migrate'] = 'drizzle-kit migrate'
+        packageJSON.scripts['db:push'] = 'drizzle-kit push'
         packageJSON.scripts['db:studio'] = 'drizzle-kit studio'
 
         packageJSON.exports['.'] = './src/index.ts'
@@ -74,8 +75,9 @@ function addDatabase({
             path.join(dbPackagePath, 'package.json')
         )
 
-        packageJSON.scripts['db:deploy'] = 'prisma generate deploy'
+        packageJSON.scripts['db:deploy'] = 'prisma migrate deploy'
         packageJSON.scripts['db:generate'] = 'prisma generate'
+        packageJSON.scripts['db:migrate'] = 'prisma migrate dev --skip-generate'
         packageJSON.scripts['db:studio'] = 'prisma studio'
         packageJSON.scripts['format'] = 'prisma format'
 
