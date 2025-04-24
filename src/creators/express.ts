@@ -23,7 +23,6 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
         '@types/express',
         '@types/morgan',
         'eslint',
-        'tsup',
     ]
 
     if (packageManager === 'bun') {
@@ -35,15 +34,20 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
         )
 
         // set bun specific scripts
-        packageJSON.scripts['dev'] =
-            'tsup --watch --onSuccess "bun dist/index.js"'
+        packageJSON.scripts['build'] =
+            'bun build src/index.ts --outdir ./dist --target bun'
+        packageJSON.scripts['dev'] = 'bun run --hot src/index.ts'
         packageJSON.scripts['start'] = 'bun dist/index.js'
 
         fse.writeJSONSync(path.join(expressDir, 'package.json'), packageJSON, {
             spaces: 4,
         })
+
+        // because bun is bundler too
+        // so we dont need tsup. BUN is a W.
+        fse.remove(path.join(expressDir, 'tsup.config.ts'))
     } else {
-        devDeps.push('@types/node')
+        devDeps.push('@types/node', 'tsup')
         addDependencies(deps, devDeps, expressDir)
 
         const packageJSON = fse.readJSONSync(
