@@ -4,8 +4,7 @@ import { z } from 'zod'
 config()
 
 const envSchema = z.object({
-    TURSO_DATABASE_URL: z.string(),
-    TURSO_AUTH_TOKEN: z.string(),
+    DATABASE_URL: z.string(),
 })
 
 export const env = envSchema.parse(process.env)

@@ -3,40 +3,44 @@ import { PrismaClient } from '../generated/client'
 const prisma = new PrismaClient()
 
 async function main() {
-    const user1 = await prisma.user.create({
+    await prisma.user.create({
         data: {
-            name: 'User1',
-            email: 'user@test.dev',
+            name: 'John',
+            email: 'john@example.com',
             posts: {
                 create: {
-                    title: 'Why is this great?',
+                    title: 'W title?',
                 },
             },
         },
     })
-    const user2 = await prisma.user.create({
+    await prisma.user.create({
         data: {
-            email: 'user2@test.dev',
-            name: 'User2',
+            email: 'jake@example.dev',
+            name: 'Jake',
             posts: {
                 create: [
                     {
-                        title: 'Great Tweet battles',
+                        title: 'Just title?',
                     },
                 ],
             },
         },
     })
-    console.log('users inserted in db are:\n', { user1, user2 })
+    console.log('seeding done!!!')
+
+    const postsWithUser = await prisma.post.findMany({
+        relationLoadStrategy: 'join',
+        include: {
+            user: true,
+        },
+    })
+    console.log('Getting posts with useer from the database: ', postsWithUser)
 }
 
 main()
     .then(async () => {
-        const posts = await prisma.post.findMany()
-        console.log('Posts in db are:\n', posts)
-
         await prisma.$disconnect()
-        console.log('seeding done!!!')
     })
     .catch(async (err) => {
         console.log('some error in seeding the database')

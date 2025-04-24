@@ -56,10 +56,10 @@ async function cli() {
                         // },
                         {
                             value: 'next',
-                            label: 'Next.js (Fullstack/SSR)',
+                            label: 'Next.js',
                         },
                         { value: 'vite', label: 'Vite (React App)' },
-                        { value: 'express', label: 'Express (Backend API)' },
+                        { value: 'express', label: 'Express' },
                     ],
                 })
             },
@@ -85,15 +85,26 @@ async function cli() {
                 })
             },
             database: ({ results }) => {
-                if (results.orm !== 'none') {
-                    return p.select({
-                        message: 'Which database do you plan to use?',
-                        options: [
-                            { value: 'postgres', label: 'Postgres' },
-                            { value: 'sqlite', label: 'SQLite (LibSQL)' },
-                        ],
-                        initialValue: 'none',
-                    })
+                switch (results.orm) {
+                    case 'drizzle': {
+                        return p.select({
+                            message: 'Which database do you plan to use?',
+                            options: [
+                                { value: 'postgresql', label: 'PostgreSQL' },
+                                { value: 'sqlite', label: 'SQLite (Turso)' },
+                                { value: 'mysql', label: 'MySQL' },
+                            ],
+                        })
+                    }
+                    case 'prisma': {
+                        return p.select({
+                            message: 'Which database do you plan to use?',
+                            options: [
+                                { value: 'postgresql', label: 'PostgreSQL' },
+                                { value: 'mysql', label: 'MySQL' },
+                            ],
+                        })
+                    }
                 }
             },
             importAlias: () => {

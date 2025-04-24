@@ -19,10 +19,12 @@ function addDatabase({
 
     fse.copySync(path.join(ROOT, 'template/database'), dbPackagePath)
 
-    // copy orm specific files for the database
-    fse.copySync(path.join(ROOT, `template/${orm}/${database}`), dbPackagePath)
-
     if (orm === 'drizzle') {
+        fse.copySync(
+            path.join(ROOT, `template/drizzle/${database}`),
+            dbPackagePath
+        )
+
         const drizzleDeps: TDependencies[] = ['drizzle-orm', 'dotenv', 'zod']
         const drizzleDevDeps: TDevDependencies[] = [
             'drizzle-kit',
@@ -31,10 +33,18 @@ function addDatabase({
             'tsx',
         ]
 
-        if (database === 'postgres') {
-            drizzleDeps.push('pg')
-        } else {
-            drizzleDeps.push('@libsql/client')
+        switch (database) {
+            case 'postgresql': {
+                drizzleDeps.push('pg')
+                break
+            }
+            case 'sqlite': {
+                drizzleDeps.push('@libsql/client')
+                break
+            }
+            case 'mysql': {
+                drizzleDeps.push('mysql2')
+            }
         }
 
         addDependencies(drizzleDeps, drizzleDevDeps, dbPackagePath)
@@ -62,6 +72,19 @@ function addDatabase({
             }
         )
     } else if (orm === 'prisma') {
+        fse.copySync(path.join(ROOT, 'template/prisma'), dbPackagePath)
+
+        // Update the database provider in `schema.prisma` file
+        const schemaFileLoc = path.join(dbPackagePath, 'prisma/schema.prisma')
+
+        const schemaFile = fse.readFileSync(schemaFileLoc, 'utf8')
+
+        const updatedFile = schemaFile.replace(
+            new RegExp('postgresql', 'g'),
+            database!
+        )
+        fse.writeFileSync(schemaFileLoc, updatedFile, 'utf8')
+
         const prismaDeps: TDependencies[] = ['@prisma/client', 'dotenv']
         const prismaDevDeps: TDevDependencies[] = ['prisma', 'eslint', 'tsx']
 
