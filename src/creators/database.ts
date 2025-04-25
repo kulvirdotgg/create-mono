@@ -19,12 +19,19 @@ function addDatabase({
 
     fse.copySync(path.join(ROOT, 'template/database'), dbPackagePath)
 
-    let dockerFile = fse.readFileSync(
-        path.join(ROOT, `template/docker/${database}.yaml`),
-        'utf-8'
-    )
-    dockerFile = dockerFile.replaceAll('test', projectName)
-    fse.writeFileSync(path.join(projectDir, 'docker-compose.yaml'), dockerFile)
+    // sqlite doesn't need any docker compose file.
+    if (database === 'mysql' || database === 'postgresql') {
+        let dockerFile = fse.readFileSync(
+            path.join(ROOT, `template/docker/${database}.yaml`),
+            'utf-8'
+        )
+        dockerFile = dockerFile.replaceAll('test', projectName)
+
+        fse.writeFileSync(
+            path.join(projectDir, 'docker-compose.yaml'),
+            dockerFile
+        )
+    }
 
     if (orm === 'drizzle') {
         fse.copySync(
