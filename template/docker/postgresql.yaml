@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:17-alpine
-    container_name: test-postgresql
+    container_name: test-pg
     ports:
       - 5432:5432
     volumes:

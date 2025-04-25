@@ -19,6 +19,13 @@ function addDatabase({
 
     fse.copySync(path.join(ROOT, 'template/database'), dbPackagePath)
 
+    let dockerFile = fse.readFileSync(
+        path.join(ROOT, `template/docker/${database}.yaml`),
+        'utf-8'
+    )
+    dockerFile = dockerFile.replaceAll('test', projectName)
+    fse.writeFileSync(path.join(projectDir, 'docker-compose.yaml'), dockerFile)
+
     if (orm === 'drizzle') {
         fse.copySync(
             path.join(ROOT, `template/drizzle/${database}`),
