@@ -134,11 +134,6 @@ function addDatabase({
         )
     }
 
-    fse.renameSync(
-        path.join(dbPackagePath, '_env'),
-        path.join(dbPackagePath, '.env')
-    )
-
     const packageJSON = fse.readJSONSync(
         path.join(dbPackagePath, 'package.json')
     )

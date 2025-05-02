@@ -1,5 +1,0 @@
-# NOTE: after adding environment variables here
-# make sure to add correct zod schema for the key in `src/env.ts` file
-
-TURSO_DATABASE_URL=
-TURSO_AUTH_TOKEN=

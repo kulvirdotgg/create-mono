@@ -1,4 +1,0 @@
-# NOTE: after adding environment variables here
-# make sure to add correct zod schema for the key in `src/env.ts` file
-
-DATABASE_URL="postgresql://admin:password@localhost:5432/mono"
