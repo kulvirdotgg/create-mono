@@ -5,15 +5,16 @@ const dependencyMap = {
     cors: '^2.8.5',
     dotenv: '^16.4.7',
     express: '^5.0.0',
+    'express-winston': '^4.2.0',
     'drizzle-orm': '^0.40.0',
     '@libsql/client': '^0.14.0',
-    morgan: '^1.10.0',
     mysql2: '^3.14.0',
     next: '^15.2.1',
     '@prisma/client': '^6.4.1',
     pg: '^8.13.3',
     react: '^19.0.0',
     'react-dom': '^19.0.0',
+    winston: '^3.17.0',
     zod: '^3.24.2',
 } as const
 

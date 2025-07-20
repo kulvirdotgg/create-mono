@@ -17,7 +17,14 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
     // copy over the express template
     fse.copySync(path.join(ROOT, 'template/applications/express'), expressDir)
 
-    const deps: TDependencies[] = ['cors', 'dotenv', 'express', 'morgan', 'zod']
+    const deps: TDependencies[] = [
+        'cors',
+        'dotenv',
+        'express',
+        'express-winston',
+        'winston',
+        'zod',
+    ]
     const devDeps: TDevDependencies[] = [
         '@types/cors',
         '@types/express',
