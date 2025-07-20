@@ -2,7 +2,8 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "Default",
     "compilerOptions": {
-        "composite": false,
+        "allowJs": true,
+        "composite": true,
         "declaration": true,
         "declarationMap": true,
         "esModuleInterop": true,
@@ -20,9 +21,10 @@
         "resolveJsonModule": true,
         "pretty": true,
         "skipLibCheck": true,
+        "sourceMap": true,
         "strict": true,
         "strictNullChecks": true,
-        "target": "Es2022",
+        "target": "es2022",
         "verbatimModuleSyntax": true
     }
 }

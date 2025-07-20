@@ -10,11 +10,9 @@
         ],
         "incremental": true,
         "lib": ["dom", "dom.iterable", "esnext"],
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
-        "allowJs": true,
+        "module": "esnext",
+        "moduleResolution": "bundler",
         "jsx": "preserve",
-        "noEmit": true,
-        "strict": true
+        "noEmit": true
     }
 }

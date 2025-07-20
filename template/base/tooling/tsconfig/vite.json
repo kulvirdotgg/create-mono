@@ -3,18 +3,12 @@
     "display": "Vite",
     "extends": "./base.json",
     "compilerOptions": {
-        "allowJs": false,
-        "esModuleInterop": false,
-        "isolatedModules": true,
         "jsx": "react-jsx",
-        "lib": ["DOM", "DOM.Iterable", "ESNext"],
-        "allowImportingTsExtensions": true,
-        "module": "ESNext",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "module": "esnext",
         "moduleResolution": "bundler",
         "noEmit": true,
-        "resolveJsonModule": true,
-        "strict": true,
-        "target": "ESNext",
+        "target": "esnext",
         "types": ["vite/client"]
     }
 }
