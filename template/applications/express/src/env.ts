@@ -9,7 +9,7 @@ const envSchema = z.object({
         .enum(['development', 'test', 'production'])
         .default('development'),
 
-    PORT: z.coerce.number().min(1000).default(3000),
+    PORT: z.coerce.number().min(1000).default(8000),
 })
 
 export const env = envSchema.parse(process.env)
