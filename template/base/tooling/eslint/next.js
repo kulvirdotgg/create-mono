@@ -10,32 +10,24 @@ import { baseConfig } from './index.js'
  */
 export const next = [
     ...baseConfig,
+    pluginReact.configs.flat.recommended,
     {
-        ...pluginReact.configs.flat.recommended,
+        plugins: {
+            '@next/next': pluginNext,
+            'react-hooks': pluginReactHooks,
+        },
+        rules: {
+            ...pluginNext.configs.recommended.rules,
+            ...pluginNext.configs['core-web-vitals'].rules,
+            ...pluginReactHooks.configs.recommended.rules,
+            'react/react-in-jsx-scope': 'off',
+        },
+        settings: { react: { version: 'detect' } },
         languageOptions: {
             ...pluginReact.configs.flat.recommended.languageOptions,
             globals: {
                 ...globals.serviceworker,
             },
-        },
-    },
-    {
-        plugins: {
-            '@next/next': pluginNext,
-        },
-        rules: {
-            ...pluginNext.configs.recommended.rules,
-            ...pluginNext.configs['core-web-vitals'].rules,
-        },
-    },
-    {
-        plugins: {
-            'react-hooks': pluginReactHooks,
-        },
-        settings: { react: { version: 'detect' } },
-        rules: {
-            ...pluginReactHooks.configs.recommended.rules,
-            'react/react-in-jsx-scope': 'off',
         },
     },
 ]
