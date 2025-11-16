@@ -117,6 +117,7 @@ function addDatabase({
         packageJSON.scripts['db:deploy'] = 'prisma migrate deploy'
         packageJSON.scripts['db:generate'] = 'prisma generate'
         packageJSON.scripts['db:migrate'] = 'prisma migrate dev --skip-generate'
+        packageJSON.scripts['db:push'] = 'prisma db push'
         packageJSON.scripts['db:studio'] = 'prisma studio'
         packageJSON.scripts['db:seed'] = 'tsx src/seed.ts'
         packageJSON.scripts['format'] = 'prisma format'
@@ -156,6 +157,20 @@ function addDatabase({
     fse.writeJsonSync(path.join(dbPackagePath, 'tsconfig.json'), tsconfig, {
         spaces: 4,
     })
+
+    const data = fse.readFileSync(
+        path.join(dbPackagePath, 'eslint.config.js'),
+        'utf8'
+    )
+    const updatedData = data.replace(
+        new RegExp('@repo', 'g'),
+        `@${projectName}`
+    )
+    fse.writeFileSync(
+        path.join(dbPackagePath, 'eslint.config.js'),
+        updatedData,
+        'utf8'
+    )
 
     if (packageManager === 'pnpm' || packageManager === 'bun') {
         updateWorkspacePkgs(dbPackagePath)
