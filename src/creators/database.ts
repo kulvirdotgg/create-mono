@@ -39,7 +39,7 @@ function addDatabase({
             dbPackagePath
         )
 
-        const drizzleDeps: TDependencies[] = ['drizzle-orm', 'dotenv', 'zod']
+        const drizzleDeps: TDependencies[] = ['drizzle-orm', 'zod']
         const drizzleDevDeps: TDevDependencies[] = [
             'drizzle-kit',
             'eslint',
@@ -99,7 +99,7 @@ function addDatabase({
         )
         fse.writeFileSync(schemaFileLoc, updatedFile, 'utf8')
 
-        const prismaDeps: TDependencies[] = ['@prisma/client', 'dotenv']
+        const prismaDeps: TDependencies[] = ['@prisma/client']
         const prismaDevDeps: TDevDependencies[] = ['prisma', 'eslint', 'tsx']
 
         if (packageManager === 'bun') {
@@ -114,9 +114,8 @@ function addDatabase({
             path.join(dbPackagePath, 'package.json')
         )
 
-        packageJSON.scripts['db:deploy'] = 'prisma migrate deploy'
         packageJSON.scripts['db:generate'] = 'prisma generate'
-        packageJSON.scripts['db:migrate'] = 'prisma migrate dev --skip-generate'
+        packageJSON.scripts['db:migrate'] = 'prisma migrate dev'
         packageJSON.scripts['db:push'] = 'prisma db push'
         packageJSON.scripts['db:studio'] = 'prisma studio'
         packageJSON.scripts['db:seed'] = 'tsx src/seed.ts'
@@ -146,6 +145,7 @@ function addDatabase({
 
     packageJSON.devDependencies[`@${projectName}/eslint`] = '*'
     packageJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
+    packageJSON.dependencies[`@${projectName}/utils`] = '*'
 
     const sortedFile = sortPackageJson(packageJSON)
     fse.writeJsonSync(path.join(dbPackagePath, 'package.json'), sortedFile, {
@@ -158,6 +158,7 @@ function addDatabase({
         spaces: 4,
     })
 
+    // Replace @repo references in eslint.config.js
     const data = fse.readFileSync(
         path.join(dbPackagePath, 'eslint.config.js'),
         'utf8'
@@ -171,6 +172,17 @@ function addDatabase({
         updatedData,
         'utf8'
     )
+
+    // Replace @repo/utils with @projectName/utils in env.ts file
+    const envFilePath = path.join(dbPackagePath, 'src/env.ts')
+    if (fse.existsSync(envFilePath)) {
+        const envFile = fse.readFileSync(envFilePath, 'utf8')
+        const updatedEnvFile = envFile.replace(
+            new RegExp('@repo/utils', 'g'),
+            `@${projectName}/utils`
+        )
+        fse.writeFileSync(envFilePath, updatedEnvFile, 'utf8')
+    }
 
     if (packageManager === 'pnpm' || packageManager === 'bun') {
         updateWorkspacePkgs(dbPackagePath)

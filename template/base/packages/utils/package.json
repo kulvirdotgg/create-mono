@@ -1,0 +1,20 @@
+{
+    "name": "@repo/utils",
+    "version": "0.1.0",
+    "type": "module",
+    "private": true,
+    "exports": {
+        "./env": "./src/env.ts",
+        "./logger": "./src/logger.ts"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.7",
+        "winston": "^3.17.0",
+        "zod": "^3.24.1"
+    },
+    "devDependencies": {
+        "@repo/eslint": "*",
+        "@repo/tsconfig": "*"
+    }
+}
+

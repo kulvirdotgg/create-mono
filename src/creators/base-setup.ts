@@ -111,6 +111,47 @@ async function baseSetup({
         spaces: 4,
     })
 
+    // choose proper scoped name for utils package
+    // @repo-name/utils
+    const utilsPath = path.join(projectDir, 'packages/utils', 'package.json')
+    const utilsPkgJSON = fse.readJSONSync(utilsPath)
+    utilsPkgJSON.name = `@${projectName}/utils`
+
+    // Update devDependencies to use correct package names
+    delete utilsPkgJSON.devDependencies['@repo/eslint']
+    delete utilsPkgJSON.devDependencies['@repo/tsconfig']
+    utilsPkgJSON.devDependencies[`@${projectName}/eslint`] = '*'
+    utilsPkgJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
+
+    fse.writeJsonSync(utilsPath, utilsPkgJSON, {
+        spaces: 4,
+    })
+
+    // Update utils package tsconfig to use correct package name
+    const utilsTsconfigPath = path.join(
+        projectDir,
+        'packages/utils',
+        'tsconfig.json'
+    )
+    const utilsTsconfig = fse.readJSONSync(utilsTsconfigPath)
+    utilsTsconfig['extends'] = `@${projectName}/tsconfig/base.json`
+    fse.writeJsonSync(utilsTsconfigPath, utilsTsconfig, {
+        spaces: 4,
+    })
+
+    // Update utils package eslint config to use correct package name
+    const utilsEslintPath = path.join(
+        projectDir,
+        'packages/utils',
+        'eslint.config.js'
+    )
+    const utilsEslintData = fse.readFileSync(utilsEslintPath, 'utf8')
+    const updatedUtilsEslintData = utilsEslintData.replace(
+        new RegExp('@repo', 'g'),
+        `@${projectName}`
+    )
+    fse.writeFileSync(utilsEslintPath, updatedUtilsEslintData, 'utf8')
+
     try {
         // set the name of repo in package.json
         const packageJSON = fse.readJSONSync(

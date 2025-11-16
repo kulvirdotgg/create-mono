@@ -1,16 +1,6 @@
-import { createLogger, format, transports } from 'winston'
-
 import expressWinston from 'express-winston'
 
-export const logger = createLogger({
-    level: 'info',
-    transports: [new transports.Console()],
-    format: format.combine(
-        format.timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }),
-        format.errors({ stack: true }),
-        format.json()
-    ),
-})
+import { logger } from '@repo/utils/logger'
 
 export const requestLogger = expressWinston.logger({
     winstonInstance: logger,
@@ -39,3 +29,4 @@ export const errorLogger: any = expressWinston.errorLogger({
         }
     },
 })
+

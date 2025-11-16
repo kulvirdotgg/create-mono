@@ -1,10 +1,9 @@
-import { config } from 'dotenv'
+import { createEnv } from '@repo/utils/env'
 import { z } from 'zod'
 
-config()
 
 const envSchema = z.object({
     DATABASE_URL: z.string(),
 })
 
-export const env = envSchema.parse(process.env)
+export const env = createEnv(envSchema)

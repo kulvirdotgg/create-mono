@@ -1,11 +1,10 @@
-import { config } from 'dotenv'
+import { createEnv } from '@repo/utils/env'
 import { z } from 'zod'
 
-config()
 
 const envSchema = z.object({
     TURSO_DATABASE_URL: z.string(),
     TURSO_AUTH_TOKEN: z.string(),
 })
 
-export const env = envSchema.parse(process.env)
+export const env = createEnv(envSchema)

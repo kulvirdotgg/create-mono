@@ -19,7 +19,6 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
 
     const deps: TDependencies[] = [
         'cors',
-        'dotenv',
         'express',
         'express-winston',
         'winston',
@@ -82,6 +81,7 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
 
     packageJSON.devDependencies[`@${projectName}/eslint`] = '*'
     packageJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
+    packageJSON.dependencies[`@${projectName}/utils`] = '*'
 
     const sortedFile = sortPackageJson(packageJSON)
 
@@ -94,6 +94,32 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
     fse.writeJsonSync(path.join(expressDir, 'tsconfig.json'), tsconfig, {
         spaces: 4,
     })
+
+    // Replace @repo/utils with @projectName/utils in source files
+    const envFile = fse.readFileSync(
+        path.join(expressDir, 'src/env.ts'),
+        'utf8'
+    )
+    const updatedEnvFile = envFile.replace(
+        new RegExp('@repo/utils', 'g'),
+        `@${projectName}/utils`
+    )
+    fse.writeFileSync(
+        path.join(expressDir, 'src/env.ts'),
+        updatedEnvFile,
+        'utf8'
+    )
+
+    // Replace @repo/utils in logging.ts middleware
+    const loggingFilePath = path.join(expressDir, 'src/middlewares/logging.ts')
+    if (fse.existsSync(loggingFilePath)) {
+        const loggingFile = fse.readFileSync(loggingFilePath, 'utf8')
+        const updatedLoggingFile = loggingFile.replace(
+            new RegExp('@repo/utils', 'g'),
+            `@${projectName}/utils`
+        )
+        fse.writeFileSync(loggingFilePath, updatedLoggingFile, 'utf8')
+    }
 
     if (packageManager === 'pnpm' || packageManager === 'bun') {
         updateWorkspacePkgs(expressDir)

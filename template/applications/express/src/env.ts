@@ -1,7 +1,6 @@
-import { config } from 'dotenv'
+import { createEnv } from '@repo/utils/env'
 import { z } from 'zod'
 
-config()
 
 // NOTE: Add ENV variable here too after adding to .env
 const envSchema = z.object({
@@ -12,4 +11,4 @@ const envSchema = z.object({
     PORT: z.coerce.number().min(1000).default(8000),
 })
 
-export const env = envSchema.parse(process.env)
+export const env = createEnv(envSchema)
