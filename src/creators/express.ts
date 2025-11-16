@@ -132,6 +132,15 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
         fse.writeFileSync(loggingFilePath, updatedLoggingFile, 'utf8')
     }
 
+    // Create .env file (without DATABASE_URL if no database)
+    const envTemplatePath = path.join(ROOT, 'template/applications/express/_env')
+    if (fse.existsSync(envTemplatePath)) {
+        fse.copyFileSync(
+            envTemplatePath,
+            path.join(expressDir, '.env')
+        )
+    }
+
     if (packageManager === 'pnpm' || packageManager === 'bun') {
         updateWorkspacePkgs(expressDir)
     }

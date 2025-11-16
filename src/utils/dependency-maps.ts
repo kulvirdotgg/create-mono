@@ -7,7 +7,6 @@ const dependencyMap = {
     express: '^5.0.0',
     'express-winston': '^4.2.0',
     'drizzle-orm': '^0.40.0',
-    '@libsql/client': '^0.14.0',
     mysql2: '^3.14.0',
     next: '^15.2.1',
     '@prisma/client': '^6.4.1',

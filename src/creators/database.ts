@@ -19,7 +19,6 @@ function addDatabase({
 
     fse.copySync(path.join(ROOT, 'template/database'), dbPackagePath)
 
-    // sqlite doesn't need any docker compose file.
     if (database === 'mysql' || database === 'postgresql') {
         let dockerFile = fse.readFileSync(
             path.join(ROOT, `template/docker/${database}.yaml`),
@@ -52,12 +51,9 @@ function addDatabase({
                 drizzleDeps.push('pg')
                 break
             }
-            case 'sqlite': {
-                drizzleDeps.push('@libsql/client')
-                break
-            }
             case 'mysql': {
                 drizzleDeps.push('mysql2')
+                break
             }
         }
 
@@ -85,6 +81,22 @@ function addDatabase({
                 spaces: 4,
             }
         )
+
+        // Create .env file for database package
+        const envTemplatePath = path.join(ROOT, 'template/database/_env')
+        if (fse.existsSync(envTemplatePath)) {
+            let envContent = fse.readFileSync(envTemplatePath, 'utf8')
+            if (database === 'mysql') {
+                envContent = `DATABASE_URL=mysql://admin:password@localhost:3306/${projectName}\n`
+            } else {
+                envContent = `DATABASE_URL=postgresql://admin:password@localhost:5432/${projectName}\n`
+            }
+            fse.writeFileSync(
+                path.join(dbPackagePath, '.env'),
+                envContent,
+                'utf8'
+            )
+        }
     } else if (orm === 'prisma') {
         fse.copySync(path.join(ROOT, 'template/prisma'), dbPackagePath)
 
@@ -132,6 +144,22 @@ function addDatabase({
                 spaces: 4,
             }
         )
+
+        // Create .env file for Prisma database package
+        const envTemplatePath = path.join(ROOT, 'template/database/_env')
+        if (fse.existsSync(envTemplatePath)) {
+            let envContent = ''
+            if (database === 'mysql') {
+                envContent = `DATABASE_URL=mysql://admin:password@localhost:3306/${projectName}\n`
+            } else {
+                envContent = `DATABASE_URL=postgresql://admin:password@localhost:5432/${projectName}\n`
+            }
+            fse.writeFileSync(
+                path.join(dbPackagePath, '.env'),
+                envContent,
+                'utf8'
+            )
+        }
     }
 
     const packageJSON = fse.readJSONSync(

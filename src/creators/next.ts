@@ -45,6 +45,17 @@ function next({ projectName, projectDir, packageManager }: TInitOpts) {
         spaces: 4,
     })
 
+    // Create .env.local file (without DATABASE_URL if no database)
+    const envTemplatePath = path.join(ROOT, 'template/applications/next/_env.local')
+    if (fse.existsSync(envTemplatePath)) {
+        const envContent = fse.readFileSync(envTemplatePath, 'utf8')
+        fse.writeFileSync(
+            path.join(nextAppDir, '.env.local'),
+            envContent,
+            'utf8'
+        )
+    }
+
     if (packageManager === 'pnpm' || packageManager === 'bun') {
         updateWorkspacePkgs(nextAppDir)
     }

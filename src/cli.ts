@@ -91,7 +91,6 @@ async function cli() {
                             message: 'Which database do you plan to use?',
                             options: [
                                 { value: 'postgresql', label: 'PostgreSQL' },
-                                { value: 'sqlite', label: 'SQLite (Turso)' },
                                 { value: 'mysql', label: 'MySQL' },
                             ],
                         })

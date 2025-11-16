@@ -4,7 +4,7 @@ export type TApplication = 'astro' | 'express' | 'next' | 'vite' | 'rn'
 
 export type TOrm = 'drizzle' | 'none' | 'prisma'
 
-export type TDatabase = 'postgresql' | 'sqlite' | 'mysql'
+export type TDatabase = 'postgresql' | 'mysql'
 
 export type TInitOpts = {
     projectName: string
