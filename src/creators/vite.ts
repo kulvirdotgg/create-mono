@@ -13,7 +13,7 @@ function vite({ projectName, projectDir, packageManager }: TInitOpts) {
 
     fse.copySync(path.join(ROOT, 'template/applications/vite'), viteAppDir)
 
-    const deps: TDependencies[] = ['react', 'react-dom']
+    const deps: TDependencies[] = ['react', 'react-dom', 'zod']
     const devDeps: TDevDependencies[] = [
         '@types/react',
         '@types/react-dom',
@@ -32,6 +32,7 @@ function vite({ projectName, projectDir, packageManager }: TInitOpts) {
 
     packageJSON.devDependencies[`@${projectName}/eslint`] = '*'
     packageJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
+    packageJSON.dependencies[`@${projectName}/utils`] = '*'
 
     const sortedFile = sortPackageJson(packageJSON)
 

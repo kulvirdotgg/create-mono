@@ -1,23 +1,50 @@
 # Next.js
 
-This is a minimal Next.js server bootstrapped with [`create-mono`](https://github.com/kulvirdotgg/create-mono)
-
+Next.js application with TypeScript and App Router.
 
 ## Getting Started
-
-Run the development server:
 
 ```bash
 bun dev
 ```
 
-- Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-- Make a CURL request to healthcheck endpoint [http://localhost:3000/api/status](http://localhost:3000/api/status)
+Health check API endpoint: [http://localhost:3000/api/status](http://localhost:3000/api/status)
 
-    ```sh
-    curl -X GET http://localhost:8000/api/v1/status 
-    ```
+## Environment Variables
+
+Create `.env.local` in the root directory:
+
+```env
+# Server-side only (not exposed to client)
+DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+
+# Client-side (must be prefixed with NEXT_PUBLIC_)
+NEXT_PUBLIC_APP_NAME=My App
+```
+
+For type-safe environment variables, create `src/env.ts`
+
+```ts
+import { createEnv } from '@repo/utils/env'
+import { z } from 'zod'
+
+const envSchema = z.object({
+    DATABASE_URL: z.string().optional(),
+    
+    NEXT_PUBLIC_APP_NAME: z.string().default('My App'),
+})
+
+export const env = createEnv(envSchema)
+```
+
+Usage in code:
+
+```ts
+import { env } from '@/env'
+const dbUrl = env.DATABASE_URL
+```
 
 ## Learn More
 

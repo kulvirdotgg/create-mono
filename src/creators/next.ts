@@ -13,7 +13,7 @@ function next({ projectName, projectDir, packageManager }: TInitOpts) {
 
     fse.copySync(path.join(ROOT, 'template/applications/next'), nextAppDir)
 
-    const deps: TDependencies[] = ['react', 'react-dom', 'next']
+    const deps: TDependencies[] = ['react', 'react-dom', 'next', 'zod']
     const devDeps: TDevDependencies[] = [
         '@types/node',
         '@types/react',
@@ -31,6 +31,7 @@ function next({ projectName, projectDir, packageManager }: TInitOpts) {
 
     packageJSON.devDependencies[`@${projectName}/eslint`] = '*'
     packageJSON.devDependencies[`@${projectName}/tsconfig`] = '*'
+    packageJSON.dependencies[`@${projectName}/utils`] = '*'
 
     const sortedFile = sortPackageJson(packageJSON)
 

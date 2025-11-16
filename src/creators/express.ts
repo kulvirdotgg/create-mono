@@ -68,6 +68,17 @@ function addExpressApp({ projectName, projectDir, packageManager }: TInitOpts) {
         fse.writeJSONSync(path.join(expressDir, 'package.json'), packageJSON, {
             spaces: 4,
         })
+
+        // Update tsup config to use correct database package name
+        const tsupConfigPath = path.join(expressDir, 'tsup.config.ts')
+        if (fse.existsSync(tsupConfigPath)) {
+            const tsupConfig = fse.readFileSync(tsupConfigPath, 'utf8')
+            const updatedTsupConfig = tsupConfig.replace(
+                new RegExp('@repo/database', 'g'),
+                `@${projectName}/database`
+            )
+            fse.writeFileSync(tsupConfigPath, updatedTsupConfig, 'utf8')
+        }
     }
 
     const packageJSON = fse.readJSONSync(path.join(expressDir, 'package.json'))
